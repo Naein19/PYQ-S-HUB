@@ -1,0 +1,237 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-surface: #EAE0D5;
+    --color-card: #FFFFFF;
+    --color-text: #111827;
+    --color-muted: #6B7280;
+    --color-border: #111827;
+    --color-brand-start: #4338CA;
+    --color-brand-end: #6D28D9;
+    --radius: 8px;
+    --shadow-card: 6px 6px 0px #111827;
+  }
+
+  .dark {
+    --color-surface: #000000;
+    --color-card: #0A0A0A;
+    --color-border: #1A1A1A;
+    --color-text: #FFFFFF;
+    --color-muted: #A3A3A3;
+    --shadow-card: 6px 6px 0px #1A1A1A;
+  }
+
+  html {
+    font-family: 'Inter', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-text);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Standardize Lucide icons for a premium look */
+  .lucide {
+    stroke-width: 1.5px !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 800;
+    /* Extra bold for industrial look */
+    color: var(--color-text);
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+  }
+
+  @keyframes slide-down {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-slide-down {
+    animation: slide-down 0.2s ease-out forwards;
+  }
+}
+
+@layer components {
+
+  /* ── Layout ── */
+  .container-main {
+    @apply mx-auto w-full max-w-7xl px-6 max-sm:px-4;
+  }
+
+  .section-pad {
+    @apply py-24 max-sm:py-16;
+  }
+
+  /* ── Card Frame System ── */
+  /* Industrial framed card: 1px solid dark border + 6px offset shadow */
+  .card-frame {
+    @apply bg-white border border-[#111827] rounded-[8px] p-8;
+    box-shadow: 6px 6px 0px #111827;
+    transition: all 150ms ease-in-out;
+  }
+
+  .card-frame:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 10px 10px 0px #111827;
+  }
+
+  .dark .card-frame {
+    @apply bg-[#0A0A0A] border-[#1A1A1A];
+    box-shadow: 6px 6px 0px #1A1A1A;
+  }
+
+  .dark .card-frame:hover {
+    box-shadow: 8px 8px 0px #1A1A1A;
+  }
+
+  /* Compact card frame (less padding) */
+  .card-frame-sm {
+    @apply bg-white border border-[#111827] rounded-[8px] p-5;
+    box-shadow: 6px 6px 0px #111827;
+    transition: all 150ms ease-in-out;
+  }
+
+  .card-frame-sm:hover {
+    transform: translateY(-2px);
+    box-shadow: 8px 8px 0px #111827;
+  }
+
+  /* Legacy card (still used in PYQCard) */
+  .card {
+    @apply bg-white border border-[#111827] rounded-[8px];
+    box-shadow: 6px 6px 0px #111827;
+    transition: all 150ms ease-in-out;
+  }
+
+  .card:hover {
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: 10px 10px 0px #111827;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 text-white font-semibold text-sm px-5 py-2.5 rounded-[8px] border border-[#111827];
+    background: linear-gradient(135deg, #4338CA, #6D28D9);
+    box-shadow: 3px 3px 0px #111827;
+    transition: all 150ms ease;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(0.92);
+    box-shadow: 4px 4px 0px #111827;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 bg-white text-[#111827] font-semibold text-sm px-5 py-2.5 rounded-[8px] border border-[#111827];
+    box-shadow: 3px 3px 0px #111827;
+    transition: all 150ms ease;
+  }
+
+  .btn-secondary:hover {
+    filter: brightness(0.96);
+    box-shadow: 4px 4px 0px #111827;
+  }
+
+  /* ── Badges ── */
+  .badge {
+    @apply inline-flex items-center font-mono text-xs font-semibold px-2.5 py-1 rounded-sm border uppercase tracking-wide;
+  }
+
+  .badge-cat1 {
+    @apply badge bg-[#EEF2FF] text-[#4338CA] border-[#4338CA];
+  }
+
+  .badge-cat2 {
+    @apply badge bg-[#ECFEFF] text-[#0891B2] border-[#0891B2];
+  }
+
+  .badge-fat {
+    @apply badge bg-[#F3F4F6] text-[#374151] border-[#374151];
+  }
+
+  .badge-default {
+    @apply badge bg-[#F9FAFB] text-[#6B7280] border-[#D1D5DB];
+  }
+
+  .badge-year {
+    @apply badge bg-[#EEF2FF] text-[#4338CA] border-[#4338CA];
+  }
+
+  /* ── Nav ── */
+  .nav-link {
+    @apply text-sm font-medium text-[#374151] hover:text-[#111827] relative;
+    transition: color 150ms ease;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 h-[2px] bg-[#4338CA] w-0;
+    transition: width 200ms ease;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  /* ── Forms ── */
+  .input-field {
+    @apply w-full bg-white border border-[#111827] rounded-[8px] px-3 py-2.5 text-sm text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:border-transparent transition;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    @apply border-t border-[#111827];
+  }
+
+  .divider-light {
+    @apply border-t border-[#E5E7EB];
+  }
+
+  /* ── Warm section background ── */
+  .section-warm {
+    background-color: #EAE0D5;
+  }
+
+  /* ── Animated underline link ── */
+  .link-underline {
+    @apply relative inline-block;
+    background-image: linear-gradient(#111827, #111827);
+    background-size: 0% 1px;
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    transition: background-size 200ms ease;
+  }
+
+  .link-underline:hover {
+    background-size: 100% 1px;
+  }
+}
