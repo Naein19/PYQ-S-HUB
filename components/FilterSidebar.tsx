@@ -51,8 +51,8 @@ export default function FilterSidebar({ filters, onChange }: FilterSidebarProps)
                 {examCategories.map((type) => (
                     <FilterButton
                         key={type}
-                        active={filters.examType === type}
-                        onClick={() => updateFilter('examType', type)}
+                        active={filters.exam_type === type}
+                        onClick={() => updateFilter('exam_type', type)}
                     >
                         {type}
                     </FilterButton>

@@ -10,12 +10,15 @@ import Button from '@/components/ui/Button'
 import { cn } from '@/lib/utils'
 import { usePapers } from '@/hooks/usePapers'
 import { useSubjects } from '@/hooks/useSubjects'
-import { getCleanSubjectTitle } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 
 export interface FilterState {
     subject_code: string
     exam_type: string
     search_term: string
+    year?: string
+    department?: string
+    semester?: string
 }
 
 const examCategories = [
@@ -69,7 +72,7 @@ function ExploreContent() {
     const { papers, loading, loadingMore, hasMore, totalCount, loadMore } = usePapers(filters)
 
     const subjectOptions = subjects.map(s => ({
-        label: `${s.subject_code} - ${getCleanSubjectTitle(s.subject_code, s.subject_title)}`,
+        label: `${getNormalizedSubjectCode(s.subject_code)} - ${getCleanSubjectTitle(s.subject_code, s.subject_title)}`,
         value: s.subject_code
     }))
 

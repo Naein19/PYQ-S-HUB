@@ -3,7 +3,7 @@ import { ExternalLink, Eye, FileText, Share2, Folder, Download } from 'lucide-re
 import Badge from '@/components/Badge'
 import Card from '@/components/ui/Card'
 import type { PYQ } from '@/lib/queries'
-import { getCleanSubjectTitle } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 import { useView } from '@/context/ViewContext'
 
 interface PYQCardProps {
@@ -44,12 +44,9 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                         <h3 className="text-base font-bold text-[#111827] leading-tight mb-1 line-clamp-2 break-words max-w-full">
                             {pyq.paper_title}
                         </h3>
-                        <Link
-                            href={`/subject/${pyq.subject_code}`}
-                            className="text-xs font-mono text-[#6B7280] hover:text-[#4338CA] transition-colors uppercase tracking-wider truncate block max-w-full"
-                        >
+                        <span className="text-xs font-mono text-[#6B7280] transition-colors uppercase tracking-wider truncate block max-w-full">
                             {getCleanSubjectTitle(pyq.subject_code, pyq.subject_title)}
-                        </Link>
+                        </span>
                     </div>
                 </div>
                 <Link
@@ -66,7 +63,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             {/* Tags area */}
             <div className="flex flex-wrap gap-2 mb-8 mt-auto">
                 <Badge examCategory={pyq.exam_type as any}>{pyq.exam_type}</Badge>
-                <Badge variant="default">{pyq.subject_code}</Badge>
+                <Badge variant="default">{getNormalizedSubjectCode(pyq.subject_code)}</Badge>
             </div>
 
             {/* Footer */}

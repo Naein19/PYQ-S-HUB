@@ -22,7 +22,7 @@ import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import { usePapers } from '@/hooks/usePapers'
 import { useSubjects } from '@/hooks/useSubjects'
-import { getCleanSubjectTitle } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 import { cn } from '@/lib/utils'
 
 const mockUser = {
@@ -245,7 +245,7 @@ export default function DashboardPage() {
                                                 <p className="text-[11px] font-black text-[#111827] uppercase tracking-tight group-hover:text-[#4338CA] transition-colors truncate">
                                                     {getCleanSubjectTitle(subject.subject_code, subject.subject_title)}
                                                 </p>
-                                                <p className="font-mono text-[9px] text-[#111827]/30 font-bold uppercase tracking-widest mt-0.5">{subject.subject_code}</p>
+                                                <p className="font-mono text-[9px] text-[#111827]/30 font-bold uppercase tracking-widest mt-0.5">{getNormalizedSubjectCode(subject.subject_code)}</p>
                                             </div>
                                             <div className="ml-4 w-7 h-7 border border-[#111827]/10 flex items-center justify-center bg-[#FBF9F7] group-hover:bg-[#111827] group-hover:text-white transition-all">
                                                 <ChevronRight className="w-4 h-4" />

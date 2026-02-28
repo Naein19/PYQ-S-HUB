@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Eye, FileText, ExternalLink, Folder, Download } from 'lucide-react'
 import Badge from './Badge'
 import type { PYQ } from '@/lib/queries'
-import { getCleanSubjectTitle } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 import { useView } from '@/context/ViewContext'
 
 interface PYQCardProps {
@@ -55,19 +55,16 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                     <h3 className="text-sm font-semibold text-textPrimary leading-snug line-clamp-2 break-words">
                         {pyq.paper_title}
                     </h3>
-                    <Link
-                        href={`/subject/${pyq.subject_code}`}
-                        className="text-xs text-accent hover:underline mt-0.5 inline-block truncate max-w-full"
-                    >
+                    <span className="text-xs text-slate-500 mt-0.5 inline-block truncate max-w-full font-medium">
                         {getCleanSubjectTitle(pyq.subject_code, pyq.subject_title)}
-                    </Link>
+                    </span>
                 </div>
             </div>
 
             {/* Meta Badges */}
             <div className="flex flex-wrap gap-1.5">
                 <Badge variant="default">{pyq.exam_type}</Badge>
-                <Badge variant="default">{pyq.subject_code}</Badge>
+                <Badge variant="default">{getNormalizedSubjectCode(pyq.subject_code)}</Badge>
             </div>
 
             {/* Footer */}

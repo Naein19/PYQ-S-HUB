@@ -5,7 +5,7 @@ import Badge from '@/components/Badge'
 import { Shield, FileText, Users, Activity, Lock, Loader2 } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import { usePapers } from '@/hooks/usePapers'
-import { getCleanSubjectTitle } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 
 const adminStats = [
     { label: 'Total Paper Archive', value: '1,240', icon: FileText },
@@ -83,7 +83,7 @@ export default function AdminPage() {
                                                 <div className="flex items-center gap-4 mt-2">
                                                     <p className="font-mono text-[10px] text-[#6B7280] font-bold uppercase tracking-widest">INGESTED: ACTIVE</p>
                                                     <div className="w-1 h-1 rounded-full bg-[#111827]/10" />
-                                                    <p className="font-mono text-[10px] text-[#6B7280] font-bold uppercase tracking-widest">{pyq.subject_code}</p>
+                                                    <p className="font-mono text-[10px] text-[#6B7280] font-bold uppercase tracking-widest">{getNormalizedSubjectCode(pyq.subject_code)}</p>
                                                 </div>
                                             </div>
                                             <Badge variant="success" className="text-[8px]">ACTIVE_NODE</Badge>

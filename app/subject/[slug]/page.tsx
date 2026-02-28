@@ -10,7 +10,7 @@ import Button from '@/components/ui/Button'
 import { useSubjectPapers } from '@/hooks/usePapers'
 import { useState, useMemo } from 'react'
 import { cn } from '@/lib/utils'
-import { getCleanSubjectTitle } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 
 interface SubjectPageProps {
     params: { slug: string }
@@ -32,10 +32,10 @@ export default function SubjectPage({ params }: SubjectPageProps) {
 
     // Get subject info from first paper if available
     const subjectInfo = papers.length > 0 ? {
-        code: papers[0].subject_code,
+        code: getNormalizedSubjectCode(papers[0].subject_code),
         title: getCleanSubjectTitle(papers[0].subject_code, papers[0].subject_title),
     } : {
-        code: params.slug,
+        code: getNormalizedSubjectCode(params.slug),
         title: getCleanSubjectTitle(params.slug, 'Subject Archive'),
     }
 

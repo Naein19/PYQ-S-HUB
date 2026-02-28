@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import { Subject } from '@/lib/queries'
-import { getCleanSubjectTitle } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 
 interface SubjectCardProps {
     subject: Subject
@@ -16,7 +16,7 @@ export default function SubjectCard({ subject }: SubjectCardProps) {
                     <BookOpen className="w-6 h-6" />
                 </div>
                 <p className="font-mono text-xs font-black text-[#4338CA] mb-2 uppercase tracking-[0.2em]">
-                    {subject.subject_code}
+                    {getNormalizedSubjectCode(subject.subject_code)}
                 </p>
                 <h3 className="text-2xl font-bold text-[#111827] leading-tight mb-3 uppercase tracking-tighter line-clamp-3 break-words">
                     {getCleanSubjectTitle(subject.subject_code, subject.subject_title)}

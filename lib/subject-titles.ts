@@ -6,7 +6,7 @@
 const courseMapping: Record<string, string> = {
     // CSE
     'CSE1005': 'Software Engineering',
-    'CSE1006': 'User Interface and User Experience Design',
+    'CSE1006': 'FOUNDATION TO DATA ANALYTICS',
     'CSE1007': 'Java Programming',
     'CSE1008': 'Web Technologies',
     'CSE1021': 'Introduction to Problem Solving and Programming',
@@ -55,16 +55,29 @@ const courseMapping: Record<string, string> = {
     'CSE1001': 'Problem Solving and Programming',
     'CSE1002': 'Problem Solving and Object Oriented Programming',
     'CSE2005': 'Operating Systems',
-    'CSE4012': 'UI/UX User Experience Design',
-    '4012_-_PREVIOUS_YEAR_QUESTION_PAPERS - 4012S': 'UI/UX User Experience Design',
+    'CSE4012': 'UI/UX USER EXPREIENCE DESING',
+    '4012': 'UI/UX USER EXPREIENCE DESING',
+    '4012S': 'UI/UX USER EXPREIENCE DESING',
+    '4012_-_PREVIOUS_YEAR_QUESTION_PAPERS - 4012S': 'UI/UX USER EXPREIENCE DESING',
 };
+
+/**
+ * Normalizes a subject code to its clean academic format.
+ */
+export function getNormalizedSubjectCode(code: string): string {
+    const ucCode = code.toUpperCase().trim();
+    if (ucCode.includes('4012') || ucCode === '4012S') {
+        return 'CSE4012';
+    }
+    return ucCode;
+}
 
 /**
  * Normalizes a subject code and returns the official title if known.
  * If not known, it attempts to clean the provided title.
  */
 export function getCleanSubjectTitle(code: string, rawTitle?: string): string {
-    const normalizedCode = code.toUpperCase().trim();
+    const normalizedCode = getNormalizedSubjectCode(code);
 
     // Check if we have a mapping for this code
     if (courseMapping[normalizedCode]) {
