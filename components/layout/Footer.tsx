@@ -11,8 +11,6 @@ const footerLinks = {
     Company: [
         { label: 'About Us', href: '#' },
         { label: 'Academic integrity', href: '#' },
-        { label: 'Contact', href: '#' },
-        { label: 'Feedback', href: '#' },
     ],
     Legal: [
         { label: 'Privacy Policy', href: '#' },
@@ -23,27 +21,36 @@ const footerLinks = {
 
 export default function Footer() {
     return (
-        <footer className="bg-[#EAE0D5] border-t border-[#111827]">
-            <div className="container-main py-20">
-                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-12">
+        <footer className="bg-[#0A0A0A] border-t border-white/5 relative overflow-hidden">
+            {/* Structural background elements */}
+            <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
+                <div className="absolute top-[-10%] right-[-5%] w-[400px] h-[400px] bg-[#4338CA]/20 blur-[120px] rounded-full" />
+            </div>
+
+            <div className="container-main py-24 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 gap-16 lg:gap-20">
                     {/* Brand Section */}
                     <div className="lg:col-span-2">
-                        <Link href="/" className="flex items-center gap-3 mb-6 group">
-                            <span className="flex items-center justify-center w-10 h-10 rounded-sm bg-[#111827] text-white">
-                                <BookOpen className="w-5 h-5" />
-                            </span>
-                            <span className="font-bold text-xl text-[#111827] tracking-tighter uppercase">
-                                PYQ&apos;s Hub
+                        <Link href="/" className="flex items-center gap-3 mb-8 group">
+                            <div className="flex items-center justify-center w-12 h-12 rounded-sm bg-white text-[#111827] transition-transform group-hover:scale-105">
+                                <BookOpen className="w-6 h-6" />
+                            </div>
+                            <span className="font-black text-2xl text-white tracking-tighter uppercase leading-none">
+                                PYQ&apos;S <br /> HUB
                             </span>
                         </Link>
-                        <p className="text-[#6B7280] text-base leading-relaxed max-w-sm mb-8">
+                        <p className="text-[#A3A3A3] text-lg leading-relaxed max-w-sm mb-10 font-medium">
                             The industrial-grade academic archive for engineering students.
                             Structured, verified, and always accessible.
                         </p>
                         <div className="flex gap-4">
                             {[Twitter, Github, Linkedin].map((Icon, i) => (
-                                <a key={i} href="#" className="w-10 h-10 rounded-sm border border-[#111827] flex items-center justify-center hover:bg-black/5 transition-colors">
-                                    <Icon className="w-5 h-5 text-[#111827]" />
+                                <a
+                                    key={i}
+                                    href="#"
+                                    className="w-12 h-12 rounded-sm border border-white/10 bg-white/5 flex items-center justify-center hover:bg-white hover:text-[#111827] hover:border-white transition-all duration-300 group"
+                                >
+                                    <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
                                 </a>
                             ))}
                         </div>
@@ -52,7 +59,7 @@ export default function Footer() {
                     {/* Links Sections */}
                     {Object.entries(footerLinks).map(([title, links]) => (
                         <div key={title}>
-                            <h4 className="text-[#111827] font-bold text-sm uppercase tracking-widest mb-6">
+                            <h4 className="text-white font-black text-xs uppercase tracking-[0.3em] mb-8 pb-3 border-b border-white/5">
                                 {title}
                             </h4>
                             <ul className="space-y-4">
@@ -60,10 +67,10 @@ export default function Footer() {
                                     <li key={link.label}>
                                         <Link
                                             href={link.href}
-                                            className="text-[#6B7280] text-sm hover:text-[#111827] transition-colors relative inline-block group"
+                                            className="text-[#A3A3A3] text-sm hover:text-white transition-all duration-200 relative inline-block group font-medium"
                                         >
                                             {link.label}
-                                            <span className="absolute bottom-0 left-0 w-0 h-px bg-[#111827] transition-all duration-200 group-hover:w-full" />
+                                            <span className="absolute bottom-[-2px] left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full" />
                                         </Link>
                                     </li>
                                 ))}
@@ -72,19 +79,21 @@ export default function Footer() {
                     ))}
                 </div>
 
-                <div className="mt-20 pt-10 border-t border-[#111827]/10 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <div className="flex items-center gap-6">
-                        <p className="text-xs text-[#6B7280] font-medium uppercase tracking-wider">
-                            &copy; {new Date().getFullYear()} PYQ&apos;s Hub Inc.
+                <div className="mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                        <p className="text-[10px] text-[#6B7280] font-black uppercase tracking-[0.2em]">
+                            &copy; {new Date().getFullYear()} PYQ&apos;S HUB INC. // ALL RIGHTS RESERVED.
                         </p>
-                        <div className="h-4 w-px bg-[#111827]/10 hidden sm:block" />
-                        <p className="text-xs text-[#6B7280] font-mono">
-                            Ver. 2.0.4-industrial
-                        </p>
+                        <div className="flex items-center gap-3">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                            <p className="text-[10px] text-green-500/80 font-mono font-black uppercase tracking-widest">
+                                SYSTEMS_OPERATIONAL: V2.0.4-INDUSTRIAL
+                            </p>
+                        </div>
                     </div>
-                    <div className="flex gap-8">
-                        <Link href="#" className="text-xs text-[#6B7280] hover:text-[#111827] font-medium uppercase tracking-wider">Status</Link>
-                        <Link href="#" className="text-xs text-[#6B7280] hover:text-[#111827] font-medium uppercase tracking-wider">System Info</Link>
+                    <div className="flex gap-10">
+                        <Link href="#" className="text-[10px] text-[#6B7280] hover:text-white font-black uppercase tracking-[0.2em] transition-colors">ARCHIVE_STATUS</Link>
+                        <Link href="#" className="text-[10px] text-[#6B7280] hover:text-white font-black uppercase tracking-[0.2em] transition-colors">SECURITY_MANIFESTO</Link>
                     </div>
                 </div>
             </div>

@@ -39,6 +39,10 @@
     color: var(--color-text);
   }
 
+  ::selection {
+    @apply bg-[#111827] text-[#EAE0D5];
+  }
+
   * {
     box-sizing: border-box;
   }
@@ -158,6 +162,32 @@
   .btn-secondary:hover {
     filter: brightness(0.96);
     box-shadow: 4px 4px 0px #111827;
+  }
+
+  /* 3D Industrial Effects */
+  .btn-3d {
+    @apply border border-[#111827] bg-white rounded-sm transition-all duration-75;
+    box-shadow: 2px 2px 0px #111827;
+  }
+
+  .btn-3d:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px #111827;
+  }
+
+  .icon-3d {
+    @apply flex items-center justify-center rounded-sm border border-[#111827] bg-[#EAE0D5] transition-all duration-150;
+    box-shadow: 3px 3px 0px #111827;
+  }
+
+  .icon-3d:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0px #111827;
+  }
+
+  .icon-3d:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 0px #111827;
   }
 
   /* ── Badges ── */

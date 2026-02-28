@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { Eye, FileText, ExternalLink, Folder, Download } from 'lucide-react'
+import { Eye, FileText, ExternalLink, Folder, Download, Share2, Check } from 'lucide-react'
+import { useState } from 'react'
 import Badge from './Badge'
 import type { PYQ } from '@/lib/queries'
 import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
@@ -11,6 +12,8 @@ interface PYQCardProps {
 
 export default function PYQCard({ pyq }: PYQCardProps) {
     const { viewPaper } = useView()
+
+    const [copied, setCopied] = useState(false)
 
     const handleDownload = async (e: React.MouseEvent) => {
         e.preventDefault()
@@ -27,24 +30,51 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             document.body.removeChild(a)
         } catch (error) {
             console.error('Download failed:', error)
-            // Fallback to opening in new tab if fetch fails
             window.open(pyq.file_url, '_blank')
+        }
+    }
+
+    const handleShare = async (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        const shareUrl = `${window.location.origin}/subject/${pyq.subject_code}`
+
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: pyq.paper_title,
+                    text: `Check out this PYQ for ${pyq.subject_code}`,
+                    url: shareUrl
+                })
+            } else {
+                await navigator.clipboard.writeText(shareUrl)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+            }
+        } catch (err) {
+            console.error('Error sharing:', err)
         }
     }
 
     return (
         <article className="card p-5 flex flex-col gap-4 relative group/card">
-            {/* Subject Archive Shortcut */}
-            <Link
-                href={`/subject/${pyq.subject_code}`}
-                className="absolute top-4 right-4 flex items-center gap-1.5 p-1.5 rounded-sm bg-[#111827]/5 hover:bg-[#111827] hover:text-white transition-all group/folder z-10"
-                title="View All Files"
-            >
-                <span className="text-[10px] font-black uppercase tracking-widest opacity-0 max-w-0 overflow-hidden group-hover/folder:opacity-100 group-hover/folder:max-w-[100px] transition-all duration-300 pointer-events-none">
-                    ALL FILES
-                </span>
-                <Folder className="w-4 h-4" />
-            </Link>
+            {/* Subject Archive & Share Shortcuts */}
+            <div className="absolute top-4 right-4 flex gap-2 z-10">
+                <button
+                    onClick={handleShare}
+                    className="w-9 h-9 icon-3d group/share bg-white hover:bg-white"
+                    title="Share Repository"
+                >
+                    {copied ? <Check className="w-4 h-4 text-green-600" /> : <Share2 className="w-4 h-4 text-[#111827]" />}
+                </button>
+                <Link
+                    href={`/subject/${pyq.subject_code}`}
+                    className="w-9 h-9 icon-3d group/folder bg-[#EAE0D5] hover:bg-[#111827] hover:text-white"
+                    title="View All Files"
+                >
+                    <Folder className="w-4 h-4" />
+                </Link>
+            </div>
 
             {/* Header */}
             <div className="flex items-start gap-3">
@@ -76,10 +106,10 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                     </span>
                     <button
                         onClick={() => viewPaper(pyq)}
-                        className="flex items-center gap-1 hover:text-accent transition-colors"
+                        className="flex items-center gap-2 px-3 py-1.5 bg-[#111827] text-white text-[10px] font-black uppercase tracking-widest rounded-sm border border-[#111827] shadow-[2px_2px_0px_#111827] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#111827] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#111827] transition-all"
                     >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        VIEW
+                        <Eye className="w-4 h-4" />
+                        <span>VIEW_FILE</span>
                     </button>
                 </div>
                 <button

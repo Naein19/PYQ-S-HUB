@@ -85,34 +85,50 @@ function ExploreContent() {
     return (
         <div className="bg-[#FBF9F7] min-h-screen animate-fade-in pb-20">
             <div className="container-main py-10 lg:py-24">
-                {/* Page Header */}
-                <div className="mb-10 lg:mb-16 border-b-2 border-[#111827] pb-8 lg:pb-12">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-[#111827] bg-[#EAE0D5] mb-6 lg:mb-8 font-mono text-[10px] font-black uppercase tracking-[0.3em] text-[#111827]">
-                        Industrial Archive Explorer
+                {/* Page Header - Cinematic Industrial Vault */}
+                <div className="relative mb-16 lg:mb-24 p-10 lg:p-20 overflow-hidden bg-[#0A0A0A] border-2 border-[#111827] shadow-[8px_8px_0px_#111827]">
+                    {/* Background Illustration */}
+                    <div className="absolute inset-0 z-0 opacity-40 grayscale hover:grayscale-0 transition-all duration-1000 group">
+                        <img
+                            src="/assets/explore_vault.png"
+                            alt="Central Vault"
+                            className="w-full h-full object-cover opacity-60 brightness-100"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 via-transparent to-[#0A0A0A]/40" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/40 via-transparent to-[#0A0A0A]/20" />
                     </div>
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 lg:gap-8">
-                        <div>
-                            <h1 className="text-4xl md:text-7xl font-black text-[#111827] uppercase tracking-tighter mb-3 leading-[0.9]">
-                                EXPLORE <br />REPOSITORY.
-                            </h1>
-                            <p className="text-base md:text-xl text-[#6B7280] max-w-2xl font-medium">
-                                Technical extraction interface for collegiate historical papers.
-                            </p>
+
+                    <div className="relative z-10">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-white/20 bg-white/5 backdrop-blur-md mb-8 lg:mb-12 font-mono text-[10px] font-black uppercase tracking-[0.3em] text-[#4338CA]">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#4338CA] animate-pulse" />
+                            CENTRAL_ARCHIVE_EXPLORER_v2.1
                         </div>
-                        <div className="flex gap-4">
-                            <div className="hidden sm:flex border border-[#111827] rounded-sm overflow-hidden bg-white">
-                                <button
-                                    onClick={() => setViewType('grid')}
-                                    className={cn("p-3 transition-colors", viewType === 'grid' ? "bg-[#111827] text-white" : "bg-white text-[#111827] hover:bg-black/5")}
-                                >
-                                    <LayoutGrid className="w-5 h-5" />
-                                </button>
-                                <button
-                                    onClick={() => setViewType('list')}
-                                    className={cn("p-3 transition-colors", viewType === 'list' ? "bg-[#111827] text-white" : "bg-white text-[#111827] hover:bg-black/5")}
-                                >
-                                    <List className="w-5 h-5" />
-                                </button>
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
+                            <div>
+                                <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-6 leading-[0.85]">
+                                    EXPLORE <br />
+                                    <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>REPOSITORY.</span>
+                                </h1>
+                                <p className="text-lg md:text-2xl text-[#A3A3A3] max-w-2xl font-medium leading-relaxed">
+                                    Primary resource extraction interface for collegiate technical archives.
+                                    Filtering protocol established and ready for synchronization.
+                                </p>
+                            </div>
+                            <div className="flex gap-4">
+                                <div className="hidden sm:flex border border-white/10 rounded-sm overflow-hidden bg-white/5 backdrop-blur-md p-1">
+                                    <button
+                                        onClick={() => setViewType('grid')}
+                                        className={cn("p-4 rounded-sm transition-all", viewType === 'grid' ? "bg-white text-[#111827]" : "text-white/40 hover:text-white")}
+                                    >
+                                        <LayoutGrid className="w-6 h-6" />
+                                    </button>
+                                    <button
+                                        onClick={() => setViewType('list')}
+                                        className={cn("p-4 rounded-sm transition-all", viewType === 'list' ? "bg-white text-[#111827]" : "text-white/40 hover:text-white")}
+                                    >
+                                        <List className="w-6 h-6" />
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

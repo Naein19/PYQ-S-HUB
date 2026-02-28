@@ -24,6 +24,9 @@ import { usePapers } from '@/hooks/usePapers'
 import { useSubjects } from '@/hooks/useSubjects'
 import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 import { cn } from '@/lib/utils'
+import { useAuth } from '@/context/AuthContext'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
 const mockUser = {
     name: 'Alex Kumar',
@@ -38,9 +41,31 @@ const mockUser = {
 }
 
 export default function DashboardPage() {
+    const { user, loading: authLoading } = useAuth()
+    const router = useRouter()
+
     const filters = useMemo(() => ({}), [])
-    const { papers: recentPYQs, loading: papersLoading } = usePapers(filters, 1)
+    const { papers: recentPYQs, loading: papersLoading, error: papersError } = usePapers(filters, 1)
     const { subjects, loading: subjectsLoading } = useSubjects()
+
+    useEffect(() => {
+        if (!authLoading && !user) {
+            router.push('/login')
+        }
+    }, [user, authLoading, router])
+
+    if (authLoading) {
+        return (
+            <div className="min-h-screen bg-[#EAE0D5] flex items-center justify-center">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="w-12 h-12 animate-spin text-[#4338CA]" />
+                    <p className="font-mono text-sm font-bold uppercase tracking-widest animate-pulse font-black">Establishing Session...</p>
+                </div>
+            </div>
+        )
+    }
+
+    if (!user) return null
 
     return (
         <div className="bg-[#FBF9F7] min-h-screen animate-fade-in pb-20">
@@ -72,15 +97,15 @@ export default function DashboardPage() {
                                 IDENTITY_VERIFIED
                             </div>
                             <span className="text-[10px] font-mono font-bold text-[#111827]/30 uppercase tracking-[0.3em]">
-                                UID: {mockUser.regNo}
+                                UID: {user.id.slice(0, 8)}
                             </span>
                         </div>
                         <h1 className="text-4xl md:text-7xl font-black text-[#111827] uppercase tracking-tighter mb-4 leading-none">
                             ACADEMIC <br /> STATION.
                         </h1>
                         <p className="text-lg md:text-xl text-[#6B7280] font-medium max-w-2xl">
-                            Welcome back, {mockUser.name.split(' ')[0]}. Automated resource extraction
-                            terminal for the {mockUser.department} archive.
+                            Welcome back, {user.email?.split('@')[0]}. Automated resource extraction
+                            terminal for the academic archive.
                         </p>
                     </div>
 
@@ -88,11 +113,11 @@ export default function DashboardPage() {
                         <div className="p-6 bg-white border border-[#111827] rounded-sm flex flex-col justify-between min-w-[200px]">
                             <span className="text-[9px] font-mono font-black text-[#111827]/40 uppercase tracking-[0.2em] mb-4">EXTRACTION_CAP</span>
                             <div>
-                                <div className="text-3xl font-black text-[#111827] mb-1">{mockUser.extractionUsed}/{mockUser.extractionLimit}</div>
+                                <div className="text-3xl font-black text-[#111827] mb-1">34/100</div>
                                 <div className="w-full bg-[#EAE0D5] h-1.5 mt-2 overflow-hidden rounded-full">
                                     <div
                                         className="bg-[#111827] h-full transition-all duration-1000"
-                                        style={{ width: `${(mockUser.extractionUsed / mockUser.extractionLimit) * 100}%` }}
+                                        style={{ width: `34%` }}
                                     />
                                 </div>
                             </div>
@@ -121,7 +146,7 @@ export default function DashboardPage() {
                                 <div className="relative z-10 space-y-6">
                                     <div className="flex flex-col gap-1">
                                         <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest text-[#6B7280]">DEPARTMENT_UNIT</span>
-                                        <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">{mockUser.department}</span>
+                                        <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">Academic Researcher</span>
                                     </div>
                                     <div className="flex justify-between">
                                         <div className="flex flex-col gap-1">
@@ -129,8 +154,8 @@ export default function DashboardPage() {
                                             <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">{mockUser.semester}_ODD</span>
                                         </div>
                                         <div className="flex flex-col gap-1 items-end">
-                                            <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest text-[#6B7280]">LOCATION</span>
-                                            <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">{mockUser.location}</span>
+                                            <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest text-[#6B7280]">ACCOUNT_ID</span>
+                                            <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">{user.email}</span>
                                         </div>
                                     </div>
                                     <div className="pt-4 border-t border-[#111827]/5 flex items-center justify-between">

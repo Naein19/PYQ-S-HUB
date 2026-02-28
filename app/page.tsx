@@ -6,7 +6,7 @@ import ExamTypeCard from '@/components/pyq/ExamTypeCard'
 import MetadataStrip from '@/components/pyq/MetadataStrip'
 import SubjectCard from '@/components/pyq/SubjectCard'
 import Link from 'next/link'
-import { ArrowRight, BookOpen, ShieldCheck, Zap, Loader2 } from 'lucide-react'
+import { ArrowRight, BookOpen, ShieldCheck, Zap, Loader2, Mail, MessageSquare, Globe, Send, Phone } from 'lucide-react'
 import { examTypes } from '@/lib/mock-data'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
@@ -31,79 +31,114 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Section 3: About Section (2-column industrial) */}
-            <section className="bg-white border-y border-[#111827] py-24">
-                <div className="container-main">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            {/* Section 3: About Section - Industrial high-fidelity */}
+            <section className="relative bg-[#0A0A0A] py-32 lg:py-48 overflow-hidden border-y border-white/5">
+                {/* Background Illustration */}
+                <div className="absolute top-0 right-0 w-1/2 h-full z-0 opacity-20 pointer-events-none hidden lg:block">
+                    <img
+                        src="/assets/data_stack.png"
+                        alt="Technical Structure"
+                        className="w-full h-full object-cover brightness-100"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#0A0A0A]/80" />
+                </div>
+
+                <div className="container-main relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
                         <div>
-                            <p className="text-[#4338CA] font-mono text-xs font-bold uppercase tracking-[0.3em] mb-6">
-                                The Archive Mission
-                            </p>
-                            <h2 className="text-4xl md:text-5xl font-black text-[#111827] leading-none mb-8 uppercase tracking-tighter">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#4338CA]/10 border border-[#4338CA]/30 rounded-sm mb-8">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#4338CA] animate-pulse" />
+                                <span className="text-[10px] font-mono font-black text-[#4338CA] uppercase tracking-[0.3em]">CORE_SYSTEM_PROTOCOL</span>
+                            </div>
+
+                            <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] mb-10 uppercase tracking-tighter">
                                 BUILT FOR THE <br />
-                                <span className="italic font-serif normal-case tracking-normal">Academic</span> DISCIPLINE.
+                                <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>ACADEMIC</span> <br />
+                                DISCIPLINE.
                             </h2>
-                            <p className="text-lg text-[#6B7280] leading-relaxed mb-10">
-                                We believe that preparation is 90% of the battle. Our mission is to provide
-                                engineering students with the most structured, verified, and high-fidelity
-                                question paper archive possible. No fluff, no distractions—just pure discipline.
+                            <p className="text-xl text-[#A3A3A3] leading-relaxed mb-12 max-w-xl font-medium">
+                                We believe that preparation is the primary vector for success. Our mission is to provide
+                                engineering students with a structured, verified, and high-fidelity
+                                question paper repository. No noise—just precision.
                             </p>
-                            <div className="grid grid-cols-2 gap-8">
-                                <div>
-                                    <h4 className="font-black text-[#111827] uppercase tracking-widest text-sm mb-3">Integrity</h4>
-                                    <p className="text-sm text-[#6B7280]">All papers undergo a 3-step verification process before upload.</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                                <div className="p-6 border-l-2 border-white/10">
+                                    <h4 className="font-black text-white uppercase tracking-widest text-xs mb-4">ARCHIVE_INTEGRITY</h4>
+                                    <p className="text-sm text-[#6B7280] leading-relaxed">Multi-stage verification protocol for every document upload.</p>
                                 </div>
-                                <div>
-                                    <h4 className="font-black text-[#111827] uppercase tracking-widest text-sm mb-3">Structure</h4>
-                                    <p className="text-sm text-[#6B7280]">Organized by department, year, and specific exam category.</p>
+                                <div className="p-6 border-l-2 border-white/10">
+                                    <h4 className="font-black text-white uppercase tracking-widest text-xs mb-4">ARCHIVE_STRUCTURE</h4>
+                                    <p className="text-sm text-[#6B7280] leading-relaxed">Organized by department, tier, and specific temporal parameters.</p>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <Card noHover size="sm" className="bg-[#F9FAFB] flex flex-col items-start gap-6">
-                                <ShieldCheck className="w-8 h-8 text-[#111827]" />
-                                <h3 className="font-black text-xl uppercase tracking-tighter">Verified Content</h3>
-                                <p className="text-sm text-[#6B7280]">Official university question papers sourced and scanned at high fidelity.</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative">
+                            {/* Glass cards with backdrop blur */}
+                            <Card noHover className="bg-white/5 backdrop-blur-md border-white/10 text-white p-8 group hover:border-[#4338CA]/40 transition-all">
+                                <ShieldCheck className="w-8 h-8 mb-6 text-[#4338CA]" />
+                                <h3 className="font-black text-xl uppercase tracking-tighter mb-4">VERIFIED_DATA</h3>
+                                <p className="text-sm text-[#A3A3A3] leading-relaxed font-medium">Official university question papers sourced and scanned at max fidelity.</p>
                             </Card>
-                            <Card noHover size="sm" className="bg-[#F9FAFB] flex flex-col items-start gap-6">
-                                <Zap className="w-8 h-8 text-[#111827]" />
-                                <h3 className="font-black text-xl uppercase tracking-tighter">Rapid Access</h3>
-                                <p className="text-sm text-[#6B7280]">Optimized search and filtering system for sub-second paper retrieval.</p>
+                            <Card noHover className="bg-white/5 backdrop-blur-md border-white/10 text-white p-8 group hover:border-[#4338CA]/40 transition-all">
+                                <Zap className="w-8 h-8 mb-6 text-[#4338CA]" />
+                                <h3 className="font-black text-xl uppercase tracking-tighter mb-4">RAPID_EXTRACTION</h3>
+                                <p className="text-sm text-[#A3A3A3] leading-relaxed font-medium">Optimized search architecture for sub-second resource discovery.</p>
                             </Card>
-                            <Card noHover size="sm" className="col-span-full bg-[#111827] text-white flex flex-row items-center justify-between p-8">
-                                <div>
-                                    <h3 className="font-black text-2xl uppercase tracking-tighter mb-2">Ready to study?</h3>
-                                    <p className="text-sm text-[#A3A3A3]">Join 3,200+ students in the archive.</p>
-                                </div>
+                            <div className="col-span-full">
                                 <Link href="/explore">
-                                    <Button variant="secondary" className="bg-white text-[#111827] border-none">
-                                        ENTER REPOSITORY
-                                    </Button>
+                                    <div className="w-full h-24 bg-[#111827] border border-white/10 rounded-sm flex items-center justify-between px-8 hover:bg-[#4338CA] transition-all group overflow-hidden relative">
+                                        <div className="relative z-10 flex items-center gap-6">
+                                            <div className="w-12 h-12 bg-white/5 rounded-sm flex items-center justify-center border border-white/10">
+                                                <BookOpen className="w-6 h-6 text-white" />
+                                            </div>
+                                            <div>
+                                                <h3 className="font-black text-xl text-white uppercase tracking-tighter">INITIALIZE_EXPLORATION</h3>
+                                                <p className="text-[10px] text-white/50 font-mono uppercase tracking-[0.2em]">ACCESS_CENTRAL_REPOSITORY_v2.0.4</p>
+                                            </div>
+                                        </div>
+                                        <ArrowRight className="w-6 h-6 text-white transition-transform group-hover:translate-x-2 relative z-10" />
+                                        {/* Cinematic hover effect */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                    </div>
                                 </Link>
-                            </Card>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* Section 4: Exam Type Cards Grid */}
-            <section id="exams" className="section-warm py-24 border-b border-[#111827]">
-                <div className="container-main">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                        <div className="max-w-2xl">
-                            <h2 className="text-4xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter leading-none mb-6">
-                                THE EXAMINATION <br /> CATEGORIES.
+            {/* Section 4: Exam Type Cards Grid - Industrial backgrounds */}
+            <section id="exams" className="relative py-32 overflow-hidden bg-[#111827]">
+                {/* Background Image Overlay */}
+                <div className="absolute inset-0 z-0 opacity-20 pointer-events-none grayscale brightness-50">
+                    <img
+                        src="/assets/exam_tiers.png"
+                        alt="Exam Tiers"
+                        className="w-full h-full object-cover opacity-40 brightness-100"
+                    />
+                    <div className="absolute inset-0 bg-[#111827]/60" />
+                </div>
+
+                <div className="container-main relative z-10">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
+                        <div className="max-w-3xl">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-sm mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
+                                Classification_Parameters
+                            </div>
+                            <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-8">
+                                THE EXAMINATION <br />
+                                <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.4)' }}>CATEGORIES.</span>
                             </h2>
-                            <p className="text-lg text-[#6B7280]">
-                                Our archive is categorized into three major continuous assessment and
-                                final examination tiers to help you target your specific needs.
+                            <p className="text-xl text-[#A3A3A3] font-medium leading-relaxed">
+                                Our archive is partitioned into three discrete assessment tiers.
+                                Select a category to isolate specific academic historical data.
                             </p>
                         </div>
                         <Link href="/explore">
-                            <Button variant="secondary" className="uppercase tracking-widest font-bold">
-                                All Categories
-                                <ArrowRight className="w-4 h-4 ml-1" />
+                            <Button className="px-8 py-4 uppercase tracking-[0.2em] font-black">
+                                VIEW_FULL_INDEX
+                                <ArrowRight className="w-5 h-5 ml-2" />
                             </Button>
                         </Link>
                     </div>
@@ -152,7 +187,7 @@ export default function HomePage() {
             </section>
 
             {/* Section 6: Recent PYQs */}
-            <section className="bg-white py-24">
+            <section className="bg-white py-24 border-b border-[#111827]">
                 <div className="container-main">
                     <div className="flex items-center justify-between mb-16">
                         <div>
@@ -185,34 +220,66 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Final CTA */}
-            <section className="bg-[#EAE0D5] py-24">
-                <div className="container-main">
-                    <Card noHover className="bg-[#111827] text-white p-16 text-center flex flex-col items-center">
-                        <div className="w-16 h-16 rounded-sm border border-[#4338CA] flex items-center justify-center bg-[#1E1B4B] mb-8">
-                            <BookOpen className="w-8 h-8 text-[#4338CA]" />
+
+            {/* Final CTA - Cinematic industrial scale */}
+            <section className="relative py-32 lg:py-48 overflow-hidden bg-[#111827]">
+                {/* Background Image with Cinematic Overlay */}
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="/assets/industrial_library_bg.png"
+                        alt="Industrial Archive"
+                        className="w-full h-full object-cover opacity-60 brightness-100"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/60 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#111827]/80 via-transparent to-[#111827]/80" />
+                </div>
+
+                <div className="container-main relative z-10 text-center">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="inline-flex items-center gap-3 px-4 py-2 bg-[#4338CA]/10 border border-[#4338CA]/30 rounded-sm mb-12 animate-pulse">
+                            <ShieldCheck className="w-5 h-5 text-[#4338CA]" />
+                            <span className="text-[10px] font-mono font-black text-[#4338CA] uppercase tracking-[0.3em]">SECURE_ARCHIVE_ACCESS_ESTABLISHED_v2.0</span>
                         </div>
-                        <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter leading-none mb-8">
+
+                        <h2 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-12">
                             STOP SEARCHING. <br />
-                            START PREPARING.
+                            <span className="text-transparent" style={{ WebkitTextStroke: '2px rgba(255,255,255,0.4)' }}>START PREPARING.</span>
                         </h2>
-                        <p className="text-xl text-[#A3A3A3] max-w-2xl mb-12">
-                            Join the industrial hub for engineering question papers.
-                            Free forever for students who value structure.
+
+                        <p className="text-xl md:text-2xl text-[#A3A3A3] font-medium mb-16 max-w-2xl mx-auto leading-relaxed">
+                            Join the elite industrial hub for engineering question papers.
+                            The most structured, verified archive built for digital-first students.
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-6">
+
+                        <div className="flex flex-col sm:flex-row gap-8 justify-center items-center">
                             <Link href="/register">
-                                <Button size="lg" className="px-10 py-5 text-lg uppercase tracking-[0.2em] font-black">
-                                    Get Started Now
+                                <Button size="lg" className="px-12 py-6 text-xl uppercase tracking-[0.2em] font-black group">
+                                    INITIALIZE_ENROLLMENT
+                                    <ArrowRight className="w-6 h-6 ml-2 transition-transform group-hover:translate-x-2" />
                                 </Button>
                             </Link>
                             <Link href="/explore">
-                                <Button variant="secondary" size="lg" className="px-10 py-5 text-lg uppercase tracking-[0.2em] font-black bg-transparent border-white text-white hover:bg-white hover:text-[#111827]">
-                                    Browse Archive
+                                <Button variant="secondary" size="lg" className="px-12 py-6 text-xl uppercase tracking-[0.2em] font-black bg-transparent border-white/20 text-white hover:bg-white hover:text-[#111827] hover:border-white transition-all">
+                                    SCAN_REPOSITORIES
                                 </Button>
                             </Link>
                         </div>
-                    </Card>
+
+                        <div className="mt-20 flex flex-wrap justify-center gap-12 opacity-30 grayscale contrast-125">
+                            <div className="flex flex-col items-center">
+                                <span className="text-4xl font-black text-white">3.2K</span>
+                                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#6B7280]">ACTIVE_STUDENTS</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-4xl font-black text-white">12K+</span>
+                                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#6B7280]">VERIFIED_PAPERS</span>
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <span className="text-4xl font-black text-white">24MS</span>
+                                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#6B7280]">ARCHIVE_LATENCY</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
         </div>

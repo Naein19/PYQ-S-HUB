@@ -28,16 +28,20 @@ export const metadata: Metadata = {
     keywords: ['PYQ', 'engineering', 'CAT-1', 'CAT-2', 'FAT', 'question papers'],
 }
 
+import { AuthProvider } from '@/context/AuthContext'
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
             <body className="bg-[#EAE0D5] text-[#111827] min-h-screen flex flex-col font-sans">
-                <ViewProvider>
-                    <Navbar />
-                    <main className="flex-1">{children}</main>
-                    <Footer />
-                    <PDFViewerOverlay />
-                </ViewProvider>
+                <AuthProvider>
+                    <ViewProvider>
+                        <Navbar />
+                        <main className="flex-1">{children}</main>
+                        <Footer />
+                        <PDFViewerOverlay />
+                    </ViewProvider>
+                </AuthProvider>
             </body>
         </html>
     )

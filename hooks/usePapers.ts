@@ -43,7 +43,7 @@ export function usePapers(filters: {
     useEffect(() => {
         setPage(1);
         fetchPapers(1, false);
-    }, [filters, fetchPapers]);
+    }, [JSON.stringify(filters), fetchPapers]);
 
     const loadMore = useCallback(() => {
         if (hasMore && !loadingMore) {
