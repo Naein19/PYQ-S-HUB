@@ -88,14 +88,14 @@ function ExploreContent() {
                 {/* Page Header - Cinematic Industrial Vault */}
                 <div className="relative mb-16 lg:mb-24 p-10 lg:p-20 overflow-hidden bg-[#0A0A0A] border-2 border-[#111827] shadow-[8px_8px_0px_#111827]">
                     {/* Background Illustration */}
-                    <div className="absolute inset-0 z-0 opacity-40 grayscale hover:grayscale-0 transition-all duration-1000 group">
+                    <div className="absolute inset-0 z-0 opacity-60 grayscale hover:grayscale-0 transition-all duration-1000 group">
                         <img
                             src="/assets/explore_vault.png"
                             alt="Central Vault"
-                            className="w-full h-full object-cover opacity-60 brightness-100"
+                            className="w-full h-full object-cover opacity-80 brightness-100"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/80 via-transparent to-[#0A0A0A]/40" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/40 via-transparent to-[#0A0A0A]/20" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-[#0A0A0A]/40 to-[#0A0A0A]/20" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/60 via-transparent to-[#0A0A0A]/30" />
                     </div>
 
                     <div className="relative z-10">
@@ -140,6 +140,11 @@ function ExploreContent() {
                         <SearchBar
                             className="w-full"
                             placeholder="Identify subject code or document name..."
+                            suggestions={subjects.map(s => ({
+                                label: s.subject_code,
+                                value: s.subject_code,
+                                sublabel: getCleanSubjectTitle(s.subject_code, s.subject_title)
+                            }))}
                             onSearch={setDebouncedSearch}
                         />
                     </div>

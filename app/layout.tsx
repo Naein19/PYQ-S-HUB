@@ -5,6 +5,8 @@ import Footer from '@/components/layout/Footer'
 import '@/styles/globals.css'
 import { ViewProvider } from '@/context/ViewContext'
 import PDFViewerOverlay from '@/components/pyq/PDFViewerOverlay'
+import { Analytics } from "@vercel/analytics/next"
+import TabManager from '@/components/layout/TabManager'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -26,6 +28,11 @@ export const metadata: Metadata = {
     description:
         "Industrial academic archive for engineering students. Organized by department, semester, and exam tier.",
     keywords: ['PYQ', 'engineering', 'CAT-1', 'CAT-2', 'FAT', 'question papers'],
+    icons: {
+        icon: '/assets/icon_light.png',
+        shortcut: '/assets/icon_light.png',
+        apple: '/assets/icon_light.png',
+    },
 }
 
 import { AuthProvider } from '@/context/AuthContext'
@@ -40,6 +47,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <main className="flex-1">{children}</main>
                         <Footer />
                         <PDFViewerOverlay />
+                        <Analytics />
+                        <TabManager />
                     </ViewProvider>
                 </AuthProvider>
             </body>

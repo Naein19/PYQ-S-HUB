@@ -24,7 +24,7 @@ export default function Hero() {
 
                         <h1 className="text-5xl md:text-7xl font-black text-[#111827] leading-[0.9] tracking-[-0.05em] uppercase mb-8">
                             EVERY EXAM <br />PAPER. <br />
-                            <span className="text-transparent border-b-4 border-[#111827]" style={{ WebkitTextStroke: '1px #111827' }}>RE-ENGINEERED.</span>
+                            <span className="text-transparent border-b-4 border-[#111827]" style={{ WebkitTextStroke: '1.5px #111827', textShadow: '1px 1px 0px rgba(17,24,39,0.1)' }}>RE-ENGINEERED.</span>
                         </h1>
 
                         <p className="text-xl text-[#6B7280] leading-relaxed mb-10 max-w-xl">

@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { BookOpen, Github, Twitter, Linkedin } from 'lucide-react'
+import { Github, Twitter, Linkedin } from 'lucide-react'
+import Logo from '@/components/Logo'
 
 const footerLinks = {
     Platform: [
@@ -9,13 +10,13 @@ const footerLinks = {
         { label: 'Subject list', href: '/explore' },
     ],
     Company: [
-        { label: 'About Us', href: '#' },
-        { label: 'Academic integrity', href: '#' },
+        { label: 'About Us', href: '/about' },
+        { label: 'Academic integrity', href: '/academic-integrity' },
     ],
     Legal: [
-        { label: 'Privacy Policy', href: '#' },
-        { label: 'Terms of Use', href: '#' },
-        { label: 'Cookie Policy', href: '#' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Terms of Use', href: '/terms' },
+        { label: 'Cookie Policy', href: '/cookies' },
     ],
 }
 
@@ -32,9 +33,7 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="lg:col-span-2">
                         <Link href="/" className="flex items-center gap-3 mb-8 group">
-                            <div className="flex items-center justify-center w-12 h-12 rounded-sm bg-white text-[#111827] transition-transform group-hover:scale-105">
-                                <BookOpen className="w-6 h-6" />
-                            </div>
+                            <Logo className="w-12 h-12 transition-transform group-hover:scale-105" variant="light" />
                             <span className="font-black text-2xl text-white tracking-tighter uppercase leading-none">
                                 PYQ&apos;S <br /> HUB
                             </span>
@@ -48,7 +47,7 @@ export default function Footer() {
                                 <a
                                     key={i}
                                     href="#"
-                                    className="w-12 h-12 rounded-sm border border-white/10 bg-white/5 flex items-center justify-center hover:bg-white hover:text-[#111827] hover:border-white transition-all duration-300 group"
+                                    className="w-12 h-12 rounded-sm border border-white/20 bg-white/10 text-white flex items-center justify-center hover:bg-white hover:text-[#111827] hover:border-white transition-all duration-300 group"
                                 >
                                     <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
                                 </a>

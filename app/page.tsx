@@ -34,13 +34,13 @@ export default function HomePage() {
             {/* Section 3: About Section - Industrial high-fidelity */}
             <section className="relative bg-[#0A0A0A] py-32 lg:py-48 overflow-hidden border-y border-white/5">
                 {/* Background Illustration */}
-                <div className="absolute top-0 right-0 w-1/2 h-full z-0 opacity-20 pointer-events-none hidden lg:block">
+                <div className="absolute top-0 right-0 w-1/2 h-full z-0 opacity-50 pointer-events-none hidden lg:block">
                     <img
                         src="/assets/data_stack.png"
                         alt="Technical Structure"
                         className="w-full h-full object-cover brightness-100"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#0A0A0A]/80" />
+                    <div className="absolute inset-0 bg-gradient-to-l from-[#0A0A0A]/20 to-[#0A0A0A]/95" />
                 </div>
 
                 <div className="container-main relative z-10">
@@ -53,7 +53,7 @@ export default function HomePage() {
 
                             <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] mb-10 uppercase tracking-tighter">
                                 BUILT FOR THE <br />
-                                <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>ACADEMIC</span> <br />
+                                <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)', textShadow: '0 0 20px rgba(0,0,0,0.5)' }}>ACADEMIC</span> <br />
                                 DISCIPLINE.
                             </h2>
                             <p className="text-xl text-[#A3A3A3] leading-relaxed mb-12 max-w-xl font-medium">
@@ -111,13 +111,13 @@ export default function HomePage() {
             {/* Section 4: Exam Type Cards Grid - Industrial backgrounds */}
             <section id="exams" className="relative py-32 overflow-hidden bg-[#111827]">
                 {/* Background Image Overlay */}
-                <div className="absolute inset-0 z-0 opacity-20 pointer-events-none grayscale brightness-50">
+                <div className="absolute inset-0 z-0 opacity-40 pointer-events-none grayscale">
                     <img
                         src="/assets/exam_tiers.png"
                         alt="Exam Tiers"
-                        className="w-full h-full object-cover opacity-40 brightness-100"
+                        className="w-full h-full object-cover opacity-60 brightness-100"
                     />
-                    <div className="absolute inset-0 bg-[#111827]/60" />
+                    <div className="absolute inset-0 bg-[#111827]/85" />
                 </div>
 
                 <div className="container-main relative z-10">
@@ -228,10 +228,10 @@ export default function HomePage() {
                     <img
                         src="/assets/industrial_library_bg.png"
                         alt="Industrial Archive"
-                        className="w-full h-full object-cover opacity-60 brightness-100"
+                        className="w-full h-full object-cover opacity-80 brightness-100"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/60 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#111827]/80 via-transparent to-[#111827]/80" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/80 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[#111827]/90 via-transparent to-[#111827]/90" />
                 </div>
 
                 <div className="container-main relative z-10 text-center">

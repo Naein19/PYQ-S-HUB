@@ -7,12 +7,14 @@ const footerLinks = {
         { label: 'Dashboard', href: '/dashboard' },
     ],
     Resources: [
-        { label: 'About', href: '#' },
+        { label: 'About Us', href: '/about' },
+        { label: 'Academic Integrity', href: '/academic-integrity' },
         { label: 'Contact', href: '#' },
     ],
     Legal: [
-        { label: 'Privacy Policy', href: '#' },
-        { label: 'Terms of Use', href: '#' },
+        { label: 'Privacy Policy', href: '/privacy' },
+        { label: 'Terms of Use', href: '/terms' },
+        { label: 'Cookie Policy', href: '/cookies' },
     ],
 }
 

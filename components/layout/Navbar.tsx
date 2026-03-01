@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { BookOpen, Menu, X, User as UserIcon, LogOut, LayoutDashboard, Settings, ShieldCheck } from 'lucide-react'
+import { Menu, X, User as UserIcon, LogOut, LayoutDashboard, Settings, ShieldCheck } from 'lucide-react'
+import Logo from '@/components/Logo'
 import React, { useState, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import Button from '@/components/ui/Button'
@@ -60,10 +61,8 @@ export default function Navbar() {
             <nav className="container-main h-20 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-3 group">
-                    <span className="flex items-center justify-center w-10 h-10 rounded-sm bg-[#111827] text-white transition-transform group-hover:scale-105">
-                        <BookOpen className="w-5 h-5" />
-                    </span>
-                    <span className="font-bold text-xl text-[#111827] tracking-tighter uppercase">
+                    <Logo className="w-10 h-10 transition-transform group-hover:scale-105" variant="dark" />
+                    <span className="font-black text-xl text-[#111827] tracking-tighter uppercase">
                         PYQ&apos;s Hub
                     </span>
                 </Link>

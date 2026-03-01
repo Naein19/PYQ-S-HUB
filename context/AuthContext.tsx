@@ -19,24 +19,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        // Check active sessions and sets the user
-        const getSession = async () => {
-            const { data: { session } } = await supabase.auth.getSession()
-            setUser(session?.user ?? null)
-            setRole(session?.user?.user_metadata?.role ?? null)
-            setLoading(false)
+        let isMounted = true;
+
+        const initializeAuth = async () => {
+            try {
+                // Check active sessions and sets the user
+                const { data: { session }, error } = await supabase.auth.getSession()
+
+                if (error) throw error;
+
+                if (isMounted) {
+                    setUser(session?.user ?? null)
+                    setRole(session?.user?.user_metadata?.role ?? null)
+                }
+            } catch (error) {
+                console.error('Error initializing auth:', error)
+            } finally {
+                if (isMounted) {
+                    setLoading(false)
+                }
+            }
         }
 
-        getSession()
+        initializeAuth()
 
         // Listen for changes on auth state
         const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-            setUser(session?.user ?? null)
-            setRole(session?.user?.user_metadata?.role ?? null)
-            setLoading(false)
+            if (isMounted) {
+                setUser(session?.user ?? null)
+                setRole(session?.user?.user_metadata?.role ?? null)
+                setLoading(false)
+            }
         })
 
         return () => {
+            isMounted = false;
             subscription.unsubscribe()
         }
     }, [])
