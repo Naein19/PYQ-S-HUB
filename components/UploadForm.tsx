@@ -5,7 +5,7 @@ import { Upload, FileText, X, CheckSquare, Layers, Book, CheckCircle2, Loader2, 
 import Button from './ui/Button'
 import Card from './ui/Card'
 import { cn } from '@/lib/utils'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '@/lib/supabase'
 
 const examCategories = [
     { label: 'CAT-1', full_name: 'Continuous Assessment Test 1' },
@@ -64,7 +64,9 @@ export default function UploadForm() {
         try {
             // 1. Generate safe filePath
             const fileExt = file.name.split('.').pop()
-            const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9]/g, '_')}`
+            const uniqueId = Math.random().toString(36).substring(2, 15)
+            const sanitizedBaseName = file.name.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_')
+            const fileName = `${Date.now()}-${uniqueId}-${sanitizedBaseName}`
             filePath = `${subjectCode.toUpperCase()}/${fileName}.${fileExt}`
 
             // 2. Upload to Supabase Storage

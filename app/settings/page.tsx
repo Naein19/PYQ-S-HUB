@@ -21,7 +21,7 @@ import {
 } from 'lucide-react'
 import Loading from '@/components/ui/Loading'
 import { useAuth } from '@/context/AuthContext'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Select from '@/components/ui/Select'
@@ -432,7 +432,7 @@ export default function SettingsPage() {
                                 CONFIRM TOTAL <br /> IDENTITY PURGE?
                             </h2>
                             <p className="text-sm font-medium text-[#6B7280] leading-relaxed mb-10">
-                                This will erase <span className="text-[#111827] font-black">{user.email}</span> from the central archive. You will lose access to all peer resources and personal logs.
+                                This will erase <span className="text-[#111827] font-black">{user?.email}</span> from the central archive. You will lose access to all peer resources and personal logs.
                             </p>
 
                             <div className="flex flex-col gap-4">

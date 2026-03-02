@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { BookOpen, User, Lock, ArrowRight, AlertCircle } from 'lucide-react'
 import Loading from '@/components/ui/Loading'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
 
 export default function LoginPage() {

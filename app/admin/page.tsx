@@ -3,7 +3,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '@/lib/supabase'
 import UploadForm from '@/components/UploadForm'
 import Badge from '@/components/Badge'
 import { Shield, FileText, Users, Activity, Lock, LogOut } from 'lucide-react'

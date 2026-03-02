@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabaseClient'
+import { supabase } from '@/lib/supabase'
 import Loading from '@/components/ui/Loading'
 import Button from '@/components/ui/Button'
 import { ChevronLeft, Download, Maximize2, Minimize2, ExternalLink, AlertTriangle } from 'lucide-react'

@@ -4,7 +4,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import '@/styles/globals.css'
 import { ViewProvider } from '@/context/ViewContext'
-import PDFViewerOverlay from '@/components/pyq/PDFViewerOverlay'
+
 import { Analytics } from "@vercel/analytics/next"
 import TabManager from '@/components/layout/TabManager'
 
