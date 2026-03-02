@@ -3,7 +3,8 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { BookOpen, User, Lock, ArrowRight, Loader2, AlertCircle } from 'lucide-react'
+import { BookOpen, User, Lock, ArrowRight, AlertCircle } from 'lucide-react'
+import Loading from '@/components/ui/Loading'
 import { supabase } from '@/lib/supabaseClient'
 import Button from '@/components/ui/Button'
 
@@ -114,7 +115,7 @@ export default function LoginPage() {
                         >
                             {loading ? (
                                 <>
-                                    <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                                    <Loading size="sm" className="mr-2" />
                                     AUTHENTICATING...
                                 </>
                             ) : (

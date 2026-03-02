@@ -1,9 +1,11 @@
 import { cn } from '@/lib/utils'
 import type { ButtonHTMLAttributes } from 'react'
+import Loading from './Loading'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: 'primary' | 'secondary' | 'ghost'
     size?: 'sm' | 'md' | 'lg'
+    isLoading?: boolean
 }
 
 const sizeClasses = {
@@ -15,8 +17,10 @@ const sizeClasses = {
 export default function Button({
     variant = 'primary',
     size = 'md',
+    isLoading = false,
     className,
     children,
+    disabled,
     ...props
 }: ButtonProps) {
     return (
@@ -26,10 +30,17 @@ export default function Button({
                 variant === 'secondary' && 'btn-secondary',
                 variant === 'ghost' && 'inline-flex items-center justify-center gap-2 text-[#111827] font-medium text-sm px-5 py-2.5 rounded-[8px] hover:bg-black/5 transition-all duration-150',
                 sizeClasses[size],
+                isLoading && 'opacity-80 cursor-not-allowed relative !text-transparent transition-none',
                 className,
             )}
+            disabled={disabled || isLoading}
             {...props}
         >
+            {isLoading && (
+                <span className="absolute inset-0 flex items-center justify-center">
+                    <Loading size="sm" />
+                </span>
+            )}
             {children}
         </button>
     )

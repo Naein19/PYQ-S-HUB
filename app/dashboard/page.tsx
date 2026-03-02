@@ -10,7 +10,6 @@ import {
     Star,
     TrendingUp,
     LayoutGrid,
-    Loader2,
     ShieldCheck,
     Activity,
     ChevronRight,
@@ -27,6 +26,7 @@ import { cn } from '@/lib/utils'
 import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import Loading from '@/components/ui/Loading'
 
 const mockUser = {
     name: 'Alex Kumar',
@@ -54,18 +54,7 @@ export default function DashboardPage() {
         }
     }, [user, authLoading, router])
 
-    if (authLoading) {
-        return (
-            <div className="min-h-screen bg-[#EAE0D5] flex items-center justify-center">
-                <div className="flex flex-col items-center gap-4">
-                    <Loader2 className="w-12 h-12 animate-spin text-[#4338CA]" />
-                    <p className="font-mono text-sm font-bold uppercase tracking-widest animate-pulse font-black">Establishing Session...</p>
-                </div>
-            </div>
-        )
-    }
-
-    if (!user) return null
+    if (!user && !authLoading) return null
 
     return (
         <div className="bg-[#FBF9F7] min-h-screen animate-fade-in pb-20">
@@ -97,14 +86,14 @@ export default function DashboardPage() {
                                 IDENTITY_VERIFIED
                             </div>
                             <span className="text-[10px] font-mono font-bold text-[#111827]/30 uppercase tracking-[0.3em]">
-                                UID: {user.id.slice(0, 8)}
+                                UID: {user?.id.slice(0, 8)}
                             </span>
                         </div>
                         <h1 className="text-4xl md:text-7xl font-black text-[#111827] uppercase tracking-tighter mb-4 leading-none">
                             ACADEMIC <br /> STATION.
                         </h1>
                         <p className="text-lg md:text-xl text-[#6B7280] font-medium max-w-2xl">
-                            Welcome back, {user.email?.split('@')[0]}. Automated resource extraction
+                            Welcome back, {user?.user_metadata?.full_name || user?.email?.split('@')[0]}. Automated resource extraction
                             terminal for the academic archive.
                         </p>
                     </div>
@@ -146,16 +135,22 @@ export default function DashboardPage() {
                                 <div className="relative z-10 space-y-6">
                                     <div className="flex flex-col gap-1">
                                         <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest text-[#6B7280]">DEPARTMENT_UNIT</span>
-                                        <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">Academic Researcher</span>
+                                        <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">
+                                            {user?.user_metadata?.department || 'Academic Researcher'}
+                                        </span>
                                     </div>
                                     <div className="flex justify-between">
                                         <div className="flex flex-col gap-1">
-                                            <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest">SEMESTER</span>
-                                            <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">{mockUser.semester}_ODD</span>
+                                            <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest">PROGRAM_TYPE</span>
+                                            <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">
+                                                {user?.user_metadata?.program_type || 'BTech'}
+                                            </span>
                                         </div>
                                         <div className="flex flex-col gap-1 items-end">
-                                            <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest text-[#6B7280]">ACCOUNT_ID</span>
-                                            <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">{user.email}</span>
+                                            <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest">SEMESTER</span>
+                                            <span className="text-sm font-black text-[#111827] uppercase tracking-tighter">
+                                                {user?.user_metadata?.semester || '1'}_CYCLE
+                                            </span>
                                         </div>
                                     </div>
                                     <div className="pt-4 border-t border-[#111827]/5 flex items-center justify-between">
@@ -235,10 +230,7 @@ export default function DashboardPage() {
                             </div>
 
                             {papersLoading ? (
-                                <div className="py-20 flex flex-col items-center justify-center">
-                                    <Loader2 className="w-10 h-10 animate-spin text-[#111827]" />
-                                    <p className="mt-4 font-mono text-[10px] uppercase tracking-widest font-black text-[#6B7280]">SYNCHRONIZING_ARCHIVE...</p>
-                                </div>
+                                <Loading className="py-20" text="SYNCHRONIZING_ARCHIVE..." />
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
                                     {recentPYQs.slice(0, 4).map((pyq) => (
@@ -256,7 +248,7 @@ export default function DashboardPage() {
                             </div>
                             {subjectsLoading ? (
                                 <div className="p-10 flex justify-center">
-                                    <Loader2 className="w-6 h-6 animate-spin text-[#4338CA]" />
+                                    <Loading size="sm" />
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

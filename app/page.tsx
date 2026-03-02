@@ -6,7 +6,8 @@ import ExamTypeCard from '@/components/pyq/ExamTypeCard'
 import MetadataStrip from '@/components/pyq/MetadataStrip'
 import SubjectCard from '@/components/pyq/SubjectCard'
 import Link from 'next/link'
-import { ArrowRight, BookOpen, ShieldCheck, Zap, Loader2, Mail, MessageSquare, Globe, Send, Phone } from 'lucide-react'
+import { ArrowRight, BookOpen, ShieldCheck, Zap, Mail, MessageSquare, Globe, Send, Phone } from 'lucide-react'
+import Loading from '@/components/ui/Loading'
 import { examTypes } from '@/lib/mock-data'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
@@ -174,7 +175,7 @@ export default function HomePage() {
 
                     {subjectsLoading ? (
                         <div className="flex items-center justify-center py-20">
-                            <Loader2 className="w-10 h-10 animate-spin text-[#4338CA]" />
+                            <Loading size="sm" />
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -208,7 +209,7 @@ export default function HomePage() {
 
                     {papersLoading ? (
                         <div className="flex items-center justify-center py-20">
-                            <Loader2 className="w-10 h-10 animate-spin text-[#4338CA]" />
+                            <Loading size="sm" />
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

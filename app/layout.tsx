@@ -36,20 +36,22 @@ export const metadata: Metadata = {
 }
 
 import { AuthProvider } from '@/context/AuthContext'
+import { LoadingProvider } from '@/context/LoadingContext'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
             <body className="bg-[#EAE0D5] text-[#111827] min-h-screen flex flex-col font-sans">
                 <AuthProvider>
-                    <ViewProvider>
-                        <Navbar />
-                        <main className="flex-1">{children}</main>
-                        <Footer />
-                        <PDFViewerOverlay />
-                        <Analytics />
-                        <TabManager />
-                    </ViewProvider>
+                    <LoadingProvider>
+                        <ViewProvider>
+                            <Navbar />
+                            <main className="flex-1">{children}</main>
+                            <Footer />
+                            <Analytics />
+                            <TabManager />
+                        </ViewProvider>
+                    </LoadingProvider>
                 </AuthProvider>
             </body>
         </html>

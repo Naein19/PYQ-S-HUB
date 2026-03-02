@@ -47,6 +47,17 @@
     box-sizing: border-box;
   }
 
+  /* Accessible focus indicators */
+  :focus-visible {
+    outline: 2px solid #4338CA;
+    outline-offset: 2px;
+  }
+
+  button:focus:not(:focus-visible),
+  a:focus:not(:focus-visible) {
+    outline: none;
+  }
+
   /* Standardize Lucide icons for a premium look */
   .lucide {
     stroke-width: 1.5px !important;
@@ -103,7 +114,7 @@
   }
 
   .card-frame:hover {
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(-4px);
     box-shadow: 10px 10px 0px #111827;
   }
 
@@ -136,7 +147,7 @@
   }
 
   .card:hover {
-    transform: translateY(-4px) scale(1.01);
+    transform: translateY(-4px);
     box-shadow: 10px 10px 0px #111827;
   }
 

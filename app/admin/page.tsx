@@ -6,7 +6,8 @@ import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabaseClient'
 import UploadForm from '@/components/UploadForm'
 import Badge from '@/components/Badge'
-import { Shield, FileText, Users, Activity, Lock, Loader2, LogOut } from 'lucide-react'
+import { Shield, FileText, Users, Activity, Lock, LogOut } from 'lucide-react'
+import Loading from '@/components/ui/Loading'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
 import { usePapers } from '@/hooks/usePapers'
@@ -28,8 +29,12 @@ export default function AdminPage() {
     const { papers: recentPYQs, loading: papersLoading, error: papersError } = usePapers(filters, 1)
 
     useEffect(() => {
-        if (!authLoading && (!user || user.user_metadata?.role !== 'admin')) {
-            router.push(user ? '/' : '/login')
+        if (!authLoading) {
+            if (!user) {
+                router.push('/login')
+            } else if (user.user_metadata?.role !== 'admin') {
+                router.push('/forbidden')
+            }
         }
     }, [user, authLoading, router])
 
@@ -38,19 +43,7 @@ export default function AdminPage() {
         router.push('/login')
     }
 
-    if (authLoading) {
-        return (
-            <div className="min-h-screen bg-[#EAE0D5] flex flex-col items-center justify-center p-6 text-center">
-                <div className="w-20 h-20 rounded-sm border border-[#111827] bg-white flex items-center justify-center shadow-[6px_6px_0px_#111827] mb-8 animate-bounce">
-                    <Shield className="w-10 h-10 text-[#4338CA]" />
-                </div>
-                <h2 className="text-2xl font-black text-[#111827] uppercase tracking-tighter mb-2">Verifying Node...</h2>
-                <p className="font-mono text-[10px] font-bold text-[#6B7280] uppercase tracking-[0.2em]">Establishing secure connection to encrypted archive</p>
-            </div>
-        )
-    }
-
-    if (!user) return null
+    if (!user && !authLoading) return null
 
     return (
         <div className="bg-[#EAE0D5] min-h-screen animate-fade-in">
@@ -64,7 +57,7 @@ export default function AdminPage() {
                         <div>
                             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-[#111827] bg-white mb-4 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#111827]">
                                 <Lock className="w-3 h-3 text-[#4338CA]" />
-                                ADMIN_SECURE_NODE : {user.email?.split('@')[0].toUpperCase()}
+                                ADMIN_SECURE_NODE : {user?.email?.split('@')[0].toUpperCase()}
                             </div>
                             <h1 className="text-4xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter leading-none">
                                 CONTENT MANAGER.
@@ -110,7 +103,7 @@ export default function AdminPage() {
                         <Card noHover size="none" className="bg-white divide-y divide-[#111827]/10 overflow-hidden">
                             {papersLoading ? (
                                 <div className="p-20 flex justify-center">
-                                    <Loader2 className="w-10 h-10 animate-spin text-[#4338CA]" />
+                                    <Loading size="sm" />
                                 </div>
                             ) : papersError ? (
                                 <div className="p-12 text-center text-red-600 font-mono text-[10px] uppercase tracking-widest bg-red-50/50">

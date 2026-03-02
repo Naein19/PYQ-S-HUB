@@ -8,6 +8,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { cn } from '@/lib/utils'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/context/AuthContext'
+import { useLoading } from '@/context/LoadingContext'
 
 const guestLinks = [
     { href: '/', label: 'Home' },
@@ -23,6 +24,7 @@ const authLinks = [
 export default function Navbar() {
     const pathname = usePathname()
     const { user, role, signOut, loading } = useAuth()
+    const { setIsLoading } = useLoading()
     const [mobileOpen, setMobileOpen] = useState(false)
     const [profileOpen, setProfileOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
@@ -73,6 +75,9 @@ export default function Navbar() {
                         <Link
                             key={link.href}
                             href={link.href}
+                            onClick={() => {
+                                if (pathname !== link.href) setIsLoading(true)
+                            }}
                             className={cn(
                                 'nav-link py-1',
                                 pathname === link.href && 'active text-[#111827] font-bold',
@@ -84,6 +89,9 @@ export default function Navbar() {
                     {role === 'admin' && (
                         <Link
                             href="/admin"
+                            onClick={() => {
+                                if (pathname !== '/admin') setIsLoading(true)
+                            }}
                             className={cn(
                                 'nav-link py-1 text-[#4338CA] font-bold',
                                 pathname === '/admin' && 'underline underline-offset-4',
@@ -136,19 +144,19 @@ export default function Navbar() {
                                                 )}
                                             </div>
 
-                                            <Link href="/dashboard" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#111827] hover:bg-[#EAE0D5] transition-colors">
+                                            <Link href="/dashboard" onClick={() => { setProfileOpen(false); if (pathname !== '/dashboard') setIsLoading(true); }} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#111827] hover:bg-[#EAE0D5] transition-colors">
                                                 <LayoutDashboard className="w-4 h-4" />
                                                 Dashboard
                                             </Link>
 
                                             {role === 'admin' && (
-                                                <Link href="/admin" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#4338CA] hover:bg-[#4338CA]/10 transition-colors">
+                                                <Link href="/admin" onClick={() => { setProfileOpen(false); if (pathname !== '/admin') setIsLoading(true); }} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#4338CA] hover:bg-[#4338CA]/10 transition-colors">
                                                     <ShieldCheck className="w-4 h-4" />
                                                     Admin Panel
                                                 </Link>
                                             )}
 
-                                            <Link href="/settings" onClick={() => setProfileOpen(false)} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#111827] hover:bg-[#EAE0D5] transition-colors">
+                                            <Link href="/settings" onClick={() => { setProfileOpen(false); if (pathname !== '/settings') setIsLoading(true); }} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#111827] hover:bg-[#EAE0D5] transition-colors">
                                                 <Settings className="w-4 h-4" />
                                                 Settings
                                             </Link>
@@ -181,7 +189,7 @@ export default function Navbar() {
                         </Link>
                     )}
                     <button
-                        className="p-2 rounded-sm text-[#111827] hover:bg-black/5 transition-colors"
+                        className="p-3 rounded-sm text-[#111827] hover:bg-black/5 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                         onClick={() => setMobileOpen(!mobileOpen)}
                         aria-label="Toggle menu"
                     >
@@ -199,10 +207,13 @@ export default function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 className={cn(
-                                    'text-lg font-bold text-[#111827] uppercase tracking-tight',
+                                    'text-lg font-bold text-[#111827] uppercase tracking-tight py-3 px-2 min-h-[44px] flex items-center',
                                     pathname === link.href && 'underline underline-offset-8 decoration-2 decoration-[#4338CA]',
                                 )}
-                                onClick={() => setMobileOpen(false)}
+                                onClick={() => {
+                                    setMobileOpen(false)
+                                    if (pathname !== link.href) setIsLoading(true)
+                                }}
                             >
                                 {link.label}
                             </Link>

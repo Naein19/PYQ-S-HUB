@@ -1,35 +1,52 @@
 'use client'
 
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState, useEffect } from 'react'
 import type { PYQ } from '@/lib/queries'
+import DesktopWindow from '@/components/ui/DesktopWindow'
 
 interface ViewContextType {
-    activePaper: PYQ | null
-    isOpen: boolean
     viewPaper: (paper: PYQ) => void
-    closeViewer: () => void
+    activeDesktopPaper: PYQ | null
+    closeDesktopWindow: () => void
 }
 
 const ViewContext = createContext<ViewContextType | undefined>(undefined)
 
+import { useRouter } from 'next/navigation'
+
 export function ViewProvider({ children }: { children: React.ReactNode }) {
-    const [activePaper, setActivePaper] = useState<PYQ | null>(null)
-    const [isOpen, setIsOpen] = useState(false)
+    const router = useRouter()
+    const [isDesktop, setIsDesktop] = useState(false)
+    const [activeDesktopPaper, setActiveDesktopPaper] = useState<PYQ | null>(null)
+
+    useEffect(() => {
+        const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024)
+        checkDesktop()
+        window.addEventListener('resize', checkDesktop)
+        return () => window.removeEventListener('resize', checkDesktop)
+    }, [])
 
     const viewPaper = (paper: PYQ) => {
-        setActivePaper(paper)
-        setIsOpen(true)
+        if (isDesktop) {
+            setActiveDesktopPaper(paper)
+        } else {
+            router.push(`/viewer/${paper.id}`)
+        }
     }
 
-    const closeViewer = () => {
-        setIsOpen(false)
-        // Reset paper after animation
-        setTimeout(() => setActivePaper(null), 300)
+    const closeDesktopWindow = () => {
+        setActiveDesktopPaper(null)
     }
 
     return (
-        <ViewContext.Provider value={{ activePaper, isOpen, viewPaper, closeViewer }}>
+        <ViewContext.Provider value={{ viewPaper, activeDesktopPaper, closeDesktopWindow }}>
             {children}
+            {isDesktop && activeDesktopPaper && (
+                <DesktopWindow
+                    pyq={activeDesktopPaper}
+                    onClose={closeDesktopWindow}
+                />
+            )}
         </ViewContext.Provider>
     )
 }

@@ -59,20 +59,20 @@ export default function PYQCard({ pyq }: PYQCardProps) {
     return (
         <article className="card p-5 flex flex-col gap-4 relative group/card">
             {/* Subject Archive & Share Shortcuts */}
-            <div className="absolute top-4 right-4 flex gap-2 z-10">
+            <div className="absolute top-4 right-4 flex gap-3 z-10">
                 <button
                     onClick={handleShare}
-                    className="w-9 h-9 icon-3d group/share bg-white hover:bg-white"
+                    className="w-11 h-11 icon-3d group/share bg-white hover:bg-white flex items-center justify-center border border-[#111827]/10"
                     title="Share Repository"
                 >
-                    {copied ? <Check className="w-4 h-4 text-green-600" /> : <Share2 className="w-4 h-4 text-[#111827]" />}
+                    {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5 text-[#111827]" />}
                 </button>
                 <Link
                     href={`/subject/${pyq.subject_code}`}
-                    className="w-9 h-9 icon-3d group/folder bg-[#EAE0D5] hover:bg-[#111827] hover:text-white"
+                    className="w-11 h-11 icon-3d group/folder bg-[#EAE0D5] hover:bg-[#111827] hover:text-white flex items-center justify-center border border-[#111827]/10"
                     title="View All Files"
                 >
-                    <Folder className="w-4 h-4" />
+                    <Folder className="w-5 h-5" />
                 </Link>
             </div>
 
@@ -100,13 +100,9 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             {/* Footer */}
             <div className="flex items-center justify-between pt-2 border-t border-border">
                 <div className="flex items-center gap-4 text-xs text-slate-400">
-                    <span className="flex items-center gap-1">
-                        <Eye className="w-3.5 h-3.5" />
-                        0
-                    </span>
                     <button
                         onClick={() => viewPaper(pyq)}
-                        className="flex items-center gap-2 px-3 py-1.5 bg-[#111827] text-white text-[10px] font-black uppercase tracking-widest rounded-sm border border-[#111827] shadow-[2px_2px_0px_#111827] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[3px_3px_0px_#111827] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#111827] transition-all"
+                        className="flex items-center gap-2 px-5 py-3 bg-[#111827] text-white text-[11px] font-black uppercase tracking-widest rounded-sm border border-[#111827] shadow-[3px_3px_0px_#111827] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_#111827] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#111827] transition-all min-h-[44px]"
                     >
                         <Eye className="w-4 h-4" />
                         <span>VIEW_FILE</span>

@@ -5,8 +5,10 @@ import { useSearchParams } from 'next/navigation'
 import PYQCard from '@/components/PYQCard'
 import SearchBar from '@/components/SearchBar'
 import FilterDropdown from '@/components/ui/FilterDropdown'
-import { Trash2, LayoutGrid, List, Loader2 } from 'lucide-react'
+import { Trash2, LayoutGrid, List, X } from 'lucide-react'
+import Loading from '@/components/ui/Loading'
 import Button from '@/components/ui/Button'
+import Drawer from '@/components/ui/Drawer'
 import { cn } from '@/lib/utils'
 import { usePapers } from '@/hooks/usePapers'
 import { useSubjects } from '@/hooks/useSubjects'
@@ -45,6 +47,7 @@ function ExploreContent() {
     }))
 
     const [viewType, setViewType] = useState<'grid' | 'list'>('grid')
+    const [isFilterDrawerOpen, setIsFilterDrawerOpen] = useState(false)
     const [debouncedSearch, setDebouncedSearch] = useState(filters.search_term)
 
     // Sync with searchParams if they change
@@ -149,7 +152,7 @@ function ExploreContent() {
                         />
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div className="hidden lg:grid grid-cols-4 gap-4">
                         <FilterDropdown
                             label="Subject"
                             options={subjectOptions}
@@ -162,7 +165,7 @@ function ExploreContent() {
                             value={filters.exam_type}
                             onChange={(val: string) => updateFilter('exam_type', val)}
                         />
-                        <div className="hidden lg:block" /> {/* Spacer */}
+                        <div />
                         <Button
                             variant="secondary"
                             onClick={() => {
@@ -178,25 +181,104 @@ function ExploreContent() {
                             RES_PARAMS
                         </Button>
                     </div>
+
+                    <Drawer
+                        isOpen={isFilterDrawerOpen}
+                        onClose={() => setIsFilterDrawerOpen(false)}
+                        title="Archive Filters"
+                    >
+                        <div className="space-y-8">
+                            <FilterDropdown
+                                label="Subject Repository"
+                                options={subjectOptions}
+                                value={filters.subject_code}
+                                onChange={(val: string) => updateFilter('subject_code', val)}
+                            />
+                            <FilterDropdown
+                                label="Examination Tier"
+                                options={examCategories}
+                                value={filters.exam_type}
+                                onChange={(val: string) => updateFilter('exam_type', val)}
+                            />
+                            <div className="flex flex-col gap-4 pt-4">
+                                <Button
+                                    variant="primary"
+                                    onClick={() => setIsFilterDrawerOpen(false)}
+                                    className="w-full py-4 uppercase font-black tracking-widest text-[10px]"
+                                >
+                                    APPLY_PARAMETERS
+                                </Button>
+                                <Button
+                                    variant="secondary"
+                                    onClick={() => {
+                                        setFilters(defaultFilters)
+                                        setDebouncedSearch('')
+                                        setIsFilterDrawerOpen(false)
+                                    }}
+                                    className="w-full py-4 uppercase font-black tracking-widest text-[10px] opacity-60"
+                                >
+                                    RESET_ALL
+                                </Button>
+                            </div>
+                        </div>
+                    </Drawer>
                 </div>
 
                 {/* Results Section */}
                 <div className="space-y-8 lg:space-y-10">
-                    <div className="flex items-center justify-between pb-4 lg:pb-6 border-b border-[#111827]/10">
-                        <p className="text-[10px] font-mono font-black text-[#6B7280] uppercase tracking-[0.2em]">
-                            REVISION_RESULTS: {loading ? '...' : totalCount} DOCUMENTS_IDENTIFIED
-                        </p>
-                        <div className="hidden sm:flex gap-6">
-                            <span className="text-[8px] font-mono text-[#111827]/30 uppercase tracking-[0.3em] font-bold">STATUS: {loading ? 'FETCHING' : 'ARCHIVE_LIVE'}</span>
-                            <span className="text-[8px] font-mono text-[#111827]/30 uppercase tracking-[0.3em] font-bold">LATENCY: ACTIVE</span>
+                    <div className="flex flex-col gap-6 pb-4 lg:pb-6 border-b border-[#111827]/10">
+                        <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-mono font-black text-[#6B7280] uppercase tracking-[0.2em]">
+                                REVISION_RESULTS: {loading ? '...' : totalCount} DOCUMENTS_IDENTIFIED
+                            </p>
+                            <div className="hidden sm:flex gap-6">
+                                <span className="text-[8px] font-mono text-[#111827]/30 uppercase tracking-[0.3em] font-bold">STATUS: {loading ? 'FETCHING' : 'ARCHIVE_LIVE'}</span>
+                                <span className="text-[8px] font-mono text-[#111827]/30 uppercase tracking-[0.3em] font-bold">LATENCY: ACTIVE</span>
+                            </div>
                         </div>
+
+                        {/* Active Filter Pills (Desktop & Mobile) */}
+                        {activeFilterCount > 0 && (
+                            <div className="flex flex-wrap gap-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                                {filters.subject_code && (
+                                    <button
+                                        onClick={() => updateFilter('subject_code', '')}
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#111827] text-white text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 transition-colors group"
+                                    >
+                                        <span>SUBJECT: {filters.subject_code}</span>
+                                        <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
+                                    </button>
+                                )}
+                                {filters.exam_type && (
+                                    <button
+                                        onClick={() => updateFilter('exam_type', '')}
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#4338CA] text-white text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 transition-colors group"
+                                    >
+                                        <span>TIER: {filters.exam_type}</span>
+                                        <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
+                                    </button>
+                                )}
+                                {filters.search_term && (
+                                    <button
+                                        onClick={() => setDebouncedSearch('')}
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#111827]/10 text-[#111827] text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 hover:text-white transition-colors group"
+                                    >
+                                        <span>QUERY: {filters.search_term}</span>
+                                        <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => { setFilters(defaultFilters); setDebouncedSearch(''); }}
+                                    className="text-[9px] font-black text-[#6B7280] uppercase tracking-widest hover:text-[#111827] underline underline-offset-4 ml-2"
+                                >
+                                    CLEAR_ALL
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     {loading ? (
-                        <div className="py-20 flex flex-col items-center justify-center">
-                            <Loader2 className="w-12 h-12 animate-spin text-[#111827]" />
-                            <p className="mt-4 font-mono text-xs uppercase tracking-widest font-black">Synchronizing with central archive...</p>
-                        </div>
+                        <Loading className="py-20" text="Synchronizing with central archive..." />
                     ) : papers.length === 0 ? (
                         <div className="py-20 lg:py-32 flex flex-col items-center justify-center border-2 border-dashed border-[#111827]/10 rounded-sm bg-black/5 animate-pulse">
                             <h3 className="text-lg lg:text-xl font-black text-[#111827] uppercase tracking-tighter mb-4">NO MATCHING ARCHIVE DATA</h3>
@@ -223,7 +305,7 @@ function ExploreContent() {
                                     >
                                         {loadingMore ? (
                                             <>
-                                                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                                                <Loading size="sm" className="mr-2" />
                                                 LOADING_BLOCKS...
                                             </>
                                         ) : (
@@ -236,17 +318,28 @@ function ExploreContent() {
                     )}
                 </div>
             </div>
+
+            {/* Sticky Mobile Filter FAB */}
+            <div className="lg:hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-10 duration-500">
+                <button
+                    onClick={() => setIsFilterDrawerOpen(true)}
+                    className="flex items-center gap-3 bg-[#111827] text-white px-8 py-4 rounded-full border-2 border-[#111827] shadow-[6px_6px_0px_rgba(17,24,39,0.3)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
+                >
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">REFINE_ARCHIVE</span>
+                    {activeFilterCount > 0 && (
+                        <span className="w-5 h-5 flex items-center justify-center bg-[#4338CA] rounded-full text-[9px] font-black">
+                            {activeFilterCount}
+                        </span>
+                    )}
+                </button>
+            </div>
         </div>
     )
 }
 
 export default function ExplorePage() {
     return (
-        <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center bg-[#FBF9F7]">
-                <Loader2 className="w-12 h-12 animate-spin text-[#111827]" />
-            </div>
-        }>
+        <Suspense fallback={<Loading fullPage />}>
             <ExploreContent />
         </Suspense>
     )

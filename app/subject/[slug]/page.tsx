@@ -2,7 +2,8 @@
 
 import PYQCard from '@/components/PYQCard'
 import Badge from '@/components/Badge'
-import { ArrowLeft, BookOpen, Clock, FileText, Share2, Loader2, Filter } from 'lucide-react'
+import { ArrowLeft, BookOpen, Clock, FileText, Share2, Filter } from 'lucide-react'
+import Loading from '@/components/ui/Loading'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import Card from '@/components/ui/Card'
@@ -124,9 +125,7 @@ export default function SubjectPage({ params }: SubjectPageProps) {
 
                 {/* Grid */}
                 {loading ? (
-                    <div className="flex items-center justify-center py-32">
-                        <Loader2 className="w-12 h-12 animate-spin text-[#111827]" />
-                    </div>
+                    <Loading className="py-32" />
                 ) : papers.length === 0 ? (
                     <Card className="py-32 text-center border-dashed border-[#111827]/30 bg-transparent">
                         <p className="text-lg font-bold text-[#6B7280] uppercase tracking-widest">NO DOCUMENTS MATCHING "{activeFilter}" IN THIS REPOSITORY</p>

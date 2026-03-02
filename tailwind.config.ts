@@ -67,11 +67,18 @@ const config: Config = {
             },
             animation: {
                 'fade-in': 'fadeIn 200ms ease-out forwards',
+                'scan-vertical': 'scan-vertical 3s linear infinite',
             },
             keyframes: {
                 fadeIn: {
                     '0%': { opacity: '0', transform: 'translateY(4px)' },
                     '100%': { opacity: '1', transform: 'translateY(0)' },
+                },
+                'scan-vertical': {
+                    '0%': { top: '0%', opacity: '0' },
+                    '10%': { opacity: '1' },
+                    '90%': { opacity: '1' },
+                    '100%': { top: '100%', opacity: '0' },
                 },
             },
             transitionDuration: {
