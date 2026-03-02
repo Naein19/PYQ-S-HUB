@@ -68,7 +68,8 @@ export default function SettingsPage() {
         }
     }, [user, authLoading, router])
 
-    if (!user && !authLoading) return null
+    if (authLoading) return <Loading fullPage text="Synchronizing Identity..." />
+    if (!user) return null
 
     const getSemesterOptions = (programType: string) => {
         const maxSem = programType === 'BTech' ? 8 : 4
@@ -211,18 +212,18 @@ export default function SettingsPage() {
                                     <div className="relative z-10 space-y-6">
                                         <div className="flex flex-col gap-1">
                                             <span className="text-[9px] font-mono font-black text-white/30 uppercase tracking-widest">EMAIL_ADDRESS</span>
-                                            <span className="text-sm font-black text-white truncate">{user?.email}</span>
+                                            <span className="text-sm font-black text-white truncate">{user.email}</span>
                                         </div>
                                         <div className="flex flex-col gap-1">
                                             <span className="text-[9px] font-mono font-black text-white/30 uppercase tracking-widest">UNIQUE_IDENTIFIER</span>
-                                            <span className="text-[11px] font-mono font-bold text-white/60 truncate">{user?.id}</span>
+                                            <span className="text-[11px] font-mono font-bold text-white/60 truncate">{user.id}</span>
                                         </div>
                                         <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                                             <div className="flex flex-col gap-1">
                                                 <span className="text-[9px] font-mono font-black text-white/30 uppercase tracking-widest text-[#6B7280]">CREATED_ON</span>
                                                 <div className="flex items-center gap-2 text-[11px] font-bold text-white/80">
                                                     <Calendar className="w-3 h-3 opacity-40" />
-                                                    {new Date(user?.created_at || '').toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                                                    {new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                                 </div>
                                             </div>
                                         </div>
@@ -372,7 +373,7 @@ export default function SettingsPage() {
                                         </Button>
                                         <button
                                             type="button"
-                                            onClick={() => user?.email && supabase.auth.resetPasswordForEmail(user.email)}
+                                            onClick={() => user.email && supabase.auth.resetPasswordForEmail(user.email)}
                                             className="text-[10px] font-black text-[#6B7280] hover:text-[#111827] uppercase tracking-[0.2em] underline underline-offset-4"
                                         >
                                             Trigger Recovery Key Reset
@@ -432,7 +433,7 @@ export default function SettingsPage() {
                                 CONFIRM TOTAL <br /> IDENTITY PURGE?
                             </h2>
                             <p className="text-sm font-medium text-[#6B7280] leading-relaxed mb-10">
-                                This will erase <span className="text-[#111827] font-black">{user?.email}</span> from the central archive. You will lose access to all peer resources and personal logs.
+                                This will erase <span className="text-[#111827] font-black">{user.email}</span> from the central archive. You will lose access to all peer resources and personal logs.
                             </p>
 
                             <div className="flex flex-col gap-4">
