@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Github, Twitter, Linkedin } from 'lucide-react'
+import { Github, Mail, Linkedin } from 'lucide-react'
 import Logo from '@/components/Logo'
 
 const footerLinks = {
@@ -19,6 +19,12 @@ const footerLinks = {
         { label: 'Cookie Policy', href: '/cookies' },
     ],
 }
+
+const socialLinks = [
+    { icon: Mail, href: 'mailto:support@pyqshub.com', label: 'Email' },
+    { icon: Github, href: 'https://github.com', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+]
 
 export default function Footer() {
     return (
@@ -43,13 +49,14 @@ export default function Footer() {
                             Structured, verified, and always accessible.
                         </p>
                         <div className="flex gap-4">
-                            {[Twitter, Github, Linkedin].map((Icon, i) => (
+                            {socialLinks.map((social, i) => (
                                 <a
                                     key={i}
-                                    href="#"
+                                    href={social.href}
+                                    aria-label={social.label}
                                     className="w-12 h-12 rounded-sm border border-white/20 bg-white/10 text-white flex items-center justify-center hover:bg-white hover:text-[#111827] hover:border-white transition-all duration-300 group"
                                 >
-                                    <Icon className="w-5 h-5 transition-transform group-hover:scale-110" />
+                                    <social.icon className="w-5 h-5 transition-transform group-hover:scale-110" />
                                 </a>
                             ))}
                         </div>

@@ -38,8 +38,9 @@ export default function HomePage() {
                 <div className="absolute top-0 right-0 w-1/2 h-full z-0 opacity-50 pointer-events-none hidden lg:block">
                     <img
                         src="/assets/data_stack.png"
-                        alt="Technical Structure"
+                        alt="Structural technical data stack illustration for VIT-AP question papers"
                         className="w-full h-full object-cover brightness-100"
+                        loading="lazy"
                     />
                     <div className="absolute inset-0 bg-gradient-to-l from-[#0A0A0A]/20 to-[#0A0A0A]/95" />
                 </div>
@@ -60,7 +61,7 @@ export default function HomePage() {
                             <p className="text-xl text-[#A3A3A3] leading-relaxed mb-12 max-w-xl font-medium">
                                 We believe that preparation is the primary vector for success. Our mission is to provide
                                 engineering students with a structured, verified, and high-fidelity
-                                question paper repository. No noise—just precision.
+                                **VIT-AP Previous Year Question Papers** repository. Access all **CAT-1, CAT-2, and FAT** papers. No noise—just precision.
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                                 <div className="p-6 border-l-2 border-white/10">

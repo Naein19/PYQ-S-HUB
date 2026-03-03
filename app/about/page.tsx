@@ -4,11 +4,11 @@ import { ArrowRight, BookOpen, ShieldCheck, Zap } from 'lucide-react'
 import Button from '@/components/ui/Button'
 
 export const metadata: Metadata = {
-    title: 'About Us | PYQ\'s Hub',
-    description: 'Learn about the mission, vision, and the institutional infrastructure behind PYQ\'s Hub—the archive built for engineering discipline.',
+    title: 'About the Archive | VIT-AP Previous Year Papers',
+    description: 'Learn about the mission, vision, and institutional infrastructure behind PYQ\'s Hub—the industrial-grade archive for VIT-AP engineering question papers.',
     openGraph: {
-        title: 'About Us | PYQ\'s Hub',
-        description: 'The industrial-grade archive for engineering students. Built for precision, structured for success.',
+        title: 'About PYQ\'s Hub | VIT-AP Previous Year Papers',
+        description: 'The industrial-grade archive for VIT-AP engineering students. Built for precision, structured for success.',
     },
 }
 

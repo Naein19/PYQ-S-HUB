@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { FilterState } from '@/app/explore/page'
+import { FilterState } from '@/app/explore/ExploreClient'
 import { departments, subjects } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
 
