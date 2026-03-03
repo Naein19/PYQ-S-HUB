@@ -6,6 +6,7 @@ import '@/styles/globals.css'
 import { ViewProvider } from '@/context/ViewContext'
 
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import TabManager from '@/components/layout/TabManager'
 
 const inter = Inter({
@@ -89,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <main className="flex-1">{children}</main>
                             <Footer />
                             <Analytics />
+                            <SpeedInsights />
                             <TabManager />
                         </ViewProvider>
                     </LoadingProvider>
