@@ -89,12 +89,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                             <Navbar />
                             <main className="flex-1">{children}</main>
                             <Footer />
-                            <Analytics />
-                            <SpeedInsights />
                             <TabManager />
                         </ViewProvider>
                     </LoadingProvider>
                 </AuthProvider>
+                <Analytics />
+                <SpeedInsights />
             </body>
         </html>
     )
