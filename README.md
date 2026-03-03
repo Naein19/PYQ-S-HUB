@@ -44,7 +44,7 @@ Seamlessly oscillate between a warm **"Academic Paper"** light mode and a high-f
 ````
 
 ### 🎥 Interaction Telemetry
-![Dashboard & Redirection Demo](/public/assets/dashboard_redesign_demo_1772212522928.webp)
+![Dashboard & Redirection Demo](/public/outcome/dashboard_redesign_demo_1772212522928.webp)
 *Visualizing fluid navigation and high-fidelity dashboard interactions.*
 
 ---
