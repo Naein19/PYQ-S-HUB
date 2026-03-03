@@ -21,9 +21,9 @@ const footerLinks = {
 }
 
 const socialLinks = [
-    { icon: Mail, href: 'mailto:support@pyqshub.com', label: 'Email' },
-    { icon: Github, href: 'https://github.com', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:naveen.23bce9344@vitapstudent.ac.in', label: 'Email' },
+    { icon: Github, href: 'https://github.com/Naein19', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://www.linkedin.com/in/naveen-tadaka', label: 'LinkedIn' },
 ]
 
 export default function Footer() {
