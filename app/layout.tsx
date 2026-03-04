@@ -8,6 +8,7 @@ import { ViewProvider } from '@/context/ViewContext'
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import TabManager from '@/components/layout/TabManager'
+import AnimatedFavicon from '@/components/AnimatedFavicon'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -43,6 +44,7 @@ export const metadata: Metadata = {
     alternates: {
         canonical: '/',
     },
+    manifest: '/site.webmanifest',
     openGraph: {
         title: "VIT-AP Previous Year Question Papers | PYQ’s Hub",
         description: "Access VIT-AP CAT-1, CAT-2, and FAT previous year question papers organized by subject, semester, and department.",
@@ -50,7 +52,7 @@ export const metadata: Metadata = {
         siteName: "PYQ’s Hub",
         images: [
             {
-                url: '/assets/og-image.png',
+                url: '/og-image.png',
                 width: 1200,
                 height: 630,
                 alt: "PYQ’s Hub - VIT-AP Previous Year Papers",
@@ -63,13 +65,16 @@ export const metadata: Metadata = {
         card: 'summary_large_image',
         title: "VIT-AP Previous Year Question Papers | PYQ’s Hub",
         description: "Access VIT-AP CAT-1, CAT-2, and FAT previous year question papers organized by subject, semester, and department.",
-        images: ['/assets/og-image.png'],
+        images: ['/og-image.png'],
         creator: '@pyqshub',
     },
     icons: {
-        icon: '/assets/icon_light.png',
-        shortcut: '/assets/icon_light.png',
-        apple: '/assets/icon_light.png',
+        icon: [
+            { url: '/favicon-frame1.png', sizes: '32x32', type: 'image/png' },
+            { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+        ],
+        shortcut: '/favicon-frame1.png',
+        apple: '/apple-touch-icon.png',
     },
 }
 
@@ -83,6 +88,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <JsonLd />
             </head>
             <body className="bg-[#EAE0D5] text-[#111827] min-h-screen flex flex-col font-sans">
+                <AnimatedFavicon />
                 <AuthProvider>
                     <LoadingProvider>
                         <ViewProvider>

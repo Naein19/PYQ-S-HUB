@@ -35,7 +35,7 @@ export default function Loading({
 
                 {/* Horizontal Scanning Line */}
                 <div className={cn(
-                    "absolute left-0 right-0 h-[1.5px] bg-[#4338CA] shadow-[0_0_8px_rgba(67,56,202,0.6)] z-10 pointer-events-none",
+                    "absolute top-0 left-0 right-0 h-[1.5px] bg-[#4338CA] shadow-[0_0_8px_rgba(67,56,202,0.6)] z-10 pointer-events-none",
                     "animate-scan-vertical"
                 )} />
             </div>

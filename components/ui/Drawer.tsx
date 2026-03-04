@@ -1,6 +1,5 @@
-'use client'
-
 import React, { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -28,12 +27,12 @@ export default function Drawer({ isOpen, onClose, title, children }: DrawerProps
 
     if (!mounted) return null
 
-    return (
+    return createPortal(
         <>
             {/* Backdrop */}
             <div
                 className={cn(
-                    "fixed inset-0 bg-black/60 z-[70] transition-opacity duration-300 backdrop-blur-sm",
+                    "fixed inset-0 bg-black/80 z-[9998] transition-opacity duration-300 backdrop-blur-md",
                     isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
                 )}
                 onClick={onClose}
@@ -42,31 +41,32 @@ export default function Drawer({ isOpen, onClose, title, children }: DrawerProps
             {/* Drawer */}
             <div
                 className={cn(
-                    "fixed bottom-0 left-0 right-0 bg-white z-[80] rounded-t-[24px] border-t border-[#111827] transition-transform duration-300 ease-out max-h-[85vh] overflow-hidden flex flex-col shadow-[0_-10px_40px_rgba(0,0,0,0.2)]",
+                    "fixed bottom-0 left-0 right-0 bg-[#FBF9F7] z-[9999] rounded-t-[32px] border-t-2 border-[#111827] transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] max-h-[92vh] overflow-hidden flex flex-col shadow-[0_-10px_60px_rgba(0,0,0,0.5)]",
                     isOpen ? "translate-y-0" : "translate-y-full"
                 )}
             >
-                {/* Handle */}
-                <div className="flex justify-center py-4" onClick={onClose}>
+                {/* Handle bar for dragging (visual indicator) */}
+                <div className="flex justify-center pt-3 pb-2" onClick={onClose}>
                     <div className="w-12 h-1.5 bg-[#111827]/10 rounded-full" />
                 </div>
 
                 {/* Header */}
-                <div className="px-6 pb-6 flex items-center justify-between border-b border-[#111827]/5">
-                    <h2 className="text-xl font-black uppercase tracking-tight text-[#111827]">{title}</h2>
+                <div className="px-8 pb-3 flex items-center justify-between">
+                    <h2 className="text-2xl font-black uppercase tracking-tighter text-[#111827]">{title}</h2>
                     <button
                         onClick={onClose}
-                        className="w-10 h-10 rounded-full border border-[#111827] flex items-center justify-center bg-[#EAE0D5] hover:bg-[#111827] hover:text-white transition-all transform active:scale-95"
+                        className="w-12 h-12 rounded-full border border-[#111827]/10 flex items-center justify-center bg-white hover:bg-[#111827] hover:text-white transition-all transform active:scale-95 shadow-sm"
                     >
-                        <X className="w-5 h-5" />
+                        <X className="w-6 h-6" />
                     </button>
                 </div>
 
-                {/* Content */}
-                <div className="flex-1 overflow-y-auto p-6 bg-[#FBF9F7]">
+                {/* Content area */}
+                <div className="flex-1 overflow-y-auto px-8 py-6 pb-12">
                     {children}
                 </div>
             </div>
-        </>
+        </>,
+        document.body
     )
 }

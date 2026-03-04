@@ -27,6 +27,8 @@ import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import Loading from '@/components/ui/Loading'
+import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
+import SubjectRowSkeleton from '@/components/pyq/SubjectRowSkeleton'
 
 const mockUser = {
     name: 'Alex Kumar',
@@ -230,7 +232,11 @@ export default function DashboardPage() {
                             </div>
 
                             {papersLoading ? (
-                                <Loading className="py-20" text="SYNCHRONIZING_ARCHIVE..." />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
+                                    {[...Array(4)].map((_, i) => (
+                                        <PYQCardSkeleton key={i} />
+                                    ))}
+                                </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
                                     {recentPYQs.slice(0, 4).map((pyq) => (
@@ -247,8 +253,10 @@ export default function DashboardPage() {
                                 <h2 className="text-xl font-black text-[#111827] uppercase tracking-tighter">SUBJECT ACCESS TERMINAL</h2>
                             </div>
                             {subjectsLoading ? (
-                                <div className="p-10 flex justify-center">
-                                    <Loading size="sm" />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {[...Array(6)].map((_, i) => (
+                                        <SubjectRowSkeleton key={i} />
+                                    ))}
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

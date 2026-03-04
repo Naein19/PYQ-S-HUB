@@ -1,10 +1,12 @@
 import Link from 'next/link'
-import { Eye, FileText, ExternalLink, Folder, Download, Share2, Check } from 'lucide-react'
+import { Eye, FileText, Folder, Download, Share2, Check } from 'lucide-react'
 import { useState } from 'react'
 import Badge from './Badge'
 import type { PYQ } from '@/lib/queries'
 import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
 import { useView } from '@/context/ViewContext'
+import { useSwipe } from '@/hooks/useSwipe'
+import { cn } from '@/lib/utils'
 
 interface PYQCardProps {
     pyq: PYQ
@@ -12,11 +14,11 @@ interface PYQCardProps {
 
 export default function PYQCard({ pyq }: PYQCardProps) {
     const { viewPaper } = useView()
-
     const [copied, setCopied] = useState(false)
 
-    const handleDownload = async (e: React.MouseEvent) => {
-        e.preventDefault()
+    const handleDownload = async (e?: React.MouseEvent) => {
+        e?.preventDefault()
+        e?.stopPropagation()
         try {
             const response = await fetch(pyq.file_url)
             const blob = await response.blob()
@@ -34,9 +36,9 @@ export default function PYQCard({ pyq }: PYQCardProps) {
         }
     }
 
-    const handleShare = async (e: React.MouseEvent) => {
-        e.preventDefault()
-        e.stopPropagation()
+    const handleShare = async (e?: React.MouseEvent) => {
+        e?.preventDefault()
+        e?.stopPropagation()
         const shareUrl = `${window.location.origin}/subject/${pyq.subject_code}`
 
         try {
@@ -56,10 +58,35 @@ export default function PYQCard({ pyq }: PYQCardProps) {
         }
     }
 
+    const { onTouchStart, onTouchMove, onTouchEnd, offsetX } = useSwipe({
+        onSwipeLeft: () => handleDownload(),
+        onSwipeRight: () => viewPaper(pyq),
+        threshold: 80
+    })
+
     return (
-        <article className="card p-5 flex flex-col gap-4 relative group/card">
-            {/* Subject Archive & Share Shortcuts */}
-            <div className="absolute top-4 right-4 flex gap-3 z-10">
+        <article
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+            className={cn(
+                "card p-3 md:p-5 flex flex-col gap-4 relative group/card transition-transform duration-200 overflow-hidden",
+                offsetX > 20 && "translate-x-2 border-green-500/30 bg-green-500/5",
+                offsetX < -20 && "-translate-x-2 border-blue-500/30 bg-blue-500/5"
+            )}
+        >
+            {/* Swipe Indicators (Mobile Only) */}
+            <div className={cn(
+                "md:hidden absolute inset-y-0 left-0 w-1 bg-green-500 transition-opacity",
+                offsetX > 40 ? "opacity-100" : "opacity-0"
+            )} />
+            <div className={cn(
+                "md:hidden absolute inset-y-0 right-0 w-1 bg-blue-500 transition-opacity",
+                offsetX < -40 ? "opacity-100" : "opacity-0"
+            )} />
+
+            {/* Subject Archive & Share Shortcuts (Desktop Only) */}
+            <div className="hidden md:flex absolute top-4 right-4 gap-3 z-10">
                 <button
                     onClick={handleShare}
                     className="w-11 h-11 icon-3d group/share bg-white hover:bg-white flex items-center justify-center border border-[#111827]/10"
@@ -78,14 +105,14 @@ export default function PYQCard({ pyq }: PYQCardProps) {
 
             {/* Header */}
             <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 rounded-[8px] bg-[#EFF6FF] flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-primary" />
+                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-[8px] bg-[#EFF6FF] flex items-center justify-center transition-all">
+                    <FileText className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                 </div>
                 <div className="min-w-0">
-                    <h3 className="text-sm font-semibold text-textPrimary leading-snug line-clamp-2 break-words">
+                    <h3 className="text-xs md:text-sm font-semibold text-textPrimary leading-snug line-clamp-2 break-words">
                         {pyq.paper_title}
                     </h3>
-                    <span className="text-xs text-slate-500 mt-0.5 inline-block truncate max-w-full font-medium">
+                    <span className="text-[10px] md:text-xs text-slate-500 mt-0.5 inline-block truncate max-w-full font-medium">
                         {getCleanSubjectTitle(pyq.subject_code, pyq.subject_title)}
                     </span>
                 </div>
@@ -93,12 +120,46 @@ export default function PYQCard({ pyq }: PYQCardProps) {
 
             {/* Meta Badges */}
             <div className="flex flex-wrap gap-1.5">
-                <Badge variant="default">{pyq.exam_type}</Badge>
-                <Badge variant="default">{getNormalizedSubjectCode(pyq.subject_code)}</Badge>
+                <Badge variant="default" className="text-[9px] md:text-xs px-1.5 md:px-2.5">{pyq.exam_type}</Badge>
+                <Badge variant="default" className="text-[9px] md:text-xs px-1.5 md:px-2.5">{getNormalizedSubjectCode(pyq.subject_code)}</Badge>
             </div>
 
-            {/* Footer */}
-            <div className="flex items-center justify-between pt-2 border-t border-border">
+            {/* Mobile Action Bar (Compact) */}
+            <div className="flex md:hidden items-center justify-between pt-2 border-t border-[#111827]/5">
+                <div className="flex items-center gap-1">
+                    <button
+                        onClick={() => viewPaper(pyq)}
+                        className="w-11 h-11 flex items-center justify-center text-[#111827] bg-[#111827]/5 rounded-sm active:scale-95 transition-all"
+                        aria-label="View File"
+                    >
+                        <Eye className="w-5 h-5" />
+                    </button>
+                    <button
+                        onClick={handleShare}
+                        className="w-11 h-11 flex items-center justify-center text-[#111827] bg-[#111827]/5 rounded-sm active:scale-95 transition-all"
+                        aria-label="Share"
+                    >
+                        {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
+                    </button>
+                    <Link
+                        href={`/subject/${pyq.subject_code}`}
+                        className="w-11 h-11 flex items-center justify-center text-[#111827] bg-[#111827]/5 rounded-sm active:scale-95 transition-all"
+                        aria-label="View Folder"
+                    >
+                        <Folder className="w-5 h-5" />
+                    </Link>
+                </div>
+                <button
+                    onClick={handleDownload}
+                    className="w-11 h-11 flex items-center justify-center bg-[#4338CA] text-white rounded-sm shadow-[3px_3px_0px_#111827] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all"
+                    aria-label="Download"
+                >
+                    <Download className="w-5 h-5" />
+                </button>
+            </div>
+
+            {/* Desktop Footer */}
+            <div className="hidden md:flex items-center justify-between pt-2 border-t border-border">
                 <div className="flex items-center gap-4 text-xs text-slate-400">
                     <button
                         onClick={() => viewPaper(pyq)}

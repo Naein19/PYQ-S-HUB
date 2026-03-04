@@ -3,13 +3,16 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import PYQCard from '@/components/PYQCard'
+import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
 import SearchBar from '@/components/SearchBar'
 import FilterDropdown from '@/components/ui/FilterDropdown'
-import { Trash2, LayoutGrid, List, X } from 'lucide-react'
+import FilterChips from '@/components/ui/FilterChips'
+import { Trash2, LayoutGrid, List, X, SlidersHorizontal } from 'lucide-react'
 import Loading from '@/components/ui/Loading'
 import Button from '@/components/ui/Button'
 import Drawer from '@/components/ui/Drawer'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
 import { usePapers } from '@/hooks/usePapers'
 import { useSubjects } from '@/hooks/useSubjects'
 import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
@@ -87,16 +90,17 @@ export default function ExploreClient() {
 
     return (
         <div className="bg-[#FBF9F7] min-h-screen animate-fade-in pb-20">
-            <div className="container-main py-10 lg:py-24">
-                {/* Page Header - Cinematic Industrial Vault */}
-                <div className="relative mb-16 lg:mb-24 p-10 lg:p-20 overflow-hidden bg-[#0A0A0A] border-2 border-[#111827] shadow-[8px_8px_0px_#111827]">
+            <div className="container-main py-6 md:py-10 lg:py-24">
+                {/* Page Header - Cinematic Industrial Vault (Hidden on Mobile) */}
+                <div className="hidden md:block relative mb-16 lg:mb-24 p-10 lg:p-20 overflow-hidden bg-[#0A0A0A] border-2 border-[#111827] shadow-[8px_8px_0px_#111827] min-h-[400px] lg:min-h-[500px]">
                     {/* Background Illustration */}
                     <div className="absolute inset-0 z-0 opacity-60 grayscale hover:grayscale-0 transition-all duration-1000 group">
-                        <img
+                        <Image
                             src="/assets/explore_vault.png"
                             alt="Central Vault Archive for VIT-AP exam papers"
-                            className="w-full h-full object-cover opacity-80 brightness-100"
-                            fetchPriority="high"
+                            fill
+                            className="object-cover opacity-80 brightness-100"
+                            priority
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-[#0A0A0A]/40 to-[#0A0A0A]/20" />
                         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/60 via-transparent to-[#0A0A0A]/30" />
@@ -111,7 +115,7 @@ export default function ExploreClient() {
                             <div>
                                 <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-6 leading-[0.85]">
                                     EXPLORE <br />
-                                    <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.3)' }}>REPOSITORY.</span>
+                                    <span className="bg-gradient-to-r from-[#4338CA] via-white/80 to-[#4338CA] bg-[length:200%_auto] bg-clip-text text-transparent animate-text-shimmer">REPOSITORY.</span>
                                 </h1>
                                 <p className="text-lg md:text-2xl text-[#A3A3A3] max-w-2xl font-medium leading-relaxed">
                                     Primary resource extraction interface for collegiate technical archives.
@@ -139,10 +143,10 @@ export default function ExploreClient() {
                 </div>
 
                 {/* Search & Filter Controls */}
-                <div className="mb-10 lg:mb-16 space-y-6 lg:space-y-8">
-                    <div className="relative group">
+                <div className="mb-8 md:mb-10 lg:mb-16 space-y-6 lg:space-y-8">
+                    <div className="flex items-center gap-3">
                         <SearchBar
-                            className="w-full"
+                            className="flex-1"
                             placeholder="Identify subject code or document name..."
                             suggestions={subjects.map(s => ({
                                 label: s.subject_code,
@@ -151,6 +155,17 @@ export default function ExploreClient() {
                             }))}
                             onSearch={setDebouncedSearch}
                         />
+                        <button
+                            onClick={() => setIsFilterDrawerOpen(true)}
+                            className="md:hidden flex items-center justify-center w-[52px] h-[52px] bg-[#111827] border border-[#111827] rounded-sm shadow-[4px_4px_0px_rgba(17,24,39,0.3)] active:scale-95 active:shadow-none transition-all relative"
+                        >
+                            <SlidersHorizontal className="w-5 h-5 text-white" />
+                            {activeFilterCount > 0 && (
+                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#4338CA] text-white text-[10px] font-black rounded-full border-2 border-[#EAE0D5] flex items-center justify-center">
+                                    {activeFilterCount}
+                                </span>
+                            )}
+                        </button>
                     </div>
 
                     <div className="hidden lg:grid grid-cols-4 gap-4">
@@ -183,46 +198,7 @@ export default function ExploreClient() {
                         </Button>
                     </div>
 
-                    <Drawer
-                        isOpen={isFilterDrawerOpen}
-                        onClose={() => setIsFilterDrawerOpen(false)}
-                        title="Archive Filters"
-                    >
-                        <div className="space-y-8">
-                            <FilterDropdown
-                                label="Subject Repository"
-                                options={subjectOptions}
-                                value={filters.subject_code}
-                                onChange={(val: string) => updateFilter('subject_code', val)}
-                            />
-                            <FilterDropdown
-                                label="Examination Tier"
-                                options={examCategories}
-                                value={filters.exam_type}
-                                onChange={(val: string) => updateFilter('exam_type', val)}
-                            />
-                            <div className="flex flex-col gap-4 pt-4">
-                                <Button
-                                    variant="primary"
-                                    onClick={() => setIsFilterDrawerOpen(false)}
-                                    className="w-full py-4 uppercase font-black tracking-widest text-[10px]"
-                                >
-                                    APPLY_PARAMETERS
-                                </Button>
-                                <Button
-                                    variant="secondary"
-                                    onClick={() => {
-                                        setFilters(defaultFilters)
-                                        setDebouncedSearch('')
-                                        setIsFilterDrawerOpen(false)
-                                    }}
-                                    className="w-full py-4 uppercase font-black tracking-widest text-[10px] opacity-60"
-                                >
-                                    RESET_ALL
-                                </Button>
-                            </div>
-                        </div>
-                    </Drawer>
+                    {/* Mobile Filter Drawer Removed from here to prevent duplicate z-index conflicts */}
                 </div>
 
                 {/* Results Section */}
@@ -279,7 +255,14 @@ export default function ExploreClient() {
                     </div>
 
                     {loading ? (
-                        <Loading className="py-20" text="Synchronizing with central archive..." />
+                        <div className={cn(
+                            "grid gap-6 md:gap-8 lg:gap-10",
+                            viewType === 'grid' ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
+                        )}>
+                            {[...Array(6)].map((_, i) => (
+                                <PYQCardSkeleton key={i} />
+                            ))}
+                        </div>
                     ) : papers.length === 0 ? (
                         <div className="py-20 lg:py-32 flex flex-col items-center justify-center border-2 border-dashed border-[#111827]/10 rounded-sm bg-black/5 animate-pulse">
                             <h3 className="text-lg lg:text-xl font-black text-[#111827] uppercase tracking-tighter mb-4">NO MATCHING ARCHIVE DATA</h3>
@@ -289,7 +272,7 @@ export default function ExploreClient() {
                     ) : (
                         <>
                             <div className={cn(
-                                "grid gap-6 lg:gap-10",
+                                "grid gap-6 md:gap-8 lg:gap-10",
                                 viewType === 'grid' ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" : "grid-cols-1"
                             )}>
                                 {papers.map((pyq) => (
@@ -320,20 +303,54 @@ export default function ExploreClient() {
                 </div>
             </div>
 
-            {/* Sticky Mobile Filter FAB */}
-            <div className="lg:hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[60] animate-in slide-in-from-bottom-10 duration-500">
-                <button
-                    onClick={() => setIsFilterDrawerOpen(true)}
-                    className="flex items-center gap-3 bg-[#111827] text-white px-8 py-4 rounded-full border-2 border-[#111827] shadow-[6px_6px_0px_rgba(17,24,39,0.3)] active:translate-x-1 active:translate-y-1 active:shadow-none transition-all"
-                >
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">REFINE_ARCHIVE</span>
-                    {activeFilterCount > 0 && (
-                        <span className="w-5 h-5 flex items-center justify-center bg-[#4338CA] rounded-full text-[9px] font-black">
-                            {activeFilterCount}
-                        </span>
-                    )}
-                </button>
-            </div>
+            {/* RESULTS_CONTAINER */}
+
+            <Drawer
+                isOpen={isFilterDrawerOpen}
+                onClose={() => setIsFilterDrawerOpen(false)}
+                title="VAULT_FILTERS"
+            >
+                <div className="space-y-10">
+                    <FilterChips
+                        label="EXAMINATION TIER"
+                        options={examCategories}
+                        value={filters.exam_type}
+                        onChange={(val: string) => updateFilter('exam_type', val)}
+                    />
+
+                    <FilterChips
+                        label="SUBJECT PRIORITY"
+                        options={subjects.slice(0, 32).map(s => ({
+                            label: `${getNormalizedSubjectCode(s.subject_code)} - ${getCleanSubjectTitle(s.subject_code, s.subject_title)}`,
+                            value: s.subject_code
+                        }))}
+                        value={filters.subject_code}
+                        onChange={(val: string) => updateFilter('subject_code', val)}
+                        className="max-h-[380px] overflow-y-auto pr-2 custom-scrollbar"
+                    />
+
+                    <div className="flex flex-col gap-4 pt-6">
+                        <Button
+                            variant="primary"
+                            onClick={() => setIsFilterDrawerOpen(false)}
+                            className="w-full py-5 uppercase font-black tracking-widest text-[11px] bg-[#111827] text-white border-2 border-[#111827] shadow-[6px_6px_0px_rgba(17,24,39,0.2)]"
+                        >
+                            APPLY_CHANGES
+                        </Button>
+                        <Button
+                            variant="secondary"
+                            onClick={() => {
+                                setFilters(defaultFilters)
+                                setDebouncedSearch('')
+                                setIsFilterDrawerOpen(false)
+                            }}
+                            className="w-full py-5 uppercase font-black tracking-widest text-[11px] opacity-60 border-2 border-[#111827]/10"
+                        >
+                            CLEAR_VAULT
+                        </Button>
+                    </div>
+                </div>
+            </Drawer>
         </div>
     )
 }

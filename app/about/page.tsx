@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { ArrowRight, BookOpen, ShieldCheck, Zap } from 'lucide-react'
 import Button from '@/components/ui/Button'
+import Image from 'next/image'
 
 export const metadata: Metadata = {
     title: 'About the Archive | VIT-AP Previous Year Papers',
@@ -35,10 +36,11 @@ export default function AboutPage() {
                 </div>
                 {/* Background Decoration */}
                 <div className="absolute top-0 right-0 w-1/3 h-full opacity-10 pointer-events-none grayscale hidden lg:block">
-                    <img
+                    <Image
                         src="/assets/industrial_bg.png"
                         alt="Structural Element"
-                        className="w-full h-full object-cover"
+                        fill
+                        className="object-cover"
                     />
                 </div>
             </section>

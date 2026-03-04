@@ -14,6 +14,9 @@ import Card from '@/components/ui/Card'
 import { useSubjects } from '@/hooks/useSubjects'
 import { usePapers } from '@/hooks/usePapers'
 import { useMemo } from 'react'
+import Image from 'next/image'
+import SubjectCardSkeleton from '@/components/pyq/SubjectCardSkeleton'
+import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
 
 export default function HomePage() {
     const { subjects, loading: subjectsLoading } = useSubjects()
@@ -36,11 +39,11 @@ export default function HomePage() {
             <section className="relative bg-[#0A0A0A] py-32 lg:py-48 overflow-hidden border-y border-white/5">
                 {/* Background Illustration */}
                 <div className="absolute top-0 right-0 w-1/2 h-full z-0 opacity-50 pointer-events-none hidden lg:block">
-                    <img
+                    <Image
                         src="/assets/data_stack.png"
                         alt="Structural technical data stack illustration for VIT-AP question papers"
-                        className="w-full h-full object-cover brightness-100"
-                        loading="lazy"
+                        fill
+                        className="object-cover brightness-100"
                     />
                     <div className="absolute inset-0 bg-gradient-to-l from-[#0A0A0A]/20 to-[#0A0A0A]/95" />
                 </div>
@@ -55,7 +58,7 @@ export default function HomePage() {
 
                             <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] mb-10 uppercase tracking-tighter">
                                 BUILT FOR THE <br />
-                                <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.4)', textShadow: '0 0 20px rgba(0,0,0,0.5)' }}>ACADEMIC</span> <br />
+                                <span className="bg-gradient-to-r from-[#4338CA] via-white/80 to-[#4338CA] bg-[length:200%_auto] bg-clip-text text-transparent animate-text-shimmer">ACADEMIC</span> <br />
                                 DISCIPLINE.
                             </h2>
                             <p className="text-xl text-[#A3A3A3] leading-relaxed mb-12 max-w-xl font-medium">
@@ -114,10 +117,11 @@ export default function HomePage() {
             <section id="exams" className="relative py-32 overflow-hidden bg-[#111827]">
                 {/* Background Image Overlay */}
                 <div className="absolute inset-0 z-0 opacity-40 pointer-events-none grayscale">
-                    <img
+                    <Image
                         src="/assets/exam_tiers.png"
                         alt="Exam Tiers"
-                        className="w-full h-full object-cover opacity-60 brightness-100"
+                        fill
+                        className="object-cover opacity-60 brightness-100"
                     />
                     <div className="absolute inset-0 bg-[#111827]/85" />
                 </div>
@@ -175,8 +179,10 @@ export default function HomePage() {
                     </div>
 
                     {subjectsLoading ? (
-                        <div className="flex items-center justify-center py-20">
-                            <Loading size="sm" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {[...Array(8)].map((_, i) => (
+                                <SubjectCardSkeleton key={i} />
+                            ))}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -209,8 +215,10 @@ export default function HomePage() {
                     </div>
 
                     {papersLoading ? (
-                        <div className="flex items-center justify-center py-20">
-                            <Loading size="sm" />
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {[...Array(3)].map((_, i) => (
+                                <PYQCardSkeleton key={i} />
+                            ))}
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -227,10 +235,11 @@ export default function HomePage() {
             <section className="relative py-32 lg:py-48 overflow-hidden bg-[#111827]">
                 {/* Background Image with Cinematic Overlay */}
                 <div className="absolute inset-0 z-0">
-                    <img
+                    <Image
                         src="/assets/industrial_library_bg.png"
                         alt="Industrial Archive"
-                        className="w-full h-full object-cover opacity-80 brightness-100"
+                        fill
+                        className="object-cover opacity-80 brightness-100"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/80 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-[#111827]/90 via-transparent to-[#111827]/90" />
