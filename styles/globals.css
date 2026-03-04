@@ -13,6 +13,24 @@
     --color-brand-end: #6D28D9;
     --radius: 8px;
     --shadow-card: 6px 6px 0px #111827;
+
+    /* Responsive Frame & Shadow Scales */
+    --shadow-offset: 4px;
+    --frame-offset: 4px;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --shadow-offset: 6px;
+      --frame-offset: 6px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --shadow-offset: 8px;
+      --frame-offset: 8px;
+    }
   }
 
   .dark {
@@ -87,8 +105,91 @@
     }
   }
 
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  @keyframes glow-pulse {
+
+    0%,
+    100% {
+      opacity: 0.3;
+      filter: blur(40px);
+    }
+
+    50% {
+      opacity: 0.6;
+      filter: blur(60px);
+    }
+  }
+
+  @keyframes text-shimmer {
+    0% {
+      background-position: 100% 0;
+    }
+
+    100% {
+      background-position: -100% 0;
+    }
+  }
+
+  @keyframes reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   .animate-slide-down {
     animation: slide-down 0.2s ease-out forwards;
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-glow {
+    animation: glow-pulse 4s ease-in-out infinite;
+  }
+
+  .animate-text-shimmer {
+    animation: text-shimmer 3s linear infinite;
+  }
+
+  .reveal-up {
+    animation: reveal-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .cinematic-border {
+    position: relative;
+  }
+
+  .cinematic-border::after {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(45deg, #4338CA, transparent, #6D28D9);
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .cinematic-border:hover::after {
+    opacity: 0.4;
   }
 }
 

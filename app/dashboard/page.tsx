@@ -30,24 +30,12 @@ import Loading from '@/components/ui/Loading'
 import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
 import SubjectRowSkeleton from '@/components/pyq/SubjectRowSkeleton'
 
-const mockUser = {
-    name: 'Alex Kumar',
-    regNo: '22BCE1024',
-    email: 'alex.kumar2022@vitap.ac.in',
-    department: 'Computer Science & Engineering',
-    semester: 4,
-    lastLogin: '2026-02-27T10:30:00Z',
-    location: 'Amaravati, IN',
-    extractionLimit: 100,
-    extractionUsed: 34
-}
-
 export default function DashboardPage() {
     const { user, loading: authLoading } = useAuth()
     const router = useRouter()
 
     const filters = useMemo(() => ({}), [])
-    const { papers: recentPYQs, loading: papersLoading, error: papersError } = usePapers(filters, 1)
+    const { papers: recentPYQs, loading: papersLoading } = usePapers(filters, 1)
     const { subjects, loading: subjectsLoading } = useSubjects()
 
     useEffect(() => {
@@ -104,11 +92,13 @@ export default function DashboardPage() {
                         <div className="p-6 bg-white border border-[#111827] rounded-sm flex flex-col justify-between min-w-[200px]">
                             <span className="text-[9px] font-mono font-black text-[#111827]/40 uppercase tracking-[0.2em] mb-4">EXTRACTION_CAP</span>
                             <div>
-                                <div className="text-3xl font-black text-[#111827] mb-1">34/100</div>
+                                <div className="text-3xl font-black text-[#111827] mb-1 tabular-nums transition-all">
+                                    {authLoading ? '.../100' : `${user?.user_metadata?.extraction_used || 34}/100`}
+                                </div>
                                 <div className="w-full bg-[#EAE0D5] h-1.5 mt-2 overflow-hidden rounded-full">
                                     <div
                                         className="bg-[#111827] h-full transition-all duration-1000"
-                                        style={{ width: `34%` }}
+                                        style={{ width: `${authLoading ? 0 : (user?.user_metadata?.extraction_used || 34)}%` }}
                                     />
                                 </div>
                             </div>
@@ -116,7 +106,9 @@ export default function DashboardPage() {
                         <div className="p-6 bg-[#4338CA] text-white rounded-sm flex flex-col justify-between min-w-[200px] border border-[#111827]">
                             <span className="text-[9px] font-mono font-black text-white/40 uppercase tracking-[0.2em] mb-4">TOTAL_SESSIONS</span>
                             <div>
-                                <div className="text-3xl font-black text-white mb-1">124</div>
+                                <div className="text-3xl font-black text-white mb-1 tabular-nums">
+                                    {authLoading ? '...' : (user?.user_metadata?.total_sessions || 124)}
+                                </div>
                                 <div className="text-[9px] font-mono font-black uppercase tracking-[0.2em] text-white/60">AVG_VELOCITY: 4.2H</div>
                             </div>
                         </div>
@@ -204,16 +196,18 @@ export default function DashboardPage() {
                         {/* Metrics Bar */}
                         <div className="grid grid-cols-3 gap-6">
                             {[
-                                { label: 'EXTRACTED', value: '34', icon: BookOpen },
-                                { label: 'DOWNLOADS', value: '12', icon: Download },
-                                { label: 'SAVED', value: '08', icon: Star }
+                                { label: 'EXTRACTED', value: user?.user_metadata?.extracted_count || '34', icon: BookOpen },
+                                { label: 'DOWNLOADS', value: user?.user_metadata?.download_count || '12', icon: Download },
+                                { label: 'SAVED', value: user?.user_metadata?.saved_count || '08', icon: Star }
                             ].map((stat, i) => (
                                 <div key={i} className="flex flex-col">
                                     <div className="flex items-center gap-2 mb-2">
                                         <stat.icon className="w-3.5 h-3.5 text-[#111827]/40" />
                                         <span className="text-[9px] font-mono font-black text-[#111827]/30 uppercase tracking-widest">{stat.label}</span>
                                     </div>
-                                    <div className="text-4xl font-black text-[#111827] tracking-tighter">{stat.value}</div>
+                                    <div className="text-4xl font-black text-[#111827] tracking-tighter tabular-nums">
+                                        {authLoading ? '...' : stat.value}
+                                    </div>
                                 </div>
                             ))}
                         </div>

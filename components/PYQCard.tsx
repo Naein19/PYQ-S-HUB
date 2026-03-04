@@ -70,11 +70,13 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
             className={cn(
-                "card p-3 md:p-5 flex flex-col gap-4 relative group/card transition-transform duration-200 overflow-hidden",
+                "card p-3 md:p-5 flex flex-col gap-4 relative group/card transition-all duration-500 overflow-hidden",
                 offsetX > 20 && "translate-x-2 border-green-500/30 bg-green-500/5",
                 offsetX < -20 && "-translate-x-2 border-blue-500/30 bg-blue-500/5"
             )}
         >
+            {/* Background Glow Effect */}
+            <div className="absolute -right-12 -top-12 w-32 h-32 bg-[#4338CA]/5 rounded-full blur-3xl group-hover/card:bg-[#4338CA]/10 transition-colors duration-500" />
             {/* Swipe Indicators (Mobile Only) */}
             <div className={cn(
                 "md:hidden absolute inset-y-0 left-0 w-1 bg-green-500 transition-opacity",
@@ -104,12 +106,12 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             </div>
 
             {/* Header */}
-            <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-[8px] bg-[#EFF6FF] flex items-center justify-center transition-all">
+            <div className="flex items-start gap-3 relative z-10">
+                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-[8px] bg-[#EFF6FF] flex items-center justify-center transition-all group-hover/card:scale-110 duration-500">
                     <FileText className="w-4 h-4 md:w-5 md:h-5 text-primary" />
                 </div>
                 <div className="min-w-0">
-                    <h3 className="text-xs md:text-sm font-semibold text-textPrimary leading-snug line-clamp-2 break-words">
+                    <h3 className="text-xs md:text-sm font-semibold text-textPrimary leading-snug line-clamp-2 break-words group-hover/card:text-[#4338CA] transition-colors duration-500">
                         {pyq.paper_title}
                     </h3>
                     <span className="text-[10px] md:text-xs text-slate-500 mt-0.5 inline-block truncate max-w-full font-medium">
@@ -119,9 +121,9 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             </div>
 
             {/* Meta Badges */}
-            <div className="flex flex-wrap gap-1.5">
-                <Badge variant="default" className="text-[9px] md:text-xs px-1.5 md:px-2.5">{pyq.exam_type}</Badge>
-                <Badge variant="default" className="text-[9px] md:text-xs px-1.5 md:px-2.5">{getNormalizedSubjectCode(pyq.subject_code)}</Badge>
+            <div className="flex flex-wrap gap-1.5 relative z-10">
+                <Badge variant="default" className="text-[9px] md:text-xs px-1.5 md:px-2.5 group-hover/card:scale-105 transition-transform duration-500">{pyq.exam_type}</Badge>
+                <Badge variant="default" className="text-[9px] md:text-xs px-1.5 md:px-2.5 group-hover/card:scale-105 transition-transform duration-500">{getNormalizedSubjectCode(pyq.subject_code)}</Badge>
             </div>
 
             {/* Mobile Action Bar (Compact) */}
@@ -159,23 +161,23 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             </div>
 
             {/* Desktop Footer */}
-            <div className="hidden md:flex items-center justify-between pt-2 border-t border-border">
+            <div className="hidden md:flex items-center justify-between pt-2 border-t border-border group-hover/card:border-[#4338CA]/20 transition-colors duration-500 relative z-10">
                 <div className="flex items-center gap-4 text-xs text-slate-400">
                     <button
                         onClick={() => viewPaper(pyq)}
-                        className="flex items-center gap-2 px-5 py-3 bg-[#111827] text-white text-[11px] font-black uppercase tracking-widest rounded-sm border border-[#111827] shadow-[3px_3px_0px_#111827] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_#111827] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#111827] transition-all min-h-[44px]"
+                        className="flex items-center gap-2 px-5 py-3 bg-[#111827] text-white text-[11px] font-black uppercase tracking-widest rounded-sm border border-[#111827] shadow-[3px_3px_0px_#111827] hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-[4px_4px_0px_#111827] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_#111827] transition-all min-h-[44px] group/btn"
                     >
-                        <Eye className="w-4 h-4" />
+                        <Eye className="w-4 h-4 transition-transform duration-500 group-hover/btn:scale-110" />
                         <span>VIEW_FILE</span>
                     </button>
                 </div>
                 <button
                     onClick={handleDownload}
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-primary transition-colors"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-accent hover:text-primary transition-colors group/dl"
                     title="Download PDF"
                 >
-                    <Download className="w-3.5 h-3.5" />
-                    DOWNLOAD
+                    <Download className="w-3.5 h-3.5 transition-transform duration-500 group-hover/dl:-translate-y-0.5" />
+                    <span className="group-hover/dl:underline transition-all">DOWNLOAD</span>
                 </button>
             </div>
         </article>

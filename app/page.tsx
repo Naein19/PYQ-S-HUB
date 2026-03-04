@@ -28,17 +28,11 @@ export default function HomePage() {
             {/* Section 1: Hero (Already in Components) */}
             <Hero />
 
-            {/* Section 2: Metadata Strip */}
-            <section className="bg-[#EAE0D5] pb-24">
-                <div className="container-main">
-                    <MetadataStrip />
-                </div>
-            </section>
 
             {/* Section 3: About Section - Industrial high-fidelity */}
-            <section className="relative bg-[#0A0A0A] py-32 lg:py-48 overflow-hidden border-y border-white/5">
-                {/* Background Illustration */}
-                <div className="absolute top-0 right-0 w-1/2 h-full z-0 opacity-50 pointer-events-none hidden lg:block">
+            <section className="relative bg-[#0A0A0A] py-16 lg:py-24 overflow-hidden border-y border-white/5 min-h-[calc(100vh-80px)] flex items-center">
+                {/* Background Illustration with floating effect */}
+                <div className="absolute top-0 right-0 w-1/2 h-full z-0 opacity-40 pointer-events-none hidden lg:block animate-float">
                     <Image
                         src="/assets/data_stack.png"
                         alt="Structural technical data stack illustration for VIT-AP question papers"
@@ -47,20 +41,23 @@ export default function HomePage() {
                         className="object-cover brightness-100"
                         sizes="(max-width: 1024px) 100vw, 50vw"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-l from-[#0A0A0A]/20 to-[#0A0A0A]/95" />
+                    <div className="absolute inset-0 bg-gradient-to-l from-[#0A0A0A]/10 to-[#0A0A0A]/95" />
                 </div>
 
-                <div className="container-main relative z-10">
+                {/* Decorative glow element */}
+                <div className="absolute -left-24 top-1/2 -translate-y-1/2 w-96 h-96 bg-[#4338CA]/10 rounded-full blur-[120px] animate-glow pointer-events-none" />
+
+                <div className="container-main relative z-10 w-full">
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
-                        <div>
+                        <div className="reveal-up">
                             <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#4338CA]/10 border border-[#4338CA]/30 rounded-sm mb-8">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#4338CA] animate-pulse" />
                                 <span className="text-[10px] font-mono font-black text-[#4338CA] uppercase tracking-[0.3em]">CORE_SYSTEM_PROTOCOL</span>
                             </div>
 
-                            <h2 className="text-5xl md:text-7xl font-black text-white leading-[0.9] mb-10 uppercase tracking-tighter">
+                            <h2 className="text-6xl md:text-8xl font-black text-white leading-[0.85] mb-10 uppercase tracking-tighter">
                                 BUILT FOR THE <br />
-                                <span className="bg-gradient-to-r from-[#4338CA] via-white/80 to-[#4338CA] bg-[length:200%_auto] bg-clip-text text-transparent animate-text-shimmer">ACADEMIC</span> <br />
+                                <span className="bg-gradient-to-r from-[#4338CA] via-white to-[#4338CA] bg-[length:200%_auto] bg-clip-text text-transparent animate-text-shimmer">ACADEMIC</span> <br />
                                 DISCIPLINE.
                             </h2>
                             <p className="text-xl text-[#A3A3A3] leading-relaxed mb-12 max-w-xl font-medium">
@@ -69,44 +66,44 @@ export default function HomePage() {
                                 **VIT-AP Previous Year Question Papers** repository. Access all **CAT-1, CAT-2, and FAT** papers. No noise—just precision.
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-                                <div className="p-6 border-l-2 border-white/10">
+                                <div className="p-6 border-l-2 border-[#4338CA]/30 bg-[#4338CA]/5">
                                     <h4 className="font-black text-white uppercase tracking-widest text-xs mb-4">ARCHIVE_INTEGRITY</h4>
-                                    <p className="text-sm text-[#6B7280] leading-relaxed">Multi-stage verification protocol for every document upload.</p>
+                                    <p className="text-sm text-[#6B7280] leading-relaxed font-medium">Multi-stage verification protocol for every document upload.</p>
                                 </div>
-                                <div className="p-6 border-l-2 border-white/10">
+                                <div className="p-6 border-l-2 border-white/10 group hover:border-[#4338CA]/30 hover:bg-white/5 transition-all duration-300">
                                     <h4 className="font-black text-white uppercase tracking-widest text-xs mb-4">ARCHIVE_STRUCTURE</h4>
-                                    <p className="text-sm text-[#6B7280] leading-relaxed">Organized by department, tier, and specific temporal parameters.</p>
+                                    <p className="text-sm text-[#6B7280] leading-relaxed font-medium">Organized by department, tier, and specific temporal parameters.</p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 relative">
-                            {/* Glass cards with backdrop blur */}
-                            <Card noHover className="bg-white/5 backdrop-blur-md border-white/10 text-white p-8 group hover:border-[#4338CA]/40 transition-all">
-                                <ShieldCheck className="w-8 h-8 mb-6 text-[#4338CA]" />
-                                <h3 className="font-black text-xl uppercase tracking-tighter mb-4">VERIFIED_DATA</h3>
+                            {/* Glass cards with backdrop blur & cinematic borders */}
+                            <Card noHover className="bg-white/5 backdrop-blur-md border-white/10 text-white p-8 group hover:border-[#4338CA]/40 transition-all duration-500 cinematic-border hover:-translate-y-2">
+                                <ShieldCheck className="w-8 h-8 mb-6 text-[#4338CA] group-hover:scale-110 transition-transform" />
+                                <h3 className="font-black text-xl uppercase tracking-tighter mb-4 group-hover:text-white transition-colors">VERIFIED_DATA</h3>
                                 <p className="text-sm text-[#A3A3A3] leading-relaxed font-medium">Official university question papers sourced and scanned at max fidelity.</p>
                             </Card>
-                            <Card noHover className="bg-white/5 backdrop-blur-md border-white/10 text-white p-8 group hover:border-[#4338CA]/40 transition-all">
-                                <Zap className="w-8 h-8 mb-6 text-[#4338CA]" />
-                                <h3 className="font-black text-xl uppercase tracking-tighter mb-4">RAPID_EXTRACTION</h3>
+                            <Card noHover className="bg-white/5 backdrop-blur-md border-white/10 text-white p-8 group hover:border-[#4338CA]/40 transition-all duration-500 cinematic-border hover:-translate-y-2">
+                                <Zap className="w-8 h-8 mb-6 text-[#4338CA] group-hover:scale-110 transition-transform" />
+                                <h3 className="font-black text-xl uppercase tracking-tighter mb-4 group-hover:text-white transition-colors">RAPID_EXTRACTION</h3>
                                 <p className="text-sm text-[#A3A3A3] leading-relaxed font-medium">Optimized search architecture for sub-second resource discovery.</p>
                             </Card>
                             <div className="col-span-full">
                                 <Link href="/explore">
-                                    <div className="w-full h-24 bg-[#111827] border border-white/10 rounded-sm flex items-center justify-between px-8 hover:bg-[#4338CA] transition-all group overflow-hidden relative">
+                                    <div className="w-full h-24 bg-[#111827] border border-white/10 rounded-sm flex items-center justify-between px-10 hover:bg-[#4338CA] transition-all duration-500 group overflow-hidden relative group/btn">
                                         <div className="relative z-10 flex items-center gap-6">
-                                            <div className="w-12 h-12 bg-white/5 rounded-sm flex items-center justify-center border border-white/10">
+                                            <div className="w-12 h-12 bg-white/5 rounded-sm flex items-center justify-center border border-white/10 group-hover/btn:border-white/30 group-hover/btn:bg-white/10 transition-all">
                                                 <BookOpen className="w-6 h-6 text-white" />
                                             </div>
                                             <div>
-                                                <h3 className="font-black text-xl text-white uppercase tracking-tighter">INITIALIZE_EXPLORATION</h3>
-                                                <p className="text-[10px] text-white/50 font-mono uppercase tracking-[0.2em]">ACCESS_CENTRAL_REPOSITORY_v2.0.4</p>
+                                                <h3 className="font-black text-2xl text-white uppercase tracking-tighter">INITIALIZE_EXPLORATION</h3>
+                                                <p className="text-[10px] text-white/50 font-mono uppercase tracking-[0.2em] group-hover/btn:text-white/80 transition-colors">ACCESS_CENTRAL_REPOSITORY_v2.0.4</p>
                                             </div>
                                         </div>
-                                        <ArrowRight className="w-6 h-6 text-white transition-transform group-hover:translate-x-2 relative z-10" />
-                                        {/* Cinematic hover effect */}
-                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                                        <ArrowRight className="w-8 h-8 text-white transition-transform group-hover:translate-x-3 relative z-10 duration-500" />
+                                        {/* Cinematic hover glow */}
+                                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
                                     </div>
                                 </Link>
                             </div>
@@ -116,43 +113,48 @@ export default function HomePage() {
             </section>
 
             {/* Section 4: Exam Type Cards Grid - Industrial backgrounds */}
-            <section id="exams" className="relative py-32 overflow-hidden bg-[#111827]">
-                {/* Background Image Overlay */}
-                <div className="absolute inset-0 z-0 opacity-40 pointer-events-none grayscale">
+            <section id="exams" className="relative py-16 lg:py-24 overflow-hidden bg-[#111827] min-h-[calc(100vh-80px)] flex items-center">
+                {/* Background Image Overlay with subtle movement */}
+                <div className="absolute inset-0 z-0 opacity-30 pointer-events-none grayscale contrast-125 animate-float" style={{ animationDuration: '10s' }}>
                     <Image
                         src="/assets/exam_tiers.png"
                         alt="Exam Tiers"
                         fill
-                        className="object-cover opacity-60 brightness-100"
+                        className="object-cover opacity-50 brightness-150"
                         sizes="100vw"
                     />
-                    <div className="absolute inset-0 bg-[#111827]/85" />
+                    <div className="absolute inset-0 bg-[#111827]/90" />
                 </div>
 
-                <div className="container-main relative z-10">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8">
-                        <div className="max-w-3xl">
-                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-sm mb-8 font-mono text-[10px] uppercase tracking-[0.3em] text-white/60">
+                {/* Decorative gradients for depth */}
+                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4338CA]/10 rounded-full blur-[120px] pointer-events-none" />
+                <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#6D28D9]/5 rounded-full blur-[120px] pointer-events-none" />
+
+                <div className="container-main relative z-10 w-full">
+                    <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-24 gap-12 reveal-up">
+                        <div className="max-w-4xl">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-sm mb-8 font-mono text-[10px] uppercase tracking-[0.4em] text-white/50">
+                                <span className="w-1 h-1 bg-[#4338CA] rounded-full" />
                                 Classification_Parameters
                             </div>
-                            <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-8">
+                            <h2 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter leading-[0.85] mb-10">
                                 THE EXAMINATION <br />
-                                <span className="text-transparent" style={{ WebkitTextStroke: '1px rgba(255,255,255,0.4)' }}>CATEGORIES.</span>
+                                <span className="text-transparent" style={{ WebkitTextStroke: '1.5px rgba(255,255,255,0.2)' }}>CATEGORIES.</span>
                             </h2>
-                            <p className="text-xl text-[#A3A3A3] font-medium leading-relaxed">
+                            <p className="text-xl md:text-2xl text-[#A3A3A3] font-medium leading-relaxed max-w-2xl">
                                 Our archive is partitioned into three discrete assessment tiers.
                                 Select a category to isolate specific academic historical data.
                             </p>
                         </div>
-                        <Link href="/explore">
-                            <Button className="px-8 py-4 uppercase tracking-[0.2em] font-black">
+                        <Link href="/explore" className="group/btn">
+                            <Button size="lg" className="px-10 py-5 uppercase tracking-[0.2em] font-black group-hover:scale-105 transition-transform duration-300">
                                 VIEW_FULL_INDEX
-                                <ArrowRight className="w-5 h-5 ml-2" />
+                                <ArrowRight className="w-6 h-6 ml-3 transition-transform group-hover:translate-x-2" />
                             </Button>
                         </Link>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-10 reveal-up" style={{ animationDelay: '0.2s' }}>
                         {examTypes.map((exam) => (
                             <ExamTypeCard key={exam.id} exam={exam} />
                         ))}
@@ -161,8 +163,8 @@ export default function HomePage() {
             </section>
 
             {/* Section 5: Subject Repositories */}
-            <section className="bg-[#FBF9F7] py-24 border-b border-[#111827]">
-                <div className="container-main">
+            <section className="bg-[#FBF9F7] py-16 lg:py-24 border-b border-[#111827] min-h-[calc(100vh-80px)] flex items-center">
+                <div className="container-main w-full">
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
                         <div className="max-w-2xl">
                             <h2 className="text-4xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter leading-none mb-6">
@@ -198,8 +200,8 @@ export default function HomePage() {
             </section>
 
             {/* Section 6: Recent PYQs */}
-            <section className="bg-white py-24 border-b border-[#111827]">
-                <div className="container-main">
+            <section className="bg-white py-16 lg:py-24 border-b border-[#111827] min-h-[calc(100vh-80px)] flex items-center">
+                <div className="container-main w-full">
                     <div className="flex items-center justify-between mb-16">
                         <div>
                             <h2 className="text-4xl font-black text-[#111827] uppercase tracking-tighter leading-none mb-4">
@@ -235,7 +237,7 @@ export default function HomePage() {
 
 
             {/* Final CTA - Cinematic industrial scale */}
-            <section className="relative py-32 lg:py-48 overflow-hidden bg-[#111827]">
+            <section className="relative py-16 lg:py-24 overflow-hidden bg-[#111827] min-h-[calc(100vh-80px)] flex items-center">
                 {/* Background Image with Cinematic Overlay */}
                 <div className="absolute inset-0 z-0">
                     <Image
@@ -246,10 +248,9 @@ export default function HomePage() {
                         sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/80 to-transparent" />
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#111827]/90 via-transparent to-[#111827]/90" />
                 </div>
 
-                <div className="container-main relative z-10 text-center">
+                <div className="container-main relative z-10 text-center w-full">
                     <div className="max-w-4xl mx-auto">
                         <div className="inline-flex items-center gap-3 px-4 py-2 bg-[#4338CA]/10 border border-[#4338CA]/30 rounded-sm mb-12 animate-pulse">
                             <ShieldCheck className="w-5 h-5 text-[#4338CA]" />

@@ -12,6 +12,7 @@ export default function SubjectCardSkeleton() {
                 <div className="space-y-2">
                     <div className="h-6 w-full skeleton" />
                     <div className="h-6 w-5/6 skeleton" />
+                    <div className="h-6 w-4/6 skeleton" />
                 </div>
             </div>
 

@@ -40,6 +40,7 @@ export default function AboutPage() {
                         src="/assets/industrial_bg.png"
                         alt="Structural Element"
                         fill
+                        priority
                         className="object-cover"
                     />
                 </div>

@@ -4,16 +4,16 @@ import React from 'react'
 
 export default function PYQCardSkeleton() {
     return (
-        <article className="card p-5 flex flex-col gap-4 relative">
+        <article className="card p-3 md:p-5 flex flex-col gap-4 relative">
             {/* Subject Archive & Share Shortcuts Skeleton */}
-            <div className="absolute top-4 right-4 flex gap-3 z-10">
+            <div className="hidden md:flex absolute top-4 right-4 gap-3 z-10">
                 <div className="w-11 h-11 skeleton" />
                 <div className="w-11 h-11 skeleton" />
             </div>
 
             {/* Header Skeleton */}
             <div className="flex items-start gap-3">
-                <div className="flex-shrink-0 w-10 h-10 rounded-[8px] skeleton" />
+                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-[8px] skeleton" />
                 <div className="flex-1 space-y-2">
                     <div className="h-4 w-3/4 skeleton" />
                     <div className="h-3 w-1/2 skeleton" />
