@@ -89,7 +89,7 @@ export default function ExploreClient() {
     const activeFilterCount = Object.values(filters).filter(Boolean).length
 
     return (
-        <div className="bg-[#FBF9F7] min-h-screen animate-fade-in pb-20">
+        <div className="bg-[#FBF9F7] min-h-screen pb-20">
             <div className="container-main py-6 md:py-10 lg:py-24">
                 {/* Page Header - Cinematic Industrial Vault (Hidden on Mobile) */}
                 <div className="hidden md:block relative mb-16 lg:mb-24 p-10 lg:p-20 overflow-hidden bg-[#0A0A0A] border-2 border-[#111827] shadow-[8px_8px_0px_#111827] min-h-[400px] lg:min-h-[500px]">
@@ -99,8 +99,9 @@ export default function ExploreClient() {
                             src="/assets/explore_vault.png"
                             alt="Central Vault Archive for VIT-AP exam papers"
                             fill
-                            className="object-cover opacity-80 brightness-100"
                             priority
+                            className="object-cover opacity-80 brightness-100"
+                            sizes="(max-width: 1024px) 100vw, 80vw"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-[#0A0A0A]/40 to-[#0A0A0A]/20" />
                         <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/60 via-transparent to-[#0A0A0A]/30" />

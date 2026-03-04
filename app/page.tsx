@@ -24,7 +24,7 @@ export default function HomePage() {
     const { papers: recentPYQs, loading: papersLoading } = usePapers(recentPapersFilters, 1)
 
     return (
-        <div className="animate-fade-in">
+        <div>
             {/* Section 1: Hero (Already in Components) */}
             <Hero />
 
@@ -43,7 +43,9 @@ export default function HomePage() {
                         src="/assets/data_stack.png"
                         alt="Structural technical data stack illustration for VIT-AP question papers"
                         fill
+                        priority
                         className="object-cover brightness-100"
+                        sizes="(max-width: 1024px) 100vw, 50vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-l from-[#0A0A0A]/20 to-[#0A0A0A]/95" />
                 </div>
@@ -122,6 +124,7 @@ export default function HomePage() {
                         alt="Exam Tiers"
                         fill
                         className="object-cover opacity-60 brightness-100"
+                        sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-[#111827]/85" />
                 </div>
@@ -240,6 +243,7 @@ export default function HomePage() {
                         alt="Industrial Archive"
                         fill
                         className="object-cover opacity-80 brightness-100"
+                        sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-[#111827] via-[#111827]/80 to-transparent" />
                     <div className="absolute inset-0 bg-gradient-to-r from-[#111827]/90 via-transparent to-[#111827]/90" />

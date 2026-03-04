@@ -41,7 +41,7 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
     const filters = ['ALL', 'CAT-1', 'CAT-2', 'FAT', 'OTHER']
 
     return (
-        <div className="bg-[#EAE0D5] min-h-screen animate-fade-in">
+        <div className="bg-[#EAE0D5] min-h-screen">
             <div className="container-main py-8 md:py-12 lg:py-20">
                 {/* Navigation */}
                 <Link
