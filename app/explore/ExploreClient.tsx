@@ -92,56 +92,7 @@ export default function ExploreClient() {
         <div className="bg-[#FBF9F7] min-h-screen pb-20">
             <div className="container-main py-6 md:py-10 lg:py-24">
                 {/* Page Header - Cinematic Industrial Vault (Hidden on Mobile) */}
-                <div className="hidden md:block relative mb-16 lg:mb-24 p-10 lg:p-20 overflow-hidden bg-[#0A0A0A] border-2 border-[#111827] shadow-[8px_8px_0px_#111827] min-h-[400px] lg:min-h-[500px]">
-                    {/* Background Illustration */}
-                    <div className="absolute inset-0 z-0 opacity-60 grayscale hover:grayscale-0 transition-all duration-1000 group">
-                        <Image
-                            src="/assets/explore_vault.png"
-                            alt="Central Vault Archive for VIT-AP exam papers"
-                            fill
-                            priority
-                            className="object-cover opacity-80 brightness-100"
-                            sizes="(max-width: 1024px) 100vw, 80vw"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A]/90 via-[#0A0A0A]/40 to-[#0A0A0A]/20" />
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#0A0A0A]/60 via-transparent to-[#0A0A0A]/30" />
-                    </div>
 
-                    <div className="relative z-10">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-white/20 bg-white/5 backdrop-blur-md mb-8 lg:mb-12 font-mono text-[10px] font-black uppercase tracking-[0.3em] text-[#4338CA]">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#4338CA] animate-pulse" />
-                            CENTRAL_ARCHIVE_EXPLORER_v2.1
-                        </div>
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10">
-                            <div>
-                                <h1 className="text-5xl md:text-8xl font-black text-white uppercase tracking-tighter mb-6 leading-[0.85]">
-                                    EXPLORE <br />
-                                    <span className="bg-gradient-to-r from-[#4338CA] via-white/80 to-[#4338CA] bg-[length:200%_auto] bg-clip-text text-transparent animate-text-shimmer">REPOSITORY.</span>
-                                </h1>
-                                <p className="text-lg md:text-2xl text-[#A3A3A3] max-w-2xl font-medium leading-relaxed">
-                                    Primary resource extraction interface for collegiate technical archives.
-                                    Filtering protocol established and ready for synchronization.
-                                </p>
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="hidden sm:flex border border-white/10 rounded-sm overflow-hidden bg-white/5 backdrop-blur-md p-1">
-                                    <button
-                                        onClick={() => setViewType('grid')}
-                                        className={cn("p-4 rounded-sm transition-all", viewType === 'grid' ? "bg-white text-[#111827]" : "text-white/40 hover:text-white")}
-                                    >
-                                        <LayoutGrid className="w-6 h-6" />
-                                    </button>
-                                    <button
-                                        onClick={() => setViewType('list')}
-                                        className={cn("p-4 rounded-sm transition-all", viewType === 'list' ? "bg-white text-[#111827]" : "text-white/40 hover:text-white")}
-                                    >
-                                        <List className="w-6 h-6" />
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Search & Filter Controls */}
                 <div className="mb-8 md:mb-10 lg:mb-16 space-y-6 lg:space-y-8">

@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
@@ -24,6 +24,10 @@ const jetbrains = JetBrains_Mono({
 
 import JsonLd from '@/components/SEO/JsonLd'
 
+export const viewport: Viewport = {
+    themeColor: '#EAE0D5',
+}
+
 export const metadata: Metadata = {
     metadataBase: new URL('https://pyqs-hub.vercel.app'),
     title: {
@@ -45,6 +49,11 @@ export const metadata: Metadata = {
         canonical: '/',
     },
     manifest: '/site.webmanifest',
+    appleWebApp: {
+        capable: true,
+        statusBarStyle: 'default',
+        title: "PYQ's Hub",
+    },
     openGraph: {
         title: "VIT-AP Previous Year Question Papers | PYQ’s Hub",
         description: "Access VIT-AP CAT-1, CAT-2, and FAT previous year question papers organized by subject, semester, and department.",

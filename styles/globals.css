@@ -79,6 +79,11 @@
     stroke-width: 1.5px !important;
   }
 
+  button svg,
+  a svg {
+    pointer-events: none;
+  }
+
   h1,
   h2,
   h3,

@@ -76,7 +76,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             )}
         >
             {/* Background Glow Effect */}
-            <div className="absolute -right-12 -top-12 w-32 h-32 bg-[#4338CA]/5 rounded-full blur-3xl group-hover/card:bg-[#4338CA]/10 transition-colors duration-500" />
+            <div className="absolute -right-12 -top-12 w-32 h-32 bg-[#4338CA]/5 rounded-full blur-3xl group-hover/card:bg-[#4338CA]/10 transition-colors duration-500 pointer-events-none" />
             {/* Swipe Indicators (Mobile Only) */}
             <div className={cn(
                 "md:hidden absolute inset-y-0 left-0 w-1 bg-green-500 transition-opacity",
@@ -88,11 +88,12 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             )} />
 
             {/* Subject Archive & Share Shortcuts (Desktop Only) */}
-            <div className="hidden md:flex absolute top-4 right-4 gap-3 z-10">
+            <div className="hidden md:flex absolute top-4 right-4 gap-3 z-20">
                 <button
                     onClick={handleShare}
                     className="w-11 h-11 icon-3d group/share bg-white hover:bg-white flex items-center justify-center border border-[#111827]/10"
                     title="Share Repository"
+                    aria-label="Share Repository"
                 >
                     {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5 text-[#111827]" />}
                 </button>
@@ -100,6 +101,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                     href={`/subject/${pyq.subject_code}`}
                     className="w-11 h-11 icon-3d group/folder bg-[#EAE0D5] hover:bg-[#111827] hover:text-white flex items-center justify-center border border-[#111827]/10"
                     title="View All Files"
+                    aria-label="View All Files"
                 >
                     <Folder className="w-5 h-5" />
                 </Link>
@@ -107,9 +109,13 @@ export default function PYQCard({ pyq }: PYQCardProps) {
 
             {/* Header */}
             <div className="flex items-start gap-3 relative z-10">
-                <div className="flex-shrink-0 w-8 h-8 md:w-10 md:h-10 rounded-[8px] bg-[#EFF6FF] flex items-center justify-center transition-all group-hover/card:scale-110 duration-500">
-                    <FileText className="w-4 h-4 md:w-5 md:h-5 text-primary" />
-                </div>
+                <button
+                    onClick={() => viewPaper(pyq)}
+                    className="flex-shrink-0 w-10 h-10 rounded-[8px] bg-[#EFF6FF] flex items-center justify-center transition-all duration-300 hover:scale-110 group/btn"
+                    aria-label="View Paper"
+                >
+                    <FileText className="w-5 h-5 text-primary pointer-events-none transition-transform group-hover/btn:scale-110" />
+                </button>
                 <div className="min-w-0">
                     <h3 className="text-xs md:text-sm font-semibold text-textPrimary leading-snug line-clamp-2 break-words group-hover/card:text-[#4338CA] transition-colors duration-500">
                         {pyq.paper_title}
