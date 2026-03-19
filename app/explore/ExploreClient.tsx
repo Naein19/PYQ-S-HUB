@@ -89,8 +89,8 @@ export default function ExploreClient() {
     const activeFilterCount = Object.values(filters).filter(Boolean).length
 
     return (
-        <div className="bg-[#FBF9F7] min-h-screen pb-20">
-            <div className="container-main py-6 md:py-10 lg:py-24">
+        <div className="bg-[var(--color-surface)] min-h-screen pb-20">
+            <div className="container-main pt-4 md:pt-6 lg:pt-8 pb-10 md:pb-16 lg:pb-24">
                 {/* Page Header - Cinematic Industrial Vault (Hidden on Mobile) */}
 
 
@@ -109,11 +109,11 @@ export default function ExploreClient() {
                         />
                         <button
                             onClick={() => setIsFilterDrawerOpen(true)}
-                            className="md:hidden flex items-center justify-center w-[52px] h-[52px] bg-[#111827] border border-[#111827] rounded-sm shadow-[4px_4px_0px_rgba(17,24,39,0.3)] active:scale-95 active:shadow-none transition-all relative"
+                            className="md:hidden flex items-center justify-center w-[52px] h-[52px] bg-[var(--color-card)] border border-[var(--color-border)] rounded-sm shadow-[4px_4px_0px_var(--color-border)] active:scale-95 active:shadow-none transition-all relative"
                         >
-                            <SlidersHorizontal className="w-5 h-5 text-white" />
+                            <SlidersHorizontal className="w-5 h-5 text-[var(--color-text)]" />
                             {activeFilterCount > 0 && (
-                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#4338CA] text-white text-[10px] font-black rounded-full border-2 border-[#EAE0D5] flex items-center justify-center">
+                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#4338CA] text-white text-[10px] font-black rounded-full border-2 border-[var(--color-surface)] flex items-center justify-center">
                                     {activeFilterCount}
                                 </span>
                             )}
@@ -155,14 +155,14 @@ export default function ExploreClient() {
 
                 {/* Results Section */}
                 <div className="space-y-8 lg:space-y-10">
-                    <div className="flex flex-col gap-6 pb-4 lg:pb-6 border-b border-[#111827]/10">
+                    <div className="flex flex-col gap-6 pb-4 lg:pb-6 border-b border-[var(--color-border)]/30">
                         <div className="flex items-center justify-between">
-                            <p className="text-[10px] font-mono font-black text-[#6B7280] uppercase tracking-[0.2em]">
+                            <p className="text-[10px] font-mono font-black text-[var(--color-muted)] uppercase tracking-[0.2em]">
                                 REVISION_RESULTS: {loading ? '...' : totalCount} DOCUMENTS_IDENTIFIED
                             </p>
                             <div className="hidden sm:flex gap-6">
-                                <span className="text-[8px] font-mono text-[#111827]/30 uppercase tracking-[0.3em] font-bold">STATUS: {loading ? 'FETCHING' : 'ARCHIVE_LIVE'}</span>
-                                <span className="text-[8px] font-mono text-[#111827]/30 uppercase tracking-[0.3em] font-bold">LATENCY: ACTIVE</span>
+                                <span className="text-[8px] font-mono text-[var(--color-text)]/30 uppercase tracking-[0.3em] font-bold">STATUS: {loading ? 'FETCHING' : 'ARCHIVE_LIVE'}</span>
+                                <span className="text-[8px] font-mono text-[var(--color-text)]/30 uppercase tracking-[0.3em] font-bold">LATENCY: ACTIVE</span>
                             </div>
                         </div>
 
@@ -172,7 +172,7 @@ export default function ExploreClient() {
                                 {filters.subject_code && (
                                     <button
                                         onClick={() => updateFilter('subject_code', '')}
-                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#111827] text-white text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 transition-colors group"
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 hover:text-white transition-colors group"
                                     >
                                         <span>SUBJECT: {filters.subject_code}</span>
                                         <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
@@ -181,7 +181,7 @@ export default function ExploreClient() {
                                 {filters.exam_type && (
                                     <button
                                         onClick={() => updateFilter('exam_type', '')}
-                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#4338CA] text-white text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 transition-colors group"
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#4338CA]/10 text-indigo-400 border border-indigo-400/20 text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 hover:text-white transition-colors group"
                                     >
                                         <span>TIER: {filters.exam_type}</span>
                                         <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
@@ -190,7 +190,7 @@ export default function ExploreClient() {
                                 {filters.search_term && (
                                     <button
                                         onClick={() => setDebouncedSearch('')}
-                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#111827]/10 text-[#111827] text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 hover:text-white transition-colors group"
+                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 hover:text-white transition-colors group"
                                     >
                                         <span>QUERY: {filters.search_term}</span>
                                         <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
@@ -216,9 +216,9 @@ export default function ExploreClient() {
                             ))}
                         </div>
                     ) : papers.length === 0 ? (
-                        <div className="py-20 lg:py-32 flex flex-col items-center justify-center border-2 border-dashed border-[#111827]/10 rounded-sm bg-black/5 animate-pulse">
-                            <h3 className="text-lg lg:text-xl font-black text-[#111827] uppercase tracking-tighter mb-4">NO MATCHING ARCHIVE DATA</h3>
-                            <p className="text-xs lg:text-sm font-bold text-[#6B7280] uppercase tracking-widest mb-8 text-center px-6">The combination of parameters yielded null results from the central server.</p>
+                        <div className="py-20 lg:py-32 flex flex-col items-center justify-center border-2 border-dashed border-[var(--color-border)] rounded-sm bg-[var(--color-card)] animate-pulse">
+                            <h3 className="text-lg lg:text-xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4">NO MATCHING ARCHIVE DATA</h3>
+                            <p className="text-xs lg:text-sm font-bold text-[var(--color-muted)] uppercase tracking-widest mb-8 text-center px-6">The combination of parameters yielded null results from the central server.</p>
                             <Button onClick={() => { setFilters(defaultFilters); setDebouncedSearch(''); }} className="uppercase font-black text-xs">RE-INITIALIZE_SEARCH</Button>
                         </div>
                     ) : (
@@ -285,7 +285,7 @@ export default function ExploreClient() {
                         <Button
                             variant="primary"
                             onClick={() => setIsFilterDrawerOpen(false)}
-                            className="w-full py-5 uppercase font-black tracking-widest text-[11px] bg-[#111827] text-white border-2 border-[#111827] shadow-[6px_6px_0px_rgba(17,24,39,0.2)]"
+                            className="w-full py-5 uppercase font-black tracking-widest text-[11px] border-2 border-[var(--color-border)] shadow-[6px_6px_0px_var(--color-border)]"
                         >
                             APPLY_CHANGES
                         </Button>
@@ -296,7 +296,7 @@ export default function ExploreClient() {
                                 setDebouncedSearch('')
                                 setIsFilterDrawerOpen(false)
                             }}
-                            className="w-full py-5 uppercase font-black tracking-widest text-[11px] opacity-60 border-2 border-[#111827]/10"
+                            className="w-full py-5 uppercase font-black tracking-widest text-[11px] opacity-60 border-2 border-[var(--color-border)]/10"
                         >
                             CLEAR_VAULT
                         </Button>

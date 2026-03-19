@@ -9,6 +9,8 @@ import { cn } from '@/lib/utils'
 import Button from '@/components/ui/Button'
 import { useAuth } from '@/context/AuthContext'
 import { useLoading } from '@/context/LoadingContext'
+import ThemeToggle from '@/components/ui/ThemeToggle'
+import { useTheme } from '@/context/ThemeContext'
 
 const guestLinks = [
     { href: '/', label: 'Home' },
@@ -25,6 +27,7 @@ export default function Navbar() {
     const pathname = usePathname()
     const { user, role, signOut, loading } = useAuth()
     const { setIsLoading } = useLoading()
+    const { isDark } = useTheme()
     const [mobileOpen, setMobileOpen] = useState(false)
     const [profileOpen, setProfileOpen] = useState(false)
     const [isScrolled, setIsScrolled] = useState(false)
@@ -56,15 +59,15 @@ export default function Navbar() {
             className={cn(
                 "sticky top-0 z-50 transition-all duration-300 min-h-[80px]",
                 isScrolled
-                    ? "bg-white/90 backdrop-blur-md border-b border-[#111827] shadow-sm"
-                    : "bg-[#EAE0D5] border-b border-transparent"
+                    ? "bg-[var(--color-card)] border-b border-[var(--color-border)] shadow-sm"
+                    : "bg-[var(--color-surface)] border-b border-transparent"
             )}
         >
             <nav className="container-main h-20 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-3 group">
-                    <Logo className="w-10 h-10 transition-transform group-hover:scale-105" variant="dark" />
-                    <span className="font-black text-xl text-[#111827] tracking-tighter uppercase">
+                    <Logo className="w-10 h-10 transition-transform group-hover:scale-105" variant={isScrolled || isDark ? "light" : "dark"} />
+                    <span className="font-black text-xl text-[var(--color-text)] tracking-tighter uppercase">
                         PYQ&apos;s Hub
                     </span>
                 </Link>
@@ -80,7 +83,7 @@ export default function Navbar() {
                             }}
                             className={cn(
                                 'nav-link py-1',
-                                pathname === link.href && 'active text-[#111827] font-bold',
+                                pathname === link.href && 'active text-[#4338CA] font-bold',
                             )}
                         >
                             {link.label}
@@ -102,12 +105,13 @@ export default function Navbar() {
                     )}
                 </div>
 
-                {/* Desktop Auth / Profile */}
-                <div className="hidden md:flex items-center gap-4 min-w-[140px] justify-end">
+                {/* Desktop Auth / Profile + Theme Toggle */}
+                <div className="hidden md:flex items-center gap-3 min-w-[140px] justify-end">
+                    <ThemeToggle />
                     {loading ? (
                         <div className="flex items-center gap-4">
-                            <div className="w-16 h-8 bg-black/5 animate-pulse rounded-sm" />
-                            <div className="w-20 h-8 bg-black/10 animate-pulse rounded-sm" />
+                            <div className="w-16 h-8 bg-[var(--color-text)]/5 animate-pulse rounded-sm" />
+                            <div className="w-20 h-8 bg-[var(--color-text)]/10 animate-pulse rounded-sm" />
                         </div>
                     ) : (
                         <>
@@ -124,7 +128,7 @@ export default function Navbar() {
                                 <div className="relative" ref={dropdownRef}>
                                     <button
                                         onClick={() => setProfileOpen(!profileOpen)}
-                                        className="flex items-center gap-2 p-1 rounded-full border-2 border-[#111827] hover:bg-[#111827] hover:text-white transition-all overflow-hidden"
+                                        className="flex items-center gap-2 p-1 rounded-full border-2 border-[var(--color-border)] hover:bg-[var(--color-text)] hover:text-[var(--color-surface)] transition-all overflow-hidden"
                                     >
                                         <div className="w-8 h-8 bg-[#4338CA] rounded-full flex items-center justify-center text-white">
                                             <UserIcon className="w-5 h-5" />
@@ -133,10 +137,10 @@ export default function Navbar() {
 
                                     {/* Premium Dropdown */}
                                     {profileOpen && (
-                                        <div className="absolute right-0 mt-3 w-64 bg-white border-2 border-[#111827] shadow-[8px_8px_0px_#111827] rounded-sm py-2 z-[60] animate-in fade-in zoom-in duration-200">
-                                            <div className="px-4 py-3 border-b border-[#111827]/10 mb-2">
-                                                <p className="text-[10px] font-mono font-black text-[#6B7280] uppercase tracking-widest">Signed in as</p>
-                                                <p className="font-bold text-[#111827] truncate">{user.email}</p>
+                                        <div className="absolute right-0 mt-3 w-64 bg-[var(--color-card)] border-2 border-[var(--color-border)] shadow-[8px_8px_0px_var(--color-border)] rounded-sm py-2 z-[60] animate-in fade-in zoom-in duration-200">
+                                            <div className="px-4 py-3 border-b border-[var(--color-border)]/10 mb-2">
+                                                <p className="text-[10px] font-mono font-black text-[var(--color-muted)] uppercase tracking-widest">Signed in as</p>
+                                                <p className="font-bold text-[var(--color-text)] truncate">{user.email}</p>
                                                 {role === 'admin' && (
                                                     <span className="inline-block mt-1 px-2 py-0.5 bg-[#4338CA]/10 text-[#4338CA] text-[10px] font-black uppercase tracking-tighter rounded-sm">
                                                         AUTHORIZED_ADMIN
@@ -144,7 +148,7 @@ export default function Navbar() {
                                                 )}
                                             </div>
 
-                                            <Link href="/dashboard" onClick={() => { setProfileOpen(false); if (pathname !== '/dashboard') setIsLoading(true); }} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#111827] hover:bg-[#EAE0D5] transition-colors">
+                                            <Link href="/dashboard" onClick={() => { setProfileOpen(false); if (pathname !== '/dashboard') setIsLoading(true); }} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[var(--color-text)] hover:bg-[var(--color-surface)] transition-colors">
                                                 <LayoutDashboard className="w-4 h-4" />
                                                 Dashboard
                                             </Link>
@@ -156,12 +160,12 @@ export default function Navbar() {
                                                 </Link>
                                             )}
 
-                                            <Link href="/settings" onClick={() => { setProfileOpen(false); if (pathname !== '/settings') setIsLoading(true); }} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[#111827] hover:bg-[#EAE0D5] transition-colors">
+                                            <Link href="/settings" onClick={() => { setProfileOpen(false); if (pathname !== '/settings') setIsLoading(true); }} className="flex items-center gap-3 px-4 py-2 text-sm font-bold text-[var(--color-text)] hover:bg-[var(--color-surface)] transition-colors">
                                                 <Settings className="w-4 h-4" />
                                                 Settings
                                             </Link>
 
-                                            <div className="h-px bg-[#111827]/10 my-2" />
+                                            <div className="h-px bg-[var(--color-border)]/10 my-2" />
 
                                             <button
                                                 onClick={() => {
@@ -182,14 +186,15 @@ export default function Navbar() {
                 </div>
 
                 {/* Mobile Toggle */}
-                <div className="flex items-center gap-4 md:hidden">
+                <div className="flex items-center gap-2 md:hidden">
+                    <ThemeToggle />
                     {!user && (
                         <Link href="/login">
                             <Button variant="ghost" size="sm" className="font-black text-[10px] tracking-widest px-3">LOGIN</Button>
                         </Link>
                     )}
                     <button
-                        className="p-3 rounded-sm text-[#111827] hover:bg-black/5 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
+                        className="p-3 rounded-sm text-[var(--color-text)] hover:bg-[var(--color-text)]/5 transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center"
                         onClick={() => setMobileOpen(!mobileOpen)}
                         aria-label="Toggle menu"
                     >
@@ -200,14 +205,14 @@ export default function Navbar() {
 
             {/* Mobile Menu */}
             {mobileOpen && (
-                <div className="md:hidden bg-[#EAE0D5] border-t border-[#111827] animate-fade-in">
+                <div className="md:hidden bg-[var(--color-surface)] border-t border-[var(--color-border)] animate-fade-in">
                     <div className="container-main py-6 flex flex-col gap-6">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.href}
                                 href={link.href}
                                 className={cn(
-                                    'text-lg font-bold text-[#111827] uppercase tracking-tight py-3 px-2 min-h-[44px] flex items-center',
+                                    'text-lg font-bold text-[var(--color-text)] uppercase tracking-tight py-3 px-2 min-h-[44px] flex items-center',
                                     pathname === link.href && 'underline underline-offset-8 decoration-2 decoration-[#4338CA]',
                                 )}
                                 onClick={() => {
@@ -218,7 +223,7 @@ export default function Navbar() {
                                 {link.label}
                             </Link>
                         ))}
-                        <div className="h-px bg-[#111827]/10" />
+                        <div className="h-px bg-[var(--color-border)]/10" />
                         <div className="flex flex-col gap-3">
                             {!user ? (
                                 <>

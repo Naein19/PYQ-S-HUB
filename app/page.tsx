@@ -28,7 +28,11 @@ export default function HomePage() {
             {/* Section 1: Hero (Already in Components) */}
             <Hero />
 
-            {/* Section 2: Exam Type Cards Grid - Industrial backgrounds */}
+
+            {/* Section 3: About Section - Industrial high-fidelity */}
+
+
+            {/* Section 4: Exam Type Cards Grid - Industrial backgrounds */}
             <section id="exams" className="relative py-16 lg:py-24 overflow-hidden bg-[#111827] min-h-[calc(100vh-80px)] flex items-center">
                 {/* Background Image Overlay with subtle movement */}
                 <div className="absolute inset-0 z-0 opacity-30 pointer-events-none grayscale contrast-125 animate-float" style={{ animationDuration: '10s' }}>

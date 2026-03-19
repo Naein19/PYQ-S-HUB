@@ -32,10 +32,7 @@ const socialLinks = [
 
 export default function Footer() {
     return (
-        <footer className="bg-[#0A0A0A] border-t border-white/5 relative overflow-hidden pt-24 pb-12">
-
-
-
+        <footer className="bg-[var(--color-surface)] border-t border-[var(--color-border)] relative overflow-hidden pt-24 pb-12">
             {/* Layered Background Effects */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#4338CA]/5 blur-[120px] rounded-full animate-glow" />
@@ -56,7 +53,7 @@ export default function Footer() {
                                     <Logo className="w-14 h-14" variant="light" />
                                 </motion.div>
                                 <div className="flex flex-col">
-                                    <span className="font-black text-3xl text-white tracking-widest uppercase leading-none">
+                                    <span className="font-black text-3xl text-[var(--color-text)] tracking-widest uppercase leading-none">
                                         PYQ&apos;S <br /> HUB
                                     </span>
                                     <div className="flex items-center gap-2 mt-2">
@@ -69,19 +66,19 @@ export default function Footer() {
                             </div>
                         </Link>
 
-                        <p className="text-[#A3A3A3] text-lg leading-relaxed max-w-sm font-medium">
+                        <p className="text-[var(--color-muted)] text-lg leading-relaxed max-w-sm font-medium">
                             Premium academic repository for VIT-AP engineering students.
                             Built for speed, precision, and architectural integrity.
                         </p>
 
                         <div className="space-y-4">
-                            <div className="flex items-center gap-4 p-4 border border-white/5 bg-white/5 rounded-sm backdrop-blur-sm max-w-xs group hover:border-[#4338CA]/30 transition-colors duration-500">
+                            <div className="flex items-center gap-4 p-4 border border-[var(--color-border)] bg-[var(--color-card)] rounded-sm backdrop-blur-sm max-w-xs group hover:border-[#4338CA]/30 transition-colors duration-500">
                                 <div className="p-2 bg-[#4338CA]/10 rounded-sm">
                                     <Terminal className="w-4 h-4 text-[#4338CA]" />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span className="text-[9px] font-mono text-[#6B7280] uppercase tracking-widest leading-none mb-1">System_Status</span>
-                                    <span className="text-xs font-mono text-white/90 font-bold uppercase tracking-widest">Operational // v2.1.0</span>
+                                    <span className="text-[9px] font-mono text-[var(--color-muted)] uppercase tracking-widest leading-none mb-1">System_Status</span>
+                                    <span className="text-xs font-mono text-[var(--color-text)]/90 font-bold uppercase tracking-widest">Operational // v2.1.0</span>
                                 </div>
                             </div>
 
@@ -93,11 +90,11 @@ export default function Footer() {
                                         aria-label={social.label}
                                         whileHover={{ scale: 1.1, y: -2 }}
                                         whileTap={{ scale: 0.95 }}
-                                        className="w-11 h-11 rounded-sm border border-white/10 bg-white/5 text-white/70 flex items-center justify-center hover:bg-white hover:text-[#111827] hover:border-white transition-all duration-300 relative group overflow-hidden"
+                                        className="w-11 h-11 rounded-sm border border-[var(--color-border)] bg-[var(--color-card)] text-[var(--color-text)]/70 flex items-center justify-center hover:bg-[var(--color-text)] hover:text-[var(--color-surface)] hover:border-[var(--color-text)] transition-all duration-300 relative group overflow-hidden"
                                     >
                                         <social.icon className="w-5 h-5 relative z-10 transition-transform group-hover:stroke-[2.5px]" />
                                         <motion.div
-                                            className="absolute inset-0 bg-white/20 blur-md translate-y-full group-hover:translate-y-0 transition-transform"
+                                            className="absolute inset-0 bg-[var(--color-text)]/20 blur-md translate-y-full group-hover:translate-y-0 transition-transform"
                                             initial={false}
                                         />
                                     </motion.a>
@@ -109,7 +106,7 @@ export default function Footer() {
                     {/* Links Sections */}
                     {Object.entries(footerLinks).map(([title, links]) => (
                         <div key={title} className="space-y-8">
-                            <h4 className="text-white font-black text-[10px] uppercase tracking-[0.4em] flex items-center gap-3">
+                            <h4 className="text-[var(--color-text)] font-black text-[10px] uppercase tracking-[0.4em] flex items-center gap-3">
                                 <span className="w-1.5 h-[1px] bg-[#4338CA]" />
                                 {title}
                             </h4>
@@ -118,7 +115,7 @@ export default function Footer() {
                                     <li key={link.label}>
                                         <Link
                                             href={link.href}
-                                            className="text-[#A3A3A3] text-sm hover:text-white transition-all duration-300 relative inline-block group font-medium overflow-hidden py-1"
+                                            className="text-[var(--color-muted)] text-sm hover:text-[var(--color-text)] transition-all duration-300 relative inline-block group font-medium overflow-hidden py-1"
                                         >
                                             <span className="relative z-10">{link.label}</span>
                                             <motion.span
@@ -134,7 +131,7 @@ export default function Footer() {
 
                 {/* Animated Gradient Divider */}
                 <div className="relative h-px w-full overflow-hidden mb-12">
-                    <div className="absolute inset-0 bg-white/5" />
+                    <div className="absolute inset-0 bg-[var(--color-border)]" />
                     <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-[#4338CA] to-transparent w-full"
                         animate={{
@@ -151,16 +148,16 @@ export default function Footer() {
                 {/* System Metadata Section */}
 
                 <div className="flex flex-col md:flex-row justify-between items-center gap-8">
-                    <p className="text-[9px] text-[#6B7280] font-mono font-bold uppercase tracking-[0.3em] text-center md:text-left">
-                        &copy; {new Date().getFullYear()} PYQ&apos;S HUB  — Developed by Tadaka Naveen.
+                    <p className="text-[9px] text-[var(--color-muted)] font-mono font-bold uppercase tracking-[0.3em] text-center md:text-left">
+                        &copy; {new Date().getFullYear()} PYQ&apos;S HUB  — Developed by Vitian.
                     </p>
                     <div className="flex items-center gap-8">
                         <Link href="#" className="group flex items-center gap-2">
-                            <span className="text-[9px] text-[#6B7280] group-hover:text-white font-black uppercase tracking-[0.2em] transition-colors">Not affiliated with VIT-AP University</span>
-                            <div className="w-1 h-1 rounded-full bg-white/10 group-hover:bg-[#4338CA] transition-colors" />
+                            <span className="text-[9px] text-[var(--color-muted)] group-hover:text-[var(--color-text)] font-black uppercase tracking-[0.2em] transition-colors">Not affiliated with VIT-AP University</span>
+                            <div className="w-1 h-1 rounded-full bg-[var(--color-border)] group-hover:bg-[#4338CA] transition-colors" />
                         </Link>
                         <Link href="#" className="group flex items-center gap-2">
-                            <span className="text-[9px] text-[#6B7280] group-hover:text-white font-black uppercase tracking-[0.2em] transition-colors">Made with ❤️ for students</span>
+                            <span className="text-[9px] text-[var(--color-muted)] group-hover:text-[var(--color-text)] font-black uppercase tracking-[0.2em] transition-colors">Made with ❤️ for students</span>
                         </Link>
                     </div>
                 </div>

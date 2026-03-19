@@ -87,7 +87,7 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
     return (
         <div ref={containerRef} className={cn("relative group", className)}>
             <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-                <Search className="w-4 h-4 text-[#111827]/40 group-focus-within:text-[#4338CA] transition-colors" />
+                <Search className="w-4 h-4 text-[var(--color-text)]/40 group-focus-within:text-[#4338CA] transition-colors" />
             </div>
             <input
                 type="text"
@@ -96,21 +96,21 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
                 onKeyDown={handleKeyDown}
                 onFocus={() => query.length > 0 && filteredSuggestions.length > 0 && setShowSuggestions(true)}
                 placeholder={placeholder.toUpperCase()}
-                className="w-full bg-white border border-[#111827] rounded-sm pl-12 pr-12 py-4 text-xs font-black placeholder:text-[#111827]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] shadow-[4px_4px_0px_rgba(17,24,39,0.05)] focus:shadow-[6px_6px_0px_#111827] transition-all uppercase tracking-tight"
+                className="w-full bg-[var(--color-card)] border border-[var(--color-border)] rounded-sm pl-12 pr-12 py-4 text-xs font-black placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] shadow-[4px_4px_0px_rgba(var(--color-text-rgb,17,24,39),0.05)] focus:shadow-[6px_6px_0px_var(--color-border)] transition-all uppercase tracking-tight"
             />
             {query && (
                 <button
                     onClick={clearSearch}
-                    className="absolute inset-y-0 right-4 flex items-center text-[#111827]/40 hover:text-[#111827] transition-colors"
+                    className="absolute inset-y-0 right-4 flex items-center text-[var(--color-text)]/40 hover:text-[var(--color-text)] transition-colors"
                 >
                     <X className="w-4 h-4" />
                 </button>
             )}
 
             {showSuggestions && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-[#111827] shadow-[8px_8px_0px_#111827] z-50 overflow-hidden divide-y divide-[#111827]/10">
-                    <div className="bg-[#F3F4F6] px-4 py-2 border-b border-[#111827]">
-                        <p className="text-[8px] font-mono font-black text-[#6B7280] uppercase tracking-widest">Available_Resources_Identified</p>
+                <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--color-card)] border-2 border-[var(--color-border)] shadow-[8px_8px_0px_var(--color-border)] z-50 overflow-hidden divide-y divide-[var(--color-border)]/10">
+                    <div className="bg-[var(--color-surface)] px-4 py-2 border-b border-[var(--color-border)]">
+                        <p className="text-[8px] font-mono font-black text-[var(--color-muted)] uppercase tracking-widest">Available_Resources_Identified</p>
                     </div>
                     {filteredSuggestions.map((suggestion, index) => (
                         <button
@@ -119,12 +119,12 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
                             onMouseEnter={() => setSelectedIndex(index)}
                             className={cn(
                                 "w-full flex items-center gap-4 px-4 py-3 text-left transition-colors",
-                                index === selectedIndex ? "bg-[#4338CA] text-white" : "hover:bg-[#F9FAFB] text-[#111827]"
+                                index === selectedIndex ? "bg-[#4338CA] text-white" : "hover:bg-[var(--color-surface)] text-[var(--color-text)]"
                             )}
                         >
                             <div className={cn(
                                 "w-8 h-8 rounded-sm border flex items-center justify-center shrink-0",
-                                index === selectedIndex ? "border-white/20 bg-white/10" : "border-[#111827]/10 bg-[#EAE0D5]"
+                                index === selectedIndex ? "border-white/20 bg-white/10" : "border-[var(--color-border)]/10 bg-[var(--color-surface)]"
                             )}>
                                 <BookOpen className="w-4 h-4" />
                             </div>
@@ -133,7 +133,7 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
                                 {suggestion.sublabel && (
                                     <p className={cn(
                                         "text-[8px] font-mono uppercase tracking-widest truncate",
-                                        index === selectedIndex ? "text-white/60" : "text-[#6B7280]"
+                                        index === selectedIndex ? "text-white/60" : "text-[var(--color-muted)]"
                                     )}>
                                         {suggestion.sublabel}
                                     </p>
@@ -145,8 +145,8 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
             )}
 
             {/* Industrial corner accents */}
-            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[#111827] -translate-x-0.5 -translate-y-0.5 pointer-events-none transition-transform group-focus-within:scale-150" />
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[#111827] translate-x-0.5 translate-y-0.5 pointer-events-none transition-transform group-focus-within:scale-150" />
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-[var(--color-border)] -translate-x-0.5 -translate-y-0.5 pointer-events-none transition-transform group-focus-within:scale-150" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-[var(--color-border)] translate-x-0.5 translate-y-0.5 pointer-events-none transition-transform group-focus-within:scale-150" />
         </div>
     )
 }

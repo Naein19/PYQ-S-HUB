@@ -45,25 +45,25 @@ export default function FilterDropdown({
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
                 className={cn(
-                    "flex items-center justify-between w-full px-4 py-3 bg-white border rounded-sm text-xs font-bold uppercase tracking-widest transition-all duration-200",
-                    isOpen ? "border-[#111827] shadow-[4px_4px_0px_#111827]" : "border-[#111827]/10 hover:border-[#111827]"
+                    "flex items-center justify-between w-full px-4 py-3 bg-[var(--color-card)] border rounded-sm text-xs font-bold uppercase tracking-widest transition-all duration-200",
+                    isOpen ? "border-[var(--color-border)] shadow-[4px_4px_0px_var(--color-border)]" : "border-[var(--color-border)]/20 hover:border-[var(--color-border)]"
                 )}
             >
-                <span className="text-[#6B7280] mr-2">{label}:</span>
-                <span className="text-[#111827] flex-1 text-left">
+                <span className="text-[var(--color-muted)] mr-2">{label}:</span>
+                <span className="text-[var(--color-text)] flex-1 text-left">
                     {selectedOption?.label || "Any"}
                 </span>
-                <ChevronDown className={cn("w-4 h-4 text-[#111827] transition-transform", isOpen && "rotate-180")} />
+                <ChevronDown className={cn("w-4 h-4 text-[var(--color-text)] transition-transform", isOpen && "rotate-180")} />
             </button>
 
             {isOpen && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-[#111827] rounded-sm shadow-[6px_6px_0px_#111827] z-30 animate-slide-down">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-[var(--color-card)] border border-[var(--color-border)] rounded-sm shadow-[6px_6px_0px_var(--color-border)] z-30 animate-slide-down">
                     <div className="py-2 max-h-60 overflow-y-auto">
                         <button
                             onClick={() => { onChange(''); setIsOpen(false); }}
                             className={cn(
-                                "flex items-center justify-between w-full px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-[#F9FAFB] transition-colors text-left",
-                                value === '' ? "text-[#4338CA] bg-[#EEF2FF]/50" : "text-[#6B7280]"
+                                "flex items-center justify-between w-full px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-[var(--color-surface)] transition-colors text-left",
+                                value === '' ? "text-[#4338CA] bg-[#4338CA]/10" : "text-[var(--color-muted)]"
                             )}
                         >
                             All {label}s
@@ -74,8 +74,8 @@ export default function FilterDropdown({
                                 key={option.value}
                                 onClick={() => { onChange(option.value); setIsOpen(false); }}
                                 className={cn(
-                                    "flex items-center justify-between w-full px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-[#F9FAFB] transition-colors text-left",
-                                    value === option.value ? "text-[#4338CA] bg-[#EEF2FF]/50" : "text-[#111827]"
+                                    "flex items-center justify-between w-full px-4 py-2.5 text-[10px] font-bold uppercase tracking-widest hover:bg-[var(--color-surface)] transition-colors text-left",
+                                    value === option.value ? "text-[#4338CA] bg-[#4338CA]/10" : "text-[var(--color-text)]"
                                 )}
                             >
                                 {option.label}

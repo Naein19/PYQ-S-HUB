@@ -30,7 +30,7 @@ export default function Loading({
                 {/* Document Icon */}
                 <FileText className={cn(
                     iconSizes[size],
-                    "text-[#111827] opacity-20"
+                    "text-[var(--color-text)] opacity-20"
                 )} />
 
                 {/* Horizontal Scanning Line */}
@@ -42,7 +42,7 @@ export default function Loading({
 
             {text && (
                 <p className={cn(
-                    "font-mono font-black uppercase tracking-[0.2em] text-[#111827]/40 animate-pulse",
+                    "font-mono font-black uppercase tracking-[0.2em] text-[var(--color-muted)] animate-pulse",
                     size === 'sm' ? "text-[8px]" : "text-[10px]"
                 )}>
                     {text}

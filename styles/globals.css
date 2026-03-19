@@ -5,8 +5,10 @@
 @layer base {
   :root {
     --color-surface: #EAE0D5;
+    --color-surface-rgb: 234, 224, 213;
     --color-card: #FFFFFF;
     --color-text: #111827;
+    --color-text-rgb: 17, 24, 39;
     --color-muted: #6B7280;
     --color-border: #111827;
     --color-brand-start: #4338CA;
@@ -34,12 +36,20 @@
   }
 
   .dark {
-    --color-surface: #000000;
-    --color-card: #0A0A0A;
-    --color-border: #1A1A1A;
-    --color-text: #FFFFFF;
-    --color-muted: #A3A3A3;
-    --shadow-card: 6px 6px 0px #1A1A1A;
+    --color-surface: #09090b;
+    --color-surface-rgb: 9, 9, 11;
+    /* Zinc 950 - Elite dark base */
+    --color-card: #18181b;
+    /* Zinc 900 - Layer 1 elevation */
+    --color-border: #27272a;
+    /* Zinc 800 - Subtle boundaries */
+    --color-text: #fafafa;
+    --color-text-rgb: 250, 250, 250;
+    /* Zinc 50  - High contrast text */
+    --color-muted: #a1a1aa;
+    /* Zinc 400 - Muted secondary text */
+    --shadow-card: 6px 6px 0px #27272a;
+    color: var(--color-text);
   }
 
   html {
@@ -48,15 +58,23 @@
     -moz-osx-font-smoothing: grayscale;
     background-color: var(--color-surface);
     color: var(--color-text);
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   body {
     background-color: var(--color-surface);
     color: var(--color-text);
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
 
   ::selection {
-    @apply bg-[#111827] text-[#EAE0D5];
+    background-color: #111827;
+    color: #EAE0D5;
+  }
+
+  .dark ::selection {
+    background-color: #EAE0D5;
+    color: #111827;
   }
 
   * {
@@ -196,6 +214,107 @@
   .cinematic-border:hover::after {
     opacity: 0.4;
   }
+
+  /* ─────────────────────────────────────────────
+     Hyprland-Style Theme Wipe Animation
+     The overlay expands from the toggle button
+     covering the entire viewport, then retracts.
+  ───────────────────────────────────────────── */
+
+  @keyframes theme-wipe-expand {
+    0% {
+      clip-path: circle(0% at var(--wipe-x, 95%) var(--wipe-y, 7%));
+      opacity: 1;
+    }
+
+    50% {
+      clip-path: circle(150% at var(--wipe-x, 95%) var(--wipe-y, 7%));
+      opacity: 1;
+    }
+
+    51% {
+      clip-path: circle(150% at var(--wipe-x, 95%) var(--wipe-y, 7%));
+      opacity: 0;
+    }
+
+    100% {
+      clip-path: circle(150% at var(--wipe-x, 95%) var(--wipe-y, 7%));
+      opacity: 0;
+    }
+  }
+
+  /* The full-screen overlay element */
+  #theme-wipe-overlay {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    background-color: var(--wipe-color, #020617);
+    clip-path: circle(0% at var(--wipe-x, 95%) var(--wipe-y, 7%));
+    opacity: 0;
+    will-change: clip-path, opacity;
+  }
+
+  #theme-wipe-overlay.theme-wipe-active {
+    animation: theme-wipe-expand 1.2s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  }
+
+  /* ─────────────────────────────────────────────
+     Theme Toggle Button
+  ───────────────────────────────────────────── */
+  .theme-toggle-btn {
+    position: relative;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1.5px solid currentColor;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+    overflow: hidden;
+    color: var(--color-text);
+    flex-shrink: 0;
+  }
+
+  .theme-toggle-btn:hover {
+    background-color: var(--color-text);
+    color: var(--color-surface);
+    transform: scale(1.08);
+  }
+
+  .theme-toggle-btn:active {
+    transform: scale(0.94);
+  }
+
+  /* Icon state management - sun/moon swap */
+  .theme-icon {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 300ms ease, transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .icon-visible {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+
+  .icon-hidden {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+  }
+
+  .theme-icon-moon.icon-visible {
+    transform: rotate(-20deg) scale(1);
+  }
+
+  .theme-icon-moon.icon-hidden {
+    transform: rotate(40deg) scale(0.5);
+  }
 }
 
 @layer components {
@@ -212,14 +331,14 @@
   /* ── Card Frame System ── */
   /* Industrial framed card: 1px solid dark border + 6px offset shadow */
   .card-frame {
-    @apply bg-white border border-[#111827] rounded-[8px] p-8;
-    box-shadow: 6px 6px 0px #111827;
+    @apply bg-[var(--color-card)] border border-[var(--color-border)] rounded-[8px] p-8;
+    box-shadow: 6px 6px 0px var(--color-border);
     transition: all 150ms ease-in-out;
   }
 
   .card-frame:hover {
     transform: translate3d(0, -4px, 0);
-    box-shadow: 10px 10px 0px #111827;
+    box-shadow: 10px 10px 0px var(--color-border);
   }
 
   .dark .card-frame {
@@ -233,87 +352,88 @@
 
   /* Compact card frame (less padding) */
   .card-frame-sm {
-    @apply bg-white border border-[#111827] rounded-[8px] p-5;
-    box-shadow: 6px 6px 0px #111827;
+    @apply bg-[var(--color-card)] border border-[var(--color-border)] rounded-[8px] p-5;
+    box-shadow: 6px 6px 0px var(--color-border);
     transition: all 150ms ease-in-out;
   }
 
   .card-frame-sm:hover {
     transform: translate3d(0, -2px, 0);
-    box-shadow: 8px 8px 0px #111827;
+    box-shadow: 8px 8px 0px var(--color-border);
   }
 
   /* Legacy card (still used in PYQCard) */
   .card {
-    @apply bg-white border border-[#111827] rounded-[8px];
-    box-shadow: 6px 6px 0px #111827;
+    @apply bg-[var(--color-card)] border border-[var(--color-border)] rounded-[8px];
+    box-shadow: 6px 6px 0px var(--color-border);
     transition: all 150ms ease-in-out;
   }
 
   .card:hover {
     transform: translate3d(0, -4px, 0);
-    box-shadow: 10px 10px 0px #111827;
+    box-shadow: 10px 10px 0px var(--color-border);
   }
 
   /* ── Buttons ── */
   .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 text-white font-semibold text-sm px-5 py-2.5 rounded-[8px] border border-[#111827];
+    @apply inline-flex items-center justify-center gap-2 text-white font-semibold text-sm px-5 py-2.5 rounded-[8px] border border-[var(--color-border)];
     background: linear-gradient(135deg, #4338CA, #6D28D9);
-    box-shadow: 4px 4px 0px #111827;
+    box-shadow: 4px 4px 0px var(--color-border);
     transition: all 150ms ease;
   }
 
   .btn-primary:hover {
-    filter: brightness(0.92);
-    box-shadow: 6px 6px 0px #111827;
+    filter: brightness(1.1);
+    box-shadow: 6px 6px 0px var(--color-border);
   }
 
   .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 bg-white text-[#111827] font-semibold text-sm px-5 py-2.5 rounded-[8px] border border-[#111827];
-    box-shadow: 4px 4px 0px #111827;
+    @apply inline-flex items-center justify-center gap-2 bg-[var(--color-card)] text-[var(--color-text)] font-semibold text-sm px-5 py-2.5 rounded-[8px] border border-[var(--color-border)];
+    box-shadow: 4px 4px 0px var(--color-border);
     transition: all 150ms ease;
   }
 
   .btn-secondary:hover {
     filter: brightness(0.96);
-    box-shadow: 6px 6px 0px #111827;
+    box-shadow: 6px 6px 0px var(--color-border);
   }
 
   /* 3D Industrial Effects */
   .btn-3d {
-    @apply border border-[#111827] bg-white rounded-sm transition-all duration-75;
-    box-shadow: 2px 2px 0px #111827;
+    @apply border border-[var(--color-border)] bg-[var(--color-card)] rounded-sm transition-all duration-75;
+    box-shadow: 2px 2px 0px var(--color-border);
   }
 
   .btn-3d:active {
     transform: translate3d(1px, 1px, 0);
-    box-shadow: 1px 1px 0px #111827;
+    box-shadow: 1px 1px 0px var(--color-border);
   }
 
   .icon-3d {
-    @apply flex items-center justify-center rounded-sm border border-[#111827] bg-[#EAE0D5] transition-all duration-150;
-    box-shadow: 3px 3px 0px #111827;
+    @apply flex items-center justify-center rounded-sm border border-[var(--color-border)] bg-[var(--color-surface)] transition-all duration-150;
+    box-shadow: 3px 3px 0px var(--color-border);
   }
 
   .icon-3d:hover {
     transform: translate3d(-2px, -2px, 0);
-    box-shadow: 5px 5px 0px #111827;
+    box-shadow: 5px 5px 0px var(--color-border);
   }
 
   .icon-3d:active {
     transform: translate3d(1px, 1px, 0);
-    box-shadow: 1px 1px 0px #111827;
+    box-shadow: 1px 1px 0px var(--color-border);
   }
 
   /* ── Skeleton Loading ── */
   .skeleton {
-    @apply bg-[#111827]/5 animate-pulse rounded-sm;
+    background-color: rgba(var(--color-text-rgb, 17, 24, 39), 0.05);
+    border-radius: 0.125rem;
     background-image: linear-gradient(90deg,
-        rgba(17, 24, 39, 0.05) 0%,
-        rgba(17, 24, 39, 0.08) 50%,
-        rgba(17, 24, 39, 0.05) 100%);
+        rgba(var(--color-text-rgb, 17, 24, 39), 0.05) 0%,
+        rgba(var(--color-text-rgb, 17, 24, 39), 0.08) 50%,
+        rgba(var(--color-text-rgb, 17, 24, 39), 0.05) 100%);
     background-size: 200% 100%;
-    animation: skeleton-shimmer 1.5s infinite;
+    animation: skeleton-shimmer 1.5s infinite, pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   @keyframes skeleton-shimmer {
@@ -351,9 +471,32 @@
     @apply badge bg-[#EEF2FF] text-[#4338CA] border-[#4338CA];
   }
 
+  .dark .badge-cat1 {
+    @apply bg-[#4338CA]/10 text-indigo-400 border-indigo-400/20;
+  }
+
+  .dark .badge-cat2 {
+    @apply bg-cyan-900/20 text-cyan-400 border-cyan-400/20;
+  }
+
+  .dark .badge-fat {
+    @apply bg-[var(--color-border)] text-[var(--color-text)] border-[var(--color-border)];
+  }
+
+  .dark .badge-default {
+    background-color: rgba(var(--color-border-rgb), 0.5);
+    color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    @apply uppercase tracking-widest px-2 py-0.5 rounded-[4px] font-bold text-[9px];
+  }
+
+  .dark .badge-year {
+    @apply bg-[#4338CA]/10 text-indigo-400 border-indigo-400/20;
+  }
+
   /* ── Nav ── */
   .nav-link {
-    @apply text-sm font-medium text-[#374151] hover:text-[#111827] relative;
+    @apply text-sm font-medium text-[var(--color-muted)] hover:text-[var(--color-text)] relative;
     transition: color 150ms ease;
   }
 
@@ -370,27 +513,27 @@
 
   /* ── Forms ── */
   .input-field {
-    @apply w-full bg-white border border-[#111827] rounded-[8px] px-3 py-2.5 text-sm text-[#111827] placeholder:text-[#9CA3AF] focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:border-transparent transition;
+    @apply w-full bg-[var(--color-card)] border border-[var(--color-border)] rounded-[8px] px-3 py-2.5 text-sm text-[var(--color-text)] placeholder:text-[var(--color-muted)] focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:border-transparent transition;
   }
 
   /* ── Divider ── */
   .divider {
-    @apply border-t border-[#111827];
+    @apply border-t border-[var(--color-border)];
   }
 
   .divider-light {
-    @apply border-t border-[#E5E7EB];
+    @apply border-t border-[var(--color-border)]/30;
   }
 
   /* ── Warm section background ── */
   .section-warm {
-    background-color: #EAE0D5;
+    background-color: var(--color-surface);
   }
 
   /* ── Animated underline link ── */
   .link-underline {
     @apply relative inline-block;
-    background-image: linear-gradient(#111827, #111827);
+    background-image: linear-gradient(var(--color-text), var(--color-text));
     background-size: 0% 1px;
     background-repeat: no-repeat;
     background-position: 0 100%;

@@ -9,6 +9,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import TabManager from '@/components/layout/TabManager'
 import AnimatedFavicon from '@/components/AnimatedFavicon'
+import NoticeTicker from '@/components/layout/NoticeTicker'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -89,25 +90,38 @@ export const metadata: Metadata = {
 
 import { AuthProvider } from '@/context/AuthContext'
 import { LoadingProvider } from '@/context/LoadingContext'
+import { ThemeProvider } from '@/context/ThemeContext'
+import { NoticeProvider } from '@/context/NoticeContext'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        <html lang="en" className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
+        <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
             <head>
                 <JsonLd />
+                {/* Inline script: apply saved theme before first paint to prevent FOUC */}
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `(function(){try{var t=localStorage.getItem('pyqs-theme');var d=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='dark'||(t===null&&d)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
+                    }}
+                />
             </head>
-            <body className="bg-[#EAE0D5] text-[#111827] min-h-screen flex flex-col font-sans">
+            <body className="bg-[var(--color-surface)] text-[var(--color-text)] min-h-screen flex flex-col font-sans">
                 <AnimatedFavicon />
-                <AuthProvider>
-                    <LoadingProvider>
-                        <ViewProvider>
-                            <Navbar />
-                            <main className="flex-1">{children}</main>
-                            <Footer />
-                            <TabManager />
-                        </ViewProvider>
-                    </LoadingProvider>
-                </AuthProvider>
+                <ThemeProvider>
+                    <AuthProvider>
+                        <NoticeProvider>
+                            <LoadingProvider>
+                                <ViewProvider>
+                                    <NoticeTicker />
+                                    <Navbar />
+                                    <main className="flex-1">{children}</main>
+                                    <Footer />
+                                    <TabManager />
+                                </ViewProvider>
+                            </LoadingProvider>
+                        </NoticeProvider>
+                    </AuthProvider>
+                </ThemeProvider>
                 <Analytics />
                 <SpeedInsights />
             </body>

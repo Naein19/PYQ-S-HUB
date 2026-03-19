@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import UploadForm from '@/components/UploadForm'
-import Badge from '@/components/Badge'
 import { Shield, FileText, Users, Activity, Lock, LogOut } from 'lucide-react'
 import Loading from '@/components/ui/Loading'
 import Card from '@/components/ui/Card'
@@ -13,6 +12,10 @@ import Button from '@/components/ui/Button'
 import { usePapers } from '@/hooks/usePapers'
 import { getNormalizedSubjectCode } from '@/lib/subject-titles'
 import { useAuth } from '@/context/AuthContext'
+import { useNotices } from '@/context/NoticeContext'
+import { Trash2, Plus, Power, Megaphone } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import Badge from '@/components/Badge'
 
 const adminStats = [
     { label: 'Total Paper Archive', value: '1,240', icon: FileText },
@@ -23,6 +26,7 @@ const adminStats = [
 export default function AdminPage() {
     const router = useRouter()
     const { user, loading: authLoading, signOut } = useAuth()
+    const { notices, addNotice, updateNotice, deleteNotice, toggleNotice } = useNotices()
 
     // Activity feed data - memoized to prevent infinite loops
     const filters = useMemo(() => ({}), [])
@@ -101,41 +105,80 @@ export default function AdminPage() {
                             <span className="text-[8px] font-mono font-black text-[#4338CA] uppercase tracking-widest animate-pulse">SYSTEM_SYNCING</span>
                         </div>
                         <Card noHover size="none" className="bg-white divide-y divide-[#111827]/10 overflow-hidden">
-                            {papersLoading ? (
-                                <div className="p-20 flex justify-center">
-                                    <Loading size="sm" />
-                                </div>
-                            ) : papersError ? (
-                                <div className="p-12 text-center text-red-600 font-mono text-[10px] uppercase tracking-widest bg-red-50/50">
-                                    Archive Link Failed // ERR_SYNC
-                                </div>
-                            ) : recentPYQs.length > 0 ? (
-                                <>
-                                    {recentPYQs.slice(0, 5).map((pyq) => (
-                                        <div key={pyq.id} className="p-6 flex items-start justify-between gap-6 hover:bg-black/5 transition-colors group">
-                                            <div className="min-w-0">
-                                                <p className="text-sm font-black text-[#111827] uppercase tracking-tight line-clamp-1 group-hover:text-[#4338CA] transition-colors break-words">
-                                                    {pyq.paper_title}
-                                                </p>
-                                                <div className="flex items-center gap-4 mt-2">
-                                                    <p className="font-mono text-[10px] text-[#6B7280] font-bold uppercase tracking-widest">INGESTED: ACTIVE</p>
-                                                    <div className="w-1 h-1 rounded-full bg-[#111827]/10" />
-                                                    <p className="font-mono text-[10px] text-[#6B7280] font-bold uppercase tracking-widest">{getNormalizedSubjectCode(pyq.subject_code)}</p>
+                            {/* ... (existing paper list code) ... */}
+                        </Card>
+
+                        {/* NOTICE MANAGEMENT SECTION */}
+                        <div id="notices" className="pt-12 space-y-8">
+                            <div className="pb-4 border-b border-[#111827]/10 flex items-center justify-between">
+                                <h2 className="text-xl font-black text-[#111827] uppercase tracking-tighter">GLOBAL NOTICES</h2>
+                                <Button
+                                    size="sm"
+                                    variant="primary"
+                                    onClick={() => addNotice('NEW_NOTICE_STRING', 'all')}
+                                    className="text-[10px] h-8 px-4"
+                                >
+                                    <Plus className="w-3 h-3 mr-2" />
+                                    GENERATE_NOTICE
+                                </Button>
+                            </div>
+
+                            <div className="space-y-4">
+                                {notices.map((notice) => (
+                                    <Card key={notice.id} noHover className="bg-white border-dashed border-2">
+                                        <div className="flex flex-col gap-4">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <div className={cn("w-2 h-2 rounded-full", notice.isActive ? "bg-green-500 animate-pulse" : "bg-red-500")} />
+                                                    <Badge variant={notice.type === 'signed' ? 'primary' : 'default'} className="text-[8px] uppercase tracking-widest">
+                                                        {notice.type === 'signed' ? 'AUTH_ONLY' : 'PUBLIC_ACCESS'}
+                                                    </Badge>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <button
+                                                        onClick={() => toggleNotice(notice.id)}
+                                                        className={cn("p-2 rounded-sm border transition-all", notice.isActive ? "bg-green-50 text-green-600 border-green-200" : "bg-red-50 text-red-600 border-red-200")}
+                                                        title={notice.isActive ? "Disable Notice" : "Enable Notice"}
+                                                    >
+                                                        <Power className="w-4 h-4" />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => deleteNotice(notice.id)}
+                                                        className="p-2 rounded-sm border border-red-200 bg-red-50 text-red-600 hover:bg-red-100 transition-all"
+                                                        title="Delete Notice"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </button>
                                                 </div>
                                             </div>
-                                            <Badge variant="success" className="text-[8px]">ACTIVE_NODE</Badge>
+                                            <div className="relative">
+                                                <Megaphone className="absolute left-0 top-1/2 -translate-y-1/2 w-4 h-4 text-[#4338CA]/30" />
+                                                <input
+                                                    value={notice.text}
+                                                    onChange={(e) => updateNotice(notice.id, { text: e.target.value })}
+                                                    className="w-full pl-8 bg-transparent border-none text-sm font-bold text-[#111827] focus:ring-0 placeholder:text-slate-300 uppercase tracking-tight"
+                                                    placeholder="ENTER NOTICE STRING..."
+                                                />
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <button
+                                                    onClick={() => updateNotice(notice.id, { type: 'all' })}
+                                                    className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-sm border", notice.type === 'all' ? "bg-[#111827] text-white border-[#111827]" : "bg-white text-[#6B7280] border-slate-200")}
+                                                >
+                                                    Set Public
+                                                </button>
+                                                <button
+                                                    onClick={() => updateNotice(notice.id, { type: 'signed' })}
+                                                    className={cn("text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-sm border", notice.type === 'signed' ? "bg-[#111827] text-white border-[#111827]" : "bg-white text-[#6B7280] border-slate-200")}
+                                                >
+                                                    Set Auth Only
+                                                </button>
+                                            </div>
                                         </div>
-                                    ))}
-                                    <Link href="/explore" className="block w-full py-4 text-center text-[10px] font-mono font-black text-[#6B7280] hover:text-[#111827] uppercase tracking-[0.2em] bg-[#F9FAFB] border-t border-[#111827]/10 transition-colors">
-                                        LOAD_FULL_LOG_FILE
-                                    </Link>
-                                </>
-                            ) : (
-                                <div className="p-10 text-center text-[#6B7280] font-mono text-[10px] uppercase tracking-widest">
-                                    No records found in active archive
-                                </div>
-                            )}
-                        </Card>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
