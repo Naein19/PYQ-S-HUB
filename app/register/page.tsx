@@ -88,7 +88,8 @@ export default function RegisterPage() {
     }
 
     return (
-        <div className="min-h-[calc(100vh-5rem)] bg-[#EAE0D5] flex items-center justify-center px-6 py-16 animate-fade-in">
+        <div className="min-h-[calc(100vh-5rem)] bg-[var(--color-surface)] flex items-center justify-center px-6 py-16 animate-fade-in transition-colors duration-300">
+
             <div className="w-full max-w-md">
                 {/* Header Meta */}
                 <div className="flex flex-col items-center mb-10 text-center">
@@ -98,11 +99,13 @@ export default function RegisterPage() {
                         </span>
                     </Link>
                     <p className="text-[10px] font-mono font-black text-[#4338CA] uppercase tracking-[0.3em] mb-4">Industrial Registration</p>
-                    <h1 className="text-4xl font-black text-[#111827] uppercase tracking-tighter mb-4 leading-none">CREATE IDENTITY.</h1>
-                    <p className="text-[#6B7280] font-medium">Register your academic credentials to join the archive.</p>
+                    <h1 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4 leading-none transition-colors duration-300">CREATE IDENTITY.</h1>
+                    <p className="text-[var(--color-muted)] font-medium transition-colors duration-300">Register your academic credentials to join the archive.</p>
+
                 </div>
 
-                <Card className="p-10 bg-white">
+                <Card className="p-10">
+
                     {success ? (
                         <div className="flex flex-col items-center text-center py-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
                             <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-6">
@@ -134,7 +137,7 @@ export default function RegisterPage() {
 
                             {/* Full Name */}
                             <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                     <User className="w-3 h-3" />
                                     Legal name (Identity)
                                 </label>
@@ -144,13 +147,14 @@ export default function RegisterPage() {
                                     value={formData.name}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                                     placeholder="ENT_STRING_NAME"
-                                    className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold placeholder:text-[#111827]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all uppercase tracking-tight"
+                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all uppercase tracking-tight"
                                 />
+
                             </div>
 
                             {/* Email */}
                             <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                     <Mail className="w-3 h-3" />
                                     Academic Email
                                 </label>
@@ -160,21 +164,22 @@ export default function RegisterPage() {
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                                     placeholder="IDENT_STRING@VITAPSTUDENT.AC.IN"
-                                    className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold placeholder:text-[#111827]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all uppercase tracking-tight"
+                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all uppercase tracking-tight"
                                 />
+
                             </div>
 
                             {/* Program Type & Department */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-3">
-                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                         <BookOpen className="w-3 h-3" />
                                         Program
                                     </label>
                                     <select
                                         value={formData.program_type}
                                         onChange={(e) => handleProgramChange(e.target.value)}
-                                        className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all appearance-none cursor-pointer"
+                                        className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all appearance-none cursor-pointer"
                                     >
                                         <option value="BTech">BTECH</option>
                                         <option value="MTech">MTECH</option>
@@ -183,7 +188,7 @@ export default function RegisterPage() {
                                     </select>
                                 </div>
                                 <div className="space-y-3">
-                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                         <User className="w-3 h-3" />
                                         Department
                                     </label>
@@ -191,19 +196,20 @@ export default function RegisterPage() {
                                         required
                                         value={formData.department}
                                         onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                                        className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all appearance-none cursor-pointer"
+                                        className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all appearance-none cursor-pointer"
                                     >
-                                        <option value="" disabled>SELECT UNIT</option>
+                                        <option value="" disabled className="bg-[var(--color-card)]">SELECT UNIT</option>
                                         {departments.map(dept => (
-                                            <option key={dept.id} value={dept.name}>{dept.shortName}</option>
+                                            <option key={dept.id} value={dept.name} className="bg-[var(--color-card)]">{dept.shortName}</option>
                                         ))}
                                     </select>
+
                                 </div>
                             </div>
 
                             {/* Semester Selection */}
                             <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                     <Activity className="w-3 h-3" />
                                     Active Semester Cycle
                                 </label>
@@ -216,10 +222,11 @@ export default function RegisterPage() {
                                             className={cn(
                                                 "py-3 text-[10px] font-black border transition-all rounded-sm",
                                                 formData.semester === opt.value
-                                                    ? "bg-[#111827] text-white border-[#111827] shadow-[2px_2px_0px_#4338CA]"
-                                                    : "bg-white text-[#111827] border-[#111827]/10 hover:border-[#111827]"
+                                                    ? "bg-[#111827] text-white border-[#111827] shadow-[2px_2px_0px_#4338CA] dark:bg-[var(--color-text)] dark:text-[var(--color-surface)] dark:border-[var(--color-text)]"
+                                                    : "bg-[var(--color-card)] text-[var(--color-text)] border-[var(--color-border)]/10 hover:border-[var(--color-border)]"
                                             )}
                                         >
+
                                             SEM {opt.value}
                                         </button>
                                     ))}
@@ -228,7 +235,7 @@ export default function RegisterPage() {
 
                             {/* Password */}
                             <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                     <Lock className="w-3 h-3" />
                                     Security Token (Password)
                                 </label>
@@ -239,16 +246,17 @@ export default function RegisterPage() {
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                                         placeholder="••••••••••••"
-                                        className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold placeholder:text-[#111827]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all"
+                                        className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all"
                                     />
                                     <button
                                         type="button"
                                         onClick={() => setShowPassword(!showPassword)}
-                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#111827]/40 hover:text-[#111827] transition-colors p-1"
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--color-text)]/40 hover:text-[var(--color-text)] transition-colors p-1"
                                     >
                                         {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                                     </button>
                                 </div>
+
                             </div>
 
                             <Button
@@ -263,8 +271,8 @@ export default function RegisterPage() {
                     )}
 
                     {!success && (
-                        <div className="mt-10 pt-10 border-t border-[#111827]/10 text-center">
-                            <p className="text-[10px] font-mono font-bold text-[#6B7280] uppercase tracking-widest mb-6">
+                        <div className="mt-10 pt-10 border-t border-[var(--color-border)]/10 text-center">
+                            <p className="text-[10px] font-mono font-bold text-[var(--color-muted)] uppercase tracking-widest mb-6 transition-colors">
                                 Already have an identity?
                             </p>
                             <Link href="/login">
@@ -274,14 +282,16 @@ export default function RegisterPage() {
                             </Link>
                         </div>
                     )}
+
                 </Card>
 
                 {/* Footer Meta */}
                 <div className="mt-10 text-center">
-                    <p className="text-[8px] font-mono text-[#111827]/30 uppercase tracking-[0.3em]">
+                    <p className="text-[8px] font-mono text-[var(--color-text)]/30 uppercase tracking-[0.3em] transition-colors">
                         ACADEMIC CLEARANCE v2.0.4-REG
                     </p>
                 </div>
+
             </div>
         </div>
     )

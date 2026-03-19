@@ -1,76 +1,123 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
+import { supabase } from '@/lib/supabase'
 
 export interface Notice {
     id: string
     text: string
     type: 'all' | 'signed'
     isActive: boolean
+    created_at?: string
 }
 
 interface NoticeContextType {
     notices: Notice[]
-    addNotice: (text: string, type: 'all' | 'signed') => void
-    updateNotice: (id: string, updates: Partial<Notice>) => void
-    deleteNotice: (id: string) => void
-    toggleNotice: (id: string) => void
+    addNotice: (text: string, type: 'all' | 'signed') => Promise<void>
+    updateNotice: (id: string, updates: Partial<Notice>) => Promise<void>
+    deleteNotice: (id: string) => Promise<void>
+    toggleNotice: (id: string) => Promise<void>
     activeNotice: Notice | null
+    loading: boolean
 }
 
 const NoticeContext = createContext<NoticeContextType | undefined>(undefined)
 
-const DEFAULT_NOTICES: Notice[] = [
-    { id: '1', text: 'Currently only admins can upload papers. Stay tuned for community uploads!', type: 'all', isActive: true },
-    { id: '2', text: 'Welcome back! You have access to the exclusive signed-in user archive.', type: 'signed', isActive: true }
-]
-
 export function NoticeProvider({ children }: { children: React.ReactNode }) {
-    const [notices, setNotices] = useState<Notice[]>(DEFAULT_NOTICES)
+    const [notices, setNotices] = useState<Notice[]>([])
+    const [loading, setLoading] = useState(true)
 
-    // Load from localStorage on mount
+    // Initial fetch and Realtime subscription
     useEffect(() => {
-        const saved = localStorage.getItem('pyqs_hub_notices')
-        if (saved) {
-            try {
-                setNotices(JSON.parse(saved))
-            } catch (e) {
-                console.error('Failed to parse saved notices', e)
+        const fetchNotices = async () => {
+            setLoading(true)
+            const { data, error } = await supabase
+                .from('notices')
+                .select('*')
+                .order('created_at', { ascending: false })
+
+            if (error) {
+                console.error('Error fetching notices:', error)
+            } else {
+                setNotices(data || [])
             }
+            setLoading(false)
+        }
+
+        fetchNotices()
+
+        // Subscribe to real-time changes
+        const channel = supabase
+            .channel('notices-realtime')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'notices'
+                },
+                (payload) => {
+                    if (payload.eventType === 'INSERT') {
+                        setNotices((prev) => [payload.new as Notice, ...prev])
+                    } else if (payload.eventType === 'UPDATE') {
+                        setNotices((prev) =>
+                            prev.map((n) => (n.id === payload.new.id ? (payload.new as Notice) : n))
+                        )
+                    } else if (payload.eventType === 'DELETE') {
+                        setNotices((prev) => prev.filter((n) => n.id !== payload.old.id))
+                    }
+                }
+            )
+            .subscribe()
+
+        return () => {
+            supabase.removeChannel(channel)
         }
     }, [])
 
-    // Sync to localStorage
-    useEffect(() => {
-        localStorage.setItem('pyqs_hub_notices', JSON.stringify(notices))
-    }, [notices])
+    const addNotice = async (text: string, type: 'all' | 'signed') => {
+        const { error } = await supabase
+            .from('notices')
+            .insert({
+                text,
+                type,
+                isActive: true
+            })
 
-    const addNotice = (text: string, type: 'all' | 'signed') => {
-        const newNotice: Notice = {
-            id: Math.random().toString(36).substr(2, 9),
-            text,
-            type,
-            isActive: true
-        }
-        setNotices(prev => [...prev, newNotice])
+        if (error) console.error('Error adding notice:', error)
     }
 
-    const updateNotice = (id: string, updates: Partial<Notice>) => {
-        setNotices(prev => prev.map(n => n.id === id ? { ...n, ...updates } : n))
+    const updateNotice = async (id: string, updates: Partial<Notice>) => {
+        const { error } = await supabase
+            .from('notices')
+            .update(updates)
+            .eq('id', id)
+
+        if (error) console.error('Error updating notice:', error)
     }
 
-    const deleteNotice = (id: string) => {
-        setNotices(prev => prev.filter(n => n.id !== id))
+    const deleteNotice = async (id: string) => {
+        const { error } = await supabase
+            .from('notices')
+            .delete()
+            .eq('id', id)
+
+        if (error) console.error('Error deleting notice:', error)
     }
 
-    const toggleNotice = (id: string) => {
-        setNotices(prev => prev.map(n => n.id === id ? { ...n, isActive: !n.isActive } : n))
+    const toggleNotice = async (id: string) => {
+        const notice = notices.find(n => n.id === id)
+        if (!notice) return
+
+        const { error } = await supabase
+            .from('notices')
+            .update({ isActive: !notice.isActive })
+            .eq('id', id)
+
+        if (error) console.error('Error toggling notice:', error)
     }
 
-    // This logic should ideally match what's in NoticeTicker but can be centralized here
     const getActiveNotice = () => {
-        // In a real app, this might depend on auth state, 
-        // but let's keep it simple and let the consumer filter based on AuthContext
         return notices.find(n => n.isActive) || null
     }
 
@@ -81,7 +128,8 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
             updateNotice,
             deleteNotice,
             toggleNotice,
-            activeNotice: getActiveNotice()
+            activeNotice: getActiveNotice(),
+            loading
         }}>
             {children}
         </NoticeContext.Provider>
@@ -95,3 +143,4 @@ export function useNotices() {
     }
     return context
 }
+

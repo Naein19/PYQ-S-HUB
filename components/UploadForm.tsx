@@ -122,14 +122,14 @@ export default function UploadForm() {
 
     if (success) {
         return (
-            <Card noHover className="p-16 text-center bg-white border-2 border-[#111827]">
-                <div className="w-20 h-20 rounded-sm border border-[#111827] bg-[#EEF2FF] flex items-center justify-center mx-auto mb-8 shadow-[6px_6px_0px_#4338CA]">
+            <Card noHover className="p-16 text-center bg-[var(--color-card)] border-2 border-[var(--color-border)]">
+                <div className="w-20 h-20 rounded-sm border border-[var(--color-border)] bg-[#4338CA]/10 flex items-center justify-center mx-auto mb-8 shadow-[6px_6px_0px_#4338CA]">
                     <CheckCircle2 className="w-10 h-10 text-[#4338CA]" />
                 </div>
-                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-4 leading-none">
+                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4 leading-none">
                     INGESTION COMPLETE.
                 </h3>
-                <p className="text-[#6B7280] text-lg mb-10">The repository item has been successfully stored and mapped.</p>
+                <p className="text-[var(--color-muted)] text-lg mb-10">The repository item has been successfully stored and mapped.</p>
                 <Button
                     variant="secondary"
                     onClick={() => setSuccess(false)}
@@ -142,12 +142,12 @@ export default function UploadForm() {
     }
 
     return (
-        <Card noHover className="p-10 bg-white shadow-[8px_8px_0px_#111827] border border-[#111827]">
+        <Card noHover className="p-10 bg-[var(--color-card)] shadow-[8px_8px_0px_var(--color-border)] border border-[var(--color-border)]">
             <form onSubmit={handleSubmit} className="flex flex-col gap-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {/* Subject Code */}
                     <div className="space-y-3">
-                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                             <Layers className="w-3 h-3 text-[#4338CA]" />
                             COURSE_CODE
                         </label>
@@ -157,13 +157,13 @@ export default function UploadForm() {
                             value={subjectCode}
                             onChange={(e) => setSubjectCode(e.target.value)}
                             placeholder="E.G. CSE1007"
-                            className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold uppercase tracking-tight focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all"
+                            className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] uppercase tracking-tight focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all"
                         />
                     </div>
 
                     {/* Subject Title */}
                     <div className="space-y-3">
-                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                             <Book className="w-3 h-3 text-[#4338CA]" />
                             COURSE_TITLE
                         </label>
@@ -173,13 +173,13 @@ export default function UploadForm() {
                             value={subjectTitle}
                             onChange={(e) => setSubjectTitle(e.target.value)}
                             placeholder="E.G. JAVA PROGRAMMING"
-                            className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold uppercase tracking-tight focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all"
+                            className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] uppercase tracking-tight focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all"
                         />
                     </div>
 
                     {/* Paper Title */}
                     <div className="space-y-3 md:col-span-2">
-                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                             <FileText className="w-3 h-3 text-[#4338CA]" />
                             PAPER_TITLE
                         </label>
@@ -189,13 +189,13 @@ export default function UploadForm() {
                             value={paperTitle}
                             onChange={(e) => setPaperTitle(e.target.value)}
                             placeholder="E.G. FALL SEMESTER 2023-24"
-                            className="w-full bg-[#F9FAFB] border border-[#111827] rounded-sm px-4 py-3 text-xs font-bold uppercase tracking-tight focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-white transition-all"
+                            className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] uppercase tracking-tight focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all"
                         />
                     </div>
 
                     {/* Exam Tier */}
                     <div className="space-y-3 md:col-span-2">
-                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                             <CheckSquare className="w-3 h-3 text-[#4338CA]" />
                             EXAMINATION_TIER
                         </label>
@@ -208,12 +208,12 @@ export default function UploadForm() {
                                     className={cn(
                                         "flex flex-col items-center justify-center p-4 border rounded-sm transition-all",
                                         examType === et.label
-                                            ? "border-[#4338CA] bg-[#EEF2FF] shadow-[4px_4px_0px_#4338CA] translate-x-[-2px] translate-y-[-2px]"
-                                            : "border-[#111827]/10 bg-white hover:border-[#111827]"
+                                            ? "border-[#4338CA] bg-[#4338CA]/10 shadow-[4px_4px_0px_#4338CA] translate-x-[-2px] translate-y-[-2px]"
+                                            : "border-[var(--color-border)]/10 bg-[var(--color-card)] hover:border-[var(--color-border)]"
                                     )}
                                 >
-                                    <span className="text-sm font-black text-[#111827]">{et.label}</span>
-                                    <span className="text-[8px] font-mono font-bold text-[#6B7280] uppercase tracking-tighter">
+                                    <span className="text-sm font-black text-[var(--color-text)]">{et.label}</span>
+                                    <span className="text-[8px] font-mono font-bold text-[var(--color-muted)] uppercase tracking-tighter">
                                         {et.label === 'FAT' ? 'FINAL' : 'CAT'}
                                     </span>
                                 </button>
@@ -224,7 +224,7 @@ export default function UploadForm() {
 
                 {/* File Drop Zone */}
                 <div className="space-y-3">
-                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                         <Upload className="w-3 h-3 text-[#4338CA]" />
                         DOCUMENT_SOURCE (PDF / IMAGE)
                     </label>
@@ -232,17 +232,17 @@ export default function UploadForm() {
                         onDragOver={(e) => e.preventDefault()}
                         onDrop={handleFileDrop}
                         className={cn(
-                            "border-2 border-dashed border-[#111827]/20 rounded-sm p-12 text-center transition-all cursor-pointer bg-[#F9FAFB] relative group",
-                            file ? "border-[#4338CA] bg-[#EEF2FF]" : "hover:border-[#111827]"
+                            "border-2 border-dashed border-[var(--color-border)]/20 rounded-sm p-12 text-center transition-all cursor-pointer bg-[var(--color-surface)] relative group",
+                            file ? "border-[#4338CA] bg-[#4338CA]/10" : "hover:border-[var(--color-border)]"
                         )}
                     >
                         {file ? (
                             <div className="flex flex-col items-center gap-4">
-                                <div className="w-16 h-16 rounded-sm border border-[#4338CA] bg-white flex items-center justify-center shadow-[4px_4px_0px_#4338CA]">
+                                <div className="w-16 h-16 rounded-sm border border-[#4338CA] bg-[var(--color-card)] flex items-center justify-center shadow-[4px_4px_0px_#4338CA]">
                                     <FileText className="w-8 h-8 text-[#4338CA]" />
                                 </div>
                                 <div className="flex items-center gap-3">
-                                    <span className="text-sm font-black text-[#111827] uppercase tracking-tight">{file.name}</span>
+                                    <span className="text-sm font-black text-[var(--color-text)] uppercase tracking-tight">{file.name}</span>
                                     <button
                                         type="button"
                                         onClick={() => setFile(null)}
@@ -251,17 +251,17 @@ export default function UploadForm() {
                                         <X className="w-4 h-4" />
                                     </button>
                                 </div>
-                                <span className="text-[8px] font-mono font-bold text-[#6B7280] uppercase tracking-[0.3em]">
+                                <span className="text-[8px] font-mono font-bold text-[var(--color-muted)] uppercase tracking-[0.3em]">
                                     PAYLOAD_READY: {(file.size / (1024 * 1024)).toFixed(2)}MB
                                 </span>
                             </div>
                         ) : (
                             <label htmlFor="file-input" className="cursor-pointer block">
-                                <Upload className="w-12 h-12 text-[#111827]/10 mx-auto mb-6 transition-transform group-hover:-translate-y-1" />
-                                <p className="text-xs font-black text-[#111827] uppercase tracking-widest mb-2">
+                                <Upload className="w-12 h-12 text-[var(--color-text)]/10 mx-auto mb-6 transition-transform group-hover:-translate-y-1" />
+                                <p className="text-xs font-black text-[var(--color-text)] uppercase tracking-widest mb-2">
                                     DRAG SOURCE FILE OR <span className="text-[#4338CA] underline underline-offset-4">CLICK_TO_BROWSE</span>
                                 </p>
-                                <p className="text-[10px] font-mono font-bold text-[#6B7280] uppercase tracking-widest">
+                                <p className="text-[10px] font-mono font-bold text-[var(--color-muted)] uppercase tracking-widest">
                                     MAX_PAYLOAD: 20MB // FMT: PDF, JPG, PNG
                                 </p>
                                 <input
@@ -277,13 +277,13 @@ export default function UploadForm() {
                 </div>
 
                 {error && (
-                    <div className="flex items-center gap-2 p-4 bg-red-50 border border-red-200 rounded-sm text-red-600 text-[10px] font-mono font-bold uppercase tracking-tight">
+                    <div className="flex items-center gap-2 p-4 bg-red-500/10 border border-red-500/20 rounded-sm text-red-500 text-[10px] font-mono font-bold uppercase tracking-tight">
                         <AlertCircle className="h-4 w-4 shrink-0" />
                         <p>{error}</p>
                     </div>
                 )}
 
-                <div className="flex justify-end pt-4 border-t border-[#111827]/10">
+                <div className="flex justify-end pt-4 border-t border-[var(--color-border)]/10">
                     <Button
                         type="submit"
                         disabled={loading}
