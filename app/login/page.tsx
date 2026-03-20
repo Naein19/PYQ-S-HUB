@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { BookOpen, User, Lock, ArrowRight, AlertCircle } from 'lucide-react'
+import { BookOpen, User, Lock, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react'
 import Loading from '@/components/ui/Loading'
 import { supabase } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
@@ -14,6 +14,39 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
+    const [showForgot, setShowForgot] = useState(false)
+    const [message, setMessage] = useState<string | null>(null)
+
+    const validateEmailDomain = (email: string) => {
+        return email.toLowerCase().endsWith('@vitapstudent.ac.in')
+    }
+
+    const handleSendResetEmail = async (e: React.FormEvent) => {
+        e.preventDefault()
+        setLoading(true)
+        setError(null)
+        setMessage(null)
+
+        if (!validateEmailDomain(email)) {
+            setError('Only VIT-AP student emails are allowed')
+            setLoading(false)
+            return
+        }
+
+        try {
+            const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: `${window.location.origin}/reset-password`,
+            })
+
+            if (resetError) throw resetError
+
+            setMessage('Reset link sent. Check your email.')
+        } catch (err: any) {
+            setError(err.message || 'Failed to send reset link.')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -66,66 +99,141 @@ export default function LoginPage() {
                         </div>
                     )}
 
-                    <form onSubmit={handleLogin} className="flex flex-col gap-8">
-                        {/* Email */}
-                        <div className="space-y-3">
-                            <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
-                                <User className="w-3 h-3" />
-                                User Identity (Email)
-                            </label>
-                            <input
-                                type="email"
-                                required
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="USER.22XXX1234@VITAPSTUDENT.AC.IN"
-                                className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all uppercase tracking-tight"
-                            />
-                        </div>
-
-                        {/* Password */}
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center">
+                    {!showForgot ? (
+                        <form onSubmit={handleLogin} className="flex flex-col gap-8">
+                            {/* Email */}
+                            <div className="space-y-3">
                                 <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
-                                    <Lock className="w-3 h-3" />
-                                    Access Key (Password)
+                                    <User className="w-3 h-3" />
+                                    User Identity (Email)
                                 </label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="USER.22XXX1234@VITAPSTUDENT.AC.IN"
+                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all uppercase tracking-tight"
+                                />
                             </div>
-                            <input
-                                type="password"
-                                required
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="••••••••••••"
-                                className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all"
-                            />
-                        </div>
 
-                        {error && (
-                            <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-sm text-red-500 text-[10px] font-mono font-bold uppercase tracking-tight animate-shake">
-                                <AlertCircle className="h-4 w-4 shrink-0" />
-                                <p>{error}</p>
+                            {/* Password */}
+                            <div className="space-y-3">
+                                <div className="flex justify-between items-center">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
+                                        <Lock className="w-3 h-3" />
+                                        Access Key (Password)
+                                    </label>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowForgot(true)
+                                            setError(null)
+                                            setMessage(null)
+                                        }}
+                                        className="text-[10px] font-mono font-bold text-[#4338CA] hover:underline uppercase tracking-tight"
+                                    >
+                                        Forgot Password?
+                                    </button>
+                                </div>
+                                <input
+                                    type="password"
+                                    required
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="••••••••••••"
+                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all"
+                                />
                             </div>
-                        )}
 
-                        <Button
-                            type="submit"
-                            disabled={loading}
-                            className="w-full py-4 text-sm font-black uppercase tracking-[0.2em] group"
-                        >
-                            {loading ? (
-                                <>
-                                    <Loading size="sm" className="mr-2" />
-                                    AUTHENTICATING...
-                                </>
-                            ) : (
-                                <>
-                                    INITIATE SESSION
-                                    <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
-                                </>
+                            {error && (
+                                <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-sm text-red-500 text-[10px] font-mono font-bold uppercase tracking-tight animate-shake">
+                                    <AlertCircle className="h-4 w-4 shrink-0" />
+                                    <p>{error}</p>
+                                </div>
                             )}
-                        </Button>
-                    </form>
+
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-4 text-sm font-black uppercase tracking-[0.2em] group"
+                            >
+                                {loading ? (
+                                    <>
+                                        <Loading size="sm" className="mr-2" />
+                                        AUTHENTICATING...
+                                    </>
+                                ) : (
+                                    <>
+                                        INITIATE SESSION
+                                        <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+                                    </>
+                                )}
+                            </Button>
+                        </form>
+                    ) : (
+                        <form onSubmit={handleSendResetEmail} className="flex flex-col gap-8">
+                            {/* Email */}
+                            <div className="space-y-3">
+                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
+                                    <User className="w-3 h-3" />
+                                    User Identity (Email)
+                                </label>
+                                <input
+                                    type="email"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="USER.22XXX1234@VITAPSTUDENT.AC.IN"
+                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all uppercase tracking-tight"
+                                />
+                            </div>
+
+                            {error && (
+                                <div className="flex items-center gap-2 p-3 bg-red-500/10 border border-red-500/20 rounded-sm text-red-500 text-[10px] font-mono font-bold uppercase tracking-tight animate-shake">
+                                    <AlertCircle className="h-4 w-4 shrink-0" />
+                                    <p>{error}</p>
+                                </div>
+                            )}
+
+                            {message && (
+                                <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-sm text-green-500 text-[10px] font-mono font-bold uppercase tracking-tight">
+                                    <CheckCircle2 className="h-4 w-4 shrink-0" />
+                                    <p>{message}</p>
+                                </div>
+                            )}
+
+                            <Button
+                                type="submit"
+                                disabled={loading}
+                                className="w-full py-4 text-sm font-black uppercase tracking-[0.2em] group"
+                            >
+                                {loading ? (
+                                    <>
+                                        <Loading size="sm" className="mr-2" />
+                                        SENDING...
+                                    </>
+                                ) : (
+                                    <>
+                                        SEND RESET LINK
+                                        <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />
+                                    </>
+                                )}
+                            </Button>
+
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    setShowForgot(false)
+                                    setError(null)
+                                    setMessage(null)
+                                }}
+                                className="text-[10px] font-mono font-bold text-[var(--color-muted)] hover:text-[var(--color-text)] uppercase tracking-widest"
+                            >
+                                ← BACK TO LOGIN
+                            </button>
+                        </form>
+                    )}
 
                     <div className="mt-10 pt-10 border-t border-[var(--color-border)] text-center">
                         <p className="text-[8px] font-mono text-[var(--color-muted)] uppercase tracking-[0.3em]">
