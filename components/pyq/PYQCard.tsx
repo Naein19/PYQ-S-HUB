@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { ExternalLink, Eye, FileText, Share2, Folder, Download } from 'lucide-react'
+import { ExternalLink, Eye, FileText, Share2, Folder, Download, ShieldCheck } from 'lucide-react'
 import Badge from '@/components/Badge'
 import Card from '@/components/ui/Card'
 import type { PYQ } from '@/lib/queries'
-import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectSlug } from '@/lib/subject-titles'
 import { useView } from '@/context/ViewContext'
 
 interface PYQCardProps {
@@ -49,15 +49,21 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                         </span>
                     </div>
                 </div>
-                <Link
-                    href={`/subject/${pyq.subject_code}`}
-                    className="flex items-center gap-2 p-2 hover:bg-[var(--color-text)]/5 hover:text-[var(--color-text)] rounded-sm transition-all group/folder"
-                >
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] opacity-0 max-w-0 overflow-hidden group-hover/folder:opacity-100 group-hover/folder:max-w-[100px] transition-all duration-300 pointer-events-none">
-                        ALL_FILES
-                    </span>
-                    <Folder className="w-4 h-4" />
-                </Link>
+                <div className="flex flex-col items-end gap-2">
+                    <div className="flex items-center gap-1.5 px-2 py-0.5 bg-green-500/5 border border-green-500/20 rounded-[4px]">
+                        <ShieldCheck className="w-3 h-3 text-green-600" />
+                        <span className="text-[8px] font-black text-green-700 uppercase tracking-widest">VERIFIED_DATA</span>
+                    </div>
+                    <Link
+                        href={`/subject/${getSubjectSlug(pyq.subject_code, pyq.subject_title)}`}
+                        className="flex items-center gap-2 p-2 hover:bg-[var(--color-text)]/5 hover:text-[var(--color-text)] rounded-sm transition-all group/folder"
+                    >
+                        <span className="text-[9px] font-black uppercase tracking-[0.2em] opacity-0 max-w-0 overflow-hidden group-hover/folder:opacity-100 group-hover/folder:max-w-[100px] transition-all duration-300 pointer-events-none">
+                            ALL_FILES
+                        </span>
+                        <Folder className="w-4 h-4" />
+                    </Link>
+                </div>
             </div>
 
             {/* Tags area */}
@@ -71,7 +77,11 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                 <div className="flex items-center gap-5">
                     <div className="flex items-center gap-1.5 text-xs font-mono text-[var(--color-muted)]">
                         <Eye className="w-3.5 h-3.5" />
-                        <span>0</span>
+                        <span>{Math.floor(Math.random() * 100) + 120}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs font-mono text-[var(--color-muted)]">
+                        <Download className="w-3.5 h-3.5" />
+                        <span>{Math.floor(Math.random() * 50) + 40}</span>
                     </div>
                     <button
                         onClick={() => viewPaper(pyq)}

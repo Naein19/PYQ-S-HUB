@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import { usePapers } from '@/hooks/usePapers'
 import { useSubjects } from '@/hooks/useSubjects'
-import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectSlug } from '@/lib/subject-titles'
 
 export interface FilterState {
     subject_code: string
@@ -78,8 +78,9 @@ export default function ExploreClient() {
     const { papers, loading, loadingMore, hasMore, totalCount, loadMore } = usePapers(filters)
 
     const subjectOptions = subjects.map(s => ({
-        label: `${getNormalizedSubjectCode(s.subject_code)} - ${getCleanSubjectTitle(s.subject_code, s.subject_title)}`,
-        value: s.subject_code
+        label: getCleanSubjectTitle(s.subject_code, s.subject_title),
+        value: getSubjectSlug(s.subject_code, s.subject_title),
+        sublabel: getNormalizedSubjectCode(s.subject_code)
     }))
 
     const updateFilter = (key: keyof FilterState, value: string) => {
@@ -274,7 +275,7 @@ export default function ExploreClient() {
                         label="SUBJECT PRIORITY"
                         options={subjects.slice(0, 32).map(s => ({
                             label: `${getNormalizedSubjectCode(s.subject_code)} - ${getCleanSubjectTitle(s.subject_code, s.subject_title)}`,
-                            value: s.subject_code
+                            value: getSubjectSlug(s.subject_code, s.subject_title)
                         }))}
                         value={filters.subject_code}
                         onChange={(val: string) => updateFilter('subject_code', val)}

@@ -103,6 +103,29 @@ export function getCleanSubjectTitle(code: string, rawTitle?: string): string {
     return `Subject ${normalizedCode}`;
 }
 
+/**
+ * Generates an SEO-friendly slug from a course code and it's title.
+ * Example: 'CSE2007', 'Data Structures' -> 'cse2007-data-structures'
+ */
+export function getSubjectSlug(code: string, rawTitle?: string): string {
+    const normalizedCode = getNormalizedSubjectCode(code).toLowerCase();
+    const title = getCleanSubjectTitle(normalizedCode, rawTitle)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+
+    return `${normalizedCode}-${title}`;
+}
+
+/**
+ * Extracts the subject code from a slug.
+ * Example: 'cse2007-data-structures' -> 'CSE2007'
+ */
+export function getSubjectCodeFromSlug(slug: string): string {
+    const match = slug.match(/^([a-z0-9]+)-/i);
+    return match ? match[1].toUpperCase() : slug.toUpperCase();
+}
+
 export function getAllMappedCodes(): string[] {
     return Object.keys(courseMapping);
 }

@@ -7,10 +7,10 @@ interface LogoProps {
 }
 
 export default function Logo({ className = "w-10 h-10", variant = "dark" }: LogoProps) {
-    // Fixed logic for intuitive variant names:
-    // Light background (Navbar/variant="dark") -> icon_dark.png (visible on white)
-    // Dark background (Footer/variant="light") -> icon_light.png (visible on dark)
-    const src = variant === "light" ? "/assets/icon_light.png" : "/assets/icon_dark.png"
+    // User requested:
+    // Dark theme -> icon_dark.png (White lines)
+    // Light theme -> icon_light.png (Dark lines)
+    const src = variant === "dark" ? "/assets/icon_dark.png" : "/assets/icon_light.png"
 
     return (
         <div className={cn("relative overflow-hidden rounded-xl", className)}>
@@ -18,7 +18,7 @@ export default function Logo({ className = "w-10 h-10", variant = "dark" }: Logo
                 src={src}
                 alt="PYQs Hub Logo"
                 fill
-                className="object-contain"
+                className="object-contain transition-all duration-300"
                 priority
             />
         </div>

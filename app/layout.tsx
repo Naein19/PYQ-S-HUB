@@ -32,12 +32,21 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
     metadataBase: new URL('https://pyqs-hub.vercel.app'),
     title: {
-        default: "VIT-AP Previous Year Question Papers | PYQ’s Hub",
+        default: "PYQ’s Hub | VIT-AP Previous Year Question Papers",
         template: "%s | PYQ's Hub",
     },
     description:
-        "Access VIT-AP CAT-1, CAT-2, and FAT previous year question papers organized by subject, semester, and department. Industrial academic archive for engineering students.",
-    keywords: ['VIT-AP', 'VITAP', 'Previous Year Papers', 'PYQ', 'engineering', 'CAT-1', 'CAT-2', 'FAT', 'question papers', 'VIT AP exam papers'],
+        "Access VIT-AP CAT-1, CAT-2, and FAT previous year question papers organized by subject, semester, and department. The ultimate industrial-grade academic archive for VIT Amaravati students.",
+    keywords: [
+        'VIT-AP PYQs',
+        'VIT Amaravati Previous Year Papers',
+        'VIT AP Question Papers',
+        'CAT-1 CAT-2 FAT VIT AP',
+        'VITAP Exam Papers',
+        'PYQ’s Hub',
+        'Engineering PYQs',
+        'Subject Wise Papers VITAP'
+    ],
     authors: [{ name: 'PYQ’s Hub Team' }],
     creator: 'PYQ’s Hub',
     publisher: 'PYQ’s Hub',
@@ -56,8 +65,8 @@ export const metadata: Metadata = {
         title: "PYQ's Hub",
     },
     openGraph: {
-        title: "VIT-AP Previous Year Question Papers | PYQ’s Hub",
-        description: "Access VIT-AP CAT-1, CAT-2, and FAT previous year question papers organized by subject, semester, and department.",
+        title: "PYQ’s Hub | VIT-AP Previous Year Question Papers",
+        description: "Industrial academic archive for VIT-AP engineering students. CAT-1, CAT-2, and FAT papers organized by subject and semester.",
         url: 'https://pyqs-hub.vercel.app',
         siteName: "PYQ’s Hub",
         images: [
@@ -73,18 +82,23 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: "VIT-AP Previous Year Question Papers | PYQ’s Hub",
+        title: "PYQ’s Hub | VIT-AP Previous Year Papers",
         description: "Access VIT-AP CAT-1, CAT-2, and FAT previous year question papers organized by subject, semester, and department.",
         images: ['/og-image.png'],
         creator: '@pyqshub',
     },
     icons: {
         icon: [
-            { url: '/favicon-frame1.png', sizes: '32x32', type: 'image/png' },
+            { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
             { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
         ],
-        shortcut: '/favicon-frame1.png',
-        apple: '/apple-touch-icon.png',
+        shortcut: '/favicon.ico',
+        apple: [
+            { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+        ],
+        other: [
+            { rel: 'mask-icon', url: '/favicon-frame1.png', color: '#4338CA' },
+        ],
     },
 }
 

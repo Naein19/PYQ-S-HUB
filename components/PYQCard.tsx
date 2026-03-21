@@ -1,9 +1,9 @@
 import Link from 'next/link'
-import { Eye, FileText, Folder, Download, Share2, Check } from 'lucide-react'
+import { Check, Download, Eye, FileText, Share2, Folder, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'
 import Badge from './Badge'
 import type { PYQ } from '@/lib/queries'
-import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectSlug } from '@/lib/subject-titles'
 import { useView } from '@/context/ViewContext'
 import { useSwipe } from '@/hooks/useSwipe'
 import { cn } from '@/lib/utils'
@@ -93,7 +93,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                     {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5 text-[var(--color-text)]" />}
                 </button>
                 <Link
-                    href={`/subject/${pyq.subject_code}`}
+                    href={`/subject/${getSubjectSlug(pyq.subject_code, pyq.subject_title)}`}
                     className="w-11 h-11 bg-[var(--color-text)]/10 hover:bg-[var(--color-text)] hover:text-[var(--color-surface)] flex items-center justify-center border border-[var(--color-border)] rounded-xl shadow-sm transition-all active:scale-95"
                     title="View All Files"
                     aria-label="View All Files"
@@ -109,9 +109,11 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                     className="flex-shrink-0 w-10 h-10 rounded-xl bg-[var(--color-text)]/5 flex items-center justify-center transition-all duration-300 hover:scale-110 group/btn border border-[var(--color-border)]/10"
                     aria-label="View Paper"
                 >
-                    <FileText className="w-5 h-5 text-[var(--color-text)] opacity-70 group-hover/btn:opacity-100 transition-opacity" />
+                    <div className="flex-shrink-0 w-12 h-12 rounded-sm border border-[var(--color-border)] bg-[var(--color-surface)] flex items-center justify-center relative">
+                        <FileText className="w-6 h-6 text-[var(--color-text)]" />
+                    </div>
                 </button>
-                <div className="min-w-0">
+                <div className="min-w-0 pr-24 md:pr-28">
                     <h3 className="text-xs md:text-sm font-black text-[var(--color-text)] leading-snug line-clamp-2 break-words group-hover/card:text-[#4338CA] dark:group-hover/card:text-indigo-400 transition-colors duration-500 uppercase tracking-tight">
                         {pyq.paper_title}
                     </h3>
@@ -166,7 +168,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                         {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
                     </button>
                     <Link
-                        href={`/subject/${pyq.subject_code}`}
+                        href={`/subject/${getSubjectSlug(pyq.subject_code, pyq.subject_title)}`}
                         className="w-11 h-11 flex items-center justify-center text-[var(--color-text)] bg-[var(--color-text)]/5 rounded-xl active:scale-95 transition-all border border-[var(--color-border)]/10"
                         aria-label="View Folder"
                     >

@@ -12,7 +12,17 @@ interface FilterSidebarProps {
 
 export default function FilterSidebar({ filters, onChange }: FilterSidebarProps) {
     const years = ['2024', '2023', '2022', '2021', '2020']
-    const semesters = [1, 2, 3, 4, 5, 6, 7, 8]
+    const departments = [
+        { id: 'CSE', shortName: 'CSE' },
+        { id: 'ECE', shortName: 'ECE' },
+        { id: 'MAT', shortName: 'MAT' },
+        { id: 'PHY', shortName: 'PHY' },
+        { id: 'MGT', shortName: 'MGT' },
+        { id: 'FRL', shortName: 'FRL' },
+        { id: 'LAW', shortName: 'LAW' },
+        { id: 'HUM', shortName: 'HUM' },
+    ]
+    const semesters = ['Fall', 'Winter']
     const examCategories = ['CAT-1', 'CAT-2', 'FAT']
 
     const updateFilter = (key: keyof FilterState, value: string) => {
@@ -86,12 +96,12 @@ export default function FilterSidebar({ filters, onChange }: FilterSidebarProps)
             </FilterSection>
 
             <FilterSection title="Semester">
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                     {semesters.map((sem) => (
                         <FilterButton
                             key={sem}
-                            active={filters.semester === String(sem)}
-                            onClick={() => updateFilter('semester', String(sem))}
+                            active={filters.semester === sem}
+                            onClick={() => updateFilter('semester', sem)}
                         >
                             {sem}
                         </FilterButton>

@@ -83,14 +83,14 @@ export default function HomePage() {
             </section>
 
             {/* Section 3: Subject Repositories */}
-            <section className="bg-[#FBF9F7] py-16 lg:py-24 border-b border-[#111827] min-h-[calc(100vh-80px)] flex items-center">
+            <section className="bg-[var(--color-surface)] py-16 lg:py-24 border-b border-[var(--color-border)] min-h-[calc(100vh-80px)] flex items-center">
                 <div className="container-main w-full">
                     <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
                         <div className="max-w-2xl">
-                            <h2 className="text-4xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter leading-none mb-6">
+                            <h2 className="text-4xl md:text-5xl font-black text-[var(--color-text)] uppercase tracking-tighter leading-none mb-6">
                                 SUBJECT <br /> REPOSITORIES.
                             </h2>
-                            <p className="text-lg text-[#6B7280]">
+                            <p className="text-lg text-[var(--color-muted)]">
                                 Access the complete archive of question papers organized by subject code.
                                 High-fidelity scans and verified content for every module.
                             </p>
@@ -120,14 +120,14 @@ export default function HomePage() {
             </section>
 
             {/* Section 4: Latest Additions */}
-            <section className="bg-white py-16 lg:py-24 border-b border-[#111827] min-h-[calc(100vh-80px)] flex items-center">
+            <section className="bg-[var(--color-card)] py-16 lg:py-24 border-b border-[var(--color-border)] min-h-[calc(100vh-80px)] flex items-center">
                 <div className="container-main w-full">
                     <div className="flex items-center justify-between mb-16">
                         <div>
-                            <h2 className="text-4xl font-black text-[#111827] uppercase tracking-tighter leading-none mb-4">
+                            <h2 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter leading-none mb-4">
                                 LATEST ADDITIONS.
                             </h2>
-                            <p className="text-[#6B7280] font-mono text-xs uppercase tracking-widest">
+                            <p className="text-[var(--color-muted)] font-mono text-xs uppercase tracking-widest">
                                 Recently verified documents in the repository
                             </p>
                         </div>

@@ -66,7 +66,7 @@ export default function Navbar() {
             <nav className="container-main h-20 flex items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-3 group">
-                    <Logo className="w-10 h-10 transition-transform group-hover:scale-105" variant={isScrolled || isDark ? "light" : "dark"} />
+                    <Logo className="w-10 h-10 transition-transform group-hover:scale-105" variant={isDark ? "dark" : "light"} />
                     <span className="font-black text-xl text-[var(--color-text)] tracking-tighter uppercase">
                         PYQ&apos;s Hub
                     </span>

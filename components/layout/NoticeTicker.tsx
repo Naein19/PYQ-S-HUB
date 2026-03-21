@@ -28,7 +28,7 @@ export default function NoticeTicker() {
     if (filteredNotices.length === 0) return null
 
     return (
-        <div className="fixed bottom-0 left-0 right-0 z-[60] w-full bg-[var(--color-surface)]/80 border-t border-[var(--color-border)] backdrop-blur-md overflow-hidden h-10 flex items-center shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
+        <div className="fixed bottom-0 left-0 right-0 z-[60] w-full bg-[var(--color-card)] border-t border-[var(--color-border)] overflow-hidden h-10 flex items-center shadow-[0_-8px_20px_rgba(0,0,0,0.15)]">
             <div className="flex items-center w-full px-4 gap-4">
                 <div className="flex-shrink-0 flex items-center gap-2">
                     <div className="w-2 h-2 rounded-full bg-[#4338CA] animate-pulse" />

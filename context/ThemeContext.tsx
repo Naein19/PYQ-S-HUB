@@ -25,7 +25,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         // Only runs on the client
         const saved = localStorage.getItem('pyqs-theme') as Theme | null
         const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        const initial: Theme = saved ?? (systemDark ? 'dark' : 'light')
+        const initial: Theme = saved ?? 'light'
         setTheme(initial)
         applyThemeToDom(initial)
         setMounted(true)

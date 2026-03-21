@@ -5,6 +5,7 @@ import { Github, Mail, Linkedin, Terminal, ShieldCheck, Database, Cpu, Globe } f
 import Logo from '@/components/Logo'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { useTheme } from '@/context/ThemeContext'
 
 const footerLinks = {
     Platform: [
@@ -31,6 +32,7 @@ const socialLinks = [
 ]
 
 export default function Footer() {
+    const { isDark } = useTheme()
     return (
         <footer className="bg-[var(--color-surface)] border-t border-[var(--color-border)] relative overflow-hidden pt-24 pb-12">
             {/* Layered Background Effects */}
@@ -50,7 +52,7 @@ export default function Footer() {
                                     whileHover={{ scale: 1.1, rotate: 5 }}
                                     transition={{ type: 'spring', stiffness: 400, damping: 10 }}
                                 >
-                                    <Logo className="w-14 h-14" variant="light" />
+                                    <Logo className="w-14 h-14" variant={isDark ? "dark" : "light"} />
                                 </motion.div>
                                 <div className="flex flex-col">
                                     <span className="font-black text-3xl text-[var(--color-text)] tracking-widest uppercase leading-none">

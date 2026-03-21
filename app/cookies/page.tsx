@@ -79,7 +79,7 @@ export default function CookiesPage() {
                                 <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Security Proxies.</h3>
                                 <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
                                     We do not allow marketing or advertising cookies from third parties. Our only external
-                                    cookie interactions are with Supabase (Database Auth) and Vercel (Production Hosting),
+                                    cookie interactions are with Supabase (Database Auth) and our production infrastructure partners,
                                     both of which follow strict non-tracking security standards.
                                 </p>
                                 <div className="p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm flex items-center gap-4">

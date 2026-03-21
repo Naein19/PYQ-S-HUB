@@ -12,22 +12,22 @@ const features = [
 
 export default function Hero() {
     return (
-        <section className="bg-[#EAE0D5] border-b border-[#111827] overflow-hidden relative min-h-[calc(100vh-80px)] flex items-center">
+        <section className="bg-[var(--color-surface)] border-b border-[var(--color-border)] overflow-hidden relative min-h-[calc(100vh-80px)] flex items-center">
             <div className="container-main py-12 lg:py-16 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
                     {/* Left: Text Content */}
                     <div className="reveal-up">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-[#111827] bg-white mb-6 sm:mb-8 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[#111827]">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm border border-[var(--color-border)] bg-[var(--color-card)] mb-6 sm:mb-8 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-text)]">
                             <span className="w-2 h-2 rounded-full bg-[#4338CA] animate-pulse" />
                             Academic Archive v2.0
                         </div>
 
-                        <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-[#111827] leading-[0.95] sm:leading-[0.9] tracking-[-0.05em] uppercase mb-6 sm:mb-8">
+                        <h1 className="text-4xl sm:text-5xl md:text-7xl font-black text-[var(--color-text)] leading-[0.95] sm:leading-[0.9] tracking-[-0.05em] uppercase mb-6 sm:mb-8">
                             EVERY EXAM <br />PAPER. <br />
-                            <span className="text-transparent" style={{ WebkitTextStroke: '1.5px #111827' }}>RE-ENGINEERED.</span>
+                            <span className="text-transparent" style={{ WebkitTextStroke: '1.5px var(--color-border)' }}>RE-ENGINEERED.</span>
                         </h1>
 
-                        <p className="text-lg sm:text-xl text-[#6B7280] leading-relaxed mb-8 sm:mb-10 max-w-xl font-medium">
+                        <p className="text-lg sm:text-xl text-[var(--color-muted)] leading-relaxed mb-8 sm:mb-10 max-w-xl font-medium">
                             PYQ&apos;s Hub is the structured archive built for serious engineering students.
                             Browse, filter, and extract previous year question papers instantly.
                         </p>
@@ -51,30 +51,30 @@ export default function Hero() {
                     <div className="relative group reveal-up" style={{ animationDelay: '0.2s' }}>
                         {/* Background structural element - Responsive Offset */}
                         <div
-                            className="absolute w-full h-full border border-[#111827]/10 rounded-sm pointer-events-none transition-all duration-300 group-hover:border-[#111827]/20"
+                            className="absolute w-full h-full border border-[var(--color-border)]/10 rounded-sm pointer-events-none transition-all duration-300 group-hover:border-[var(--color-border)]/20"
                             style={{
                                 top: 'calc(var(--frame-offset) * -1)',
                                 right: 'calc(var(--frame-offset) * -1)'
                             }}
                         />
 
-                        <Card className="relative z-10 p-6 sm:p-10 bg-white group-hover:shadow-[calc(var(--shadow-offset)*1.5)_calc(var(--shadow-offset)*1.5)_0px_#111827] transition-all duration-300">
-                            <h3 className="text-[10px] sm:text-xs font-mono font-black text-[#111827] uppercase tracking-widest mb-6 sm:mb-8 pb-4 border-b border-[#111827]/10 flex items-center justify-between">
+                        <Card className="relative z-10 p-6 sm:p-10 bg-[var(--color-card)] group-hover:shadow-[calc(var(--shadow-offset)*1.5)_calc(var(--shadow-offset)*1.5)_0px_var(--color-border)] transition-all duration-300">
+                            <h3 className="text-[10px] sm:text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-widest mb-6 sm:mb-8 pb-4 border-b border-[var(--color-border)]/10 flex items-center justify-between">
                                 Repository Features
-                                <span className="px-2 py-0.5 border border-[#111827] rounded-sm text-[8px]">ACTIVE</span>
+                                <span className="px-2 py-0.5 border border-[var(--color-border)] rounded-sm text-[8px]">ACTIVE</span>
                             </h3>
                             <div className="space-y-6">
                                 {features.map(({ icon: Icon, text }) => (
                                     <div key={text} className="flex items-center gap-5 group/item">
-                                        <div className="w-10 h-10 rounded-sm border border-[#111827] flex items-center justify-center bg-[#EAE0D5] group-hover/item:bg-[#111827] group-hover/item:text-white transition-colors duration-200">
+                                        <div className="w-10 h-10 rounded-sm border border-[var(--color-border)] flex items-center justify-center bg-[var(--color-surface)] group-hover/item:bg-[var(--color-text)] group-hover/item:text-[var(--color-surface)] transition-colors duration-200">
                                             <Icon className="w-5 h-5" />
                                         </div>
-                                        <span className="text-base font-bold text-[#111827] uppercase tracking-tight ">{text}</span>
+                                        <span className="text-base font-bold text-[var(--color-text)] uppercase tracking-tight ">{text}</span>
                                     </div>
                                 ))}
                             </div>
 
-                            <div className="mt-12 pt-8 border-t border-[#111827]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+                            <div className="mt-12 pt-8 border-t border-[var(--color-border)]/10 flex flex-col sm:flex-row items-center justify-between gap-4">
                                 <div className="flex -space-x-3">
                                     {[
                                         { initial: 'A', bg: 'bg-[#4338CA]' },
@@ -84,16 +84,16 @@ export default function Hero() {
                                     ].map((student, i) => (
                                         <div
                                             key={i}
-                                            className={`w-8 h-8 rounded-full border border-[#111827] ${student.bg} flex items-center justify-center text-[10px] font-bold text-white shadow-sm ring-2 ring-white`}
+                                            className={`w-8 h-8 rounded-full border border-[var(--color-border)] ${student.bg} flex items-center justify-center text-[10px] font-bold text-white shadow-sm ring-2 ring-white`}
                                         >
                                             {student.initial}
                                         </div>
                                     ))}
-                                    <div className="w-8 h-8 rounded-full border border-[#111827] bg-[#F3F4F6] flex items-center justify-center text-[10px] font-bold text-[#111827] shadow-sm ring-2 ring-white">
+                                    <div className="w-8 h-8 rounded-full border border-[var(--color-border)] bg-[#F3F4F6] flex items-center justify-center text-[10px] font-bold text-[var(--color-text)] shadow-sm ring-2 ring-white">
                                         +105
                                     </div>
                                 </div>
-                                <span className="text-[10px] font-mono font-bold text-[#6B7280] uppercase tracking-widest text-center sm:text-right">
+                                <span className="text-[10px] font-mono font-bold text-[var(--color-muted)] uppercase tracking-widest text-center sm:text-right">
                                     109 Students Registered
                                 </span>
                             </div>

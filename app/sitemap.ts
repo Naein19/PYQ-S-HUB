@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next'
 import { getSubjects, Subject } from '@/lib/queries'
+import { getSubjectSlug } from '@/lib/subject-titles'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://pyqs-hub.vercel.app'
@@ -12,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
 
     const subjectUrls = subjects.map((subject: Subject) => ({
-        url: `${baseUrl}/subject/${subject.subject_code.toLowerCase()}`,
+        url: `${baseUrl}/subject/${getSubjectSlug(subject.subject_code, subject.subject_title)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.8,

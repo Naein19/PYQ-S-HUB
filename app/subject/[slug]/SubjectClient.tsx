@@ -1,23 +1,47 @@
 'use client'
 
-import PYQCard from '@/components/PYQCard'
-import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
-import { ArrowLeft, BookOpen, Clock, FileText, Share2 } from 'lucide-react'
+import { useState } from 'react'
 import Link from 'next/link'
+import { Check, ArrowLeft, BookOpen, Clock, FileText, Share2 } from 'lucide-react'
+import { cn } from '@/lib/utils'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
+import PYQCard from '@/components/PYQCard'
+import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
 import { useSubjectPapers } from '@/hooks/usePapers'
-import { useState } from 'react'
-import { cn } from '@/lib/utils'
-import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectCodeFromSlug } from '@/lib/subject-titles'
 
 interface SubjectClientProps {
     slug: string
 }
 
 export default function SubjectClient({ slug }: SubjectClientProps) {
+    const subjectCode = getSubjectCodeFromSlug(slug)
     const [activeFilter, setActiveFilter] = useState('ALL')
-    const { papers, loading, error } = useSubjectPapers(slug, activeFilter === 'ALL' ? undefined : activeFilter)
+    const [copied, setCopied] = useState(false)
+    const { papers, loading, error } = useSubjectPapers(subjectCode, activeFilter === 'ALL' ? undefined : activeFilter)
+
+    const handleShare = async (e?: React.MouseEvent) => {
+        e?.preventDefault()
+        e?.stopPropagation()
+        const shareUrl = window.location.href
+
+        try {
+            if (navigator.share) {
+                await navigator.share({
+                    title: `${subjectCode} Previous Year Papers`,
+                    text: `Check out the ${subjectCode} repository on PYQ's Hub`,
+                    url: shareUrl
+                })
+            } else {
+                await navigator.clipboard.writeText(shareUrl)
+                setCopied(true)
+                setTimeout(() => setCopied(false), 2000)
+            }
+        } catch (err) {
+            console.error('Error sharing:', err)
+        }
+    }
 
     if (error) {
         return (
@@ -41,12 +65,12 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
     const filters = ['ALL', 'CAT-1', 'CAT-2', 'FAT', 'OTHER']
 
     return (
-        <div className="bg-[#EAE0D5] min-h-screen">
+        <div className="bg-[var(--color-surface)] min-h-screen">
             <div className="container-main py-8 md:py-12 lg:py-20">
                 {/* Navigation */}
                 <Link
                     href="/explore"
-                    className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[#6B7280] hover:text-[#111827] transition-all mb-12 uppercase tracking-widest group"
+                    className="inline-flex items-center gap-2 text-xs font-mono font-bold text-[var(--color-muted)] hover:text-[var(--color-text)] transition-all mb-12 uppercase tracking-widest group"
                 >
                     <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                     Back to Repository
@@ -54,16 +78,16 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
 
                 {/* Subject Industrial Header */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-20">
-                    <Card noHover className="lg:col-span-2 p-5 md:p-10 bg-white">
+                    <Card noHover className="lg:col-span-2 p-5 md:p-10 bg-[var(--color-card)] border-[var(--color-border)]">
                         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 md:gap-8">
                             <div className="flex items-start gap-4 md:gap-6">
-                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-sm border border-[#111827] bg-[#EAE0D5] flex items-center justify-center flex-shrink-0 shadow-[3px_3px_0px_#111827] md:shadow-[4px_4px_0px_#111827]">
-                                    <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-[#111827]" />
+                                <div className="w-12 h-12 md:w-16 md:h-16 rounded-sm border border-[var(--color-border)] bg-[var(--color-surface)] flex items-center justify-center flex-shrink-0 shadow-[var(--shadow-offset)_var(--shadow-offset)_0px_var(--color-border)]">
+                                    <BookOpen className="w-6 h-6 md:w-8 md:h-8 text-[var(--color-text)]" />
                                 </div>
                                 <div className="space-y-3 md:space-y-4 min-w-0">
                                     <div>
                                         <p className="font-mono text-[10px] md:text-xs font-black text-[#4338CA] mb-1 md:mb-2 uppercase tracking-[0.2em]">{subjectInfo.code}</p>
-                                        <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter mb-2 md:mb-4 leading-[1.1] break-words max-w-full">
+                                        <h1 className="text-2xl sm:text-3xl md:text-5xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-2 md:mb-4 leading-[1.1] break-words max-w-full">
                                             {subjectInfo.title}
                                         </h1>
                                     </div>
@@ -75,8 +99,8 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
                                                 className={cn(
                                                     "px-3 py-1 md:px-4 md:py-1.5 text-[9px] md:text-[10px] font-mono font-black uppercase tracking-widest border transition-all",
                                                     activeFilter === filter
-                                                        ? "bg-[#111827] text-white border-[#111827]"
-                                                        : "bg-white text-[#6B7280] border-[#111827]/10 hover:border-[#111827]"
+                                                        ? "bg-[var(--color-border)] text-[var(--color-surface)] border-[var(--color-border)]"
+                                                        : "bg-[var(--color-card)] text-[var(--color-muted)] border-[var(--color-border)]/10 hover:border-[var(--color-border)]"
                                                 )}
                                             >
                                                 {filter}
@@ -86,8 +110,13 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
                                 </div>
                             </div>
                             <div className="flex shrink-0">
-                                <Button variant="secondary" size="sm" className="p-2.5 md:p-3">
-                                    <Share2 className="w-4 h-4 md:w-5 md:h-5" />
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    className="p-2.5 md:p-3"
+                                    onClick={handleShare}
+                                >
+                                    {copied ? <Check className="w-4 h-4 text-green-600" /> : <Share2 className="w-4 h-4 md:w-5 md:h-5" />}
                                 </Button>
                             </div>
                         </div>
@@ -114,8 +143,8 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
                 </div>
 
                 {/* Section Title */}
-                <div className="flex items-center justify-between mb-10 pb-6 border-b border-[#111827]">
-                    <h2 className="text-2xl font-black text-[#111827] uppercase tracking-tighter">THE QUESTION ARCHIVE.</h2>
+                <div className="flex items-center justify-between mb-10 pb-6 border-b border-[var(--color-border)]">
+                    <h2 className="text-2xl font-black text-[var(--color-text)] uppercase tracking-tighter">THE QUESTION ARCHIVE.</h2>
                     <p className="text-[10px] font-mono font-bold text-[#6B7280] uppercase tracking-widest hidden sm:block">
                         {loading ? 'STATUS: SYNCHRONIZING...' : `${papers.length} IDENTIFIED DOCUMENTS`}
                     </p>

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { ArrowRight, BookOpen } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import { Subject } from '@/lib/queries'
-import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
+import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectSlug } from '@/lib/subject-titles'
 
 interface SubjectCardProps {
     subject: Subject
@@ -25,7 +25,7 @@ export default function SubjectCard({ subject }: SubjectCardProps) {
                 </h3>
             </div>
 
-            <Link href={`/subject/${subject.subject_code}`} className="mt-auto pt-6 border-t border-[var(--color-border)]/10 flex items-center justify-between group-hover/card:border-[#4338CA]/20 transition-colors duration-500 relative z-10">
+            <Link href={`/subject/${getSubjectSlug(subject.subject_code, subject.subject_title)}`} className="mt-auto pt-6 border-t border-[var(--color-border)]/10 flex items-center justify-between group-hover/card:border-[#4338CA]/20 transition-colors duration-500 relative z-10">
                 <span className="text-xs font-mono font-bold text-[var(--color-text)] uppercase tracking-widest opacity-70 group-hover/card:opacity-100 transition-opacity duration-500">
                     Enter Archive
                 </span>

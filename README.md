@@ -80,7 +80,7 @@ graph TD
 | **Styling** | [Tailwind CSS](https://tailwindcss.com/) | Industrial design tokens and neo-brutalist layouts. |
 | **Typography** | [Google Fonts](https://fonts.google.com/) | Inter (Sans) & JetBrains Mono for a technical edge. |
 | **State** | [React Context](https://react.dev/) | Global View management for the Window Terminal. |
-| **Verfication** | [Vercel Analytics](https://vercel.com/) | Real-time telemetry and user interaction tracking. |
+| **Verification** | [System Analytics](https://vercel.com/) | Real-time telemetry and user interaction tracking. |
 
 ---
 
