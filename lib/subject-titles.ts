@@ -15,7 +15,7 @@ const courseMapping: Record<string, string> = {
     'CSE2007': 'Data Structures and Algorithms',
     'CSE2008': 'Network and Information Security',
     'CSE2009': 'Computer Networks',
-    'CSE2013': 'Theory of Computation',
+    'CSE2013': 'Information theory and coding',
     'CSE3002': 'Internet of Things',
     'CSE3003': 'Embedded Systems',
     'CSE3004': 'Mobile Application Development',
