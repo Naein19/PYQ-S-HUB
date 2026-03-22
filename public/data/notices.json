@@ -1,0 +1,30 @@
+[
+  {
+    "id": "4329b425-fcec-4113-a8ec-929bd40d7b7d",
+    "text": "🚨Can’t find your paper? Try searching by course code for exact results.",
+    "type": "signed",
+    "isActive": true,
+    "created_at": "2026-03-21T17:31:00.561693+00:00"
+  },
+  {
+    "id": "79638185-8809-4280-9a0f-67a4a56a8134",
+    "text": "Search by course code to find the exact paper instantly.⚠️",
+    "type": "all",
+    "isActive": true,
+    "created_at": "2026-03-19T19:01:39.688893+00:00"
+  },
+  {
+    "id": "445bb516-c629-41c6-9b2c-1ead2958e430",
+    "text": "Didn’t find your paper? Request it here →@My_MAIL",
+    "type": "all",
+    "isActive": true,
+    "created_at": "2026-03-19T19:01:15.564203+00:00"
+  },
+  {
+    "id": "3c4867dc-72f0-4f87-95b6-5444f5d028b8",
+    "text": "Currently only admins can upload papers. Stay tuned for community uploads! 😇",
+    "type": "signed",
+    "isActive": true,
+    "created_at": "2026-03-19T19:00:39.85083+00:00"
+  }
+]

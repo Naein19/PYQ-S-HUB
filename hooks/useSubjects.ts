@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { getSubjects, Subject } from '@/lib/queries';
+import { Subject } from '@/lib/queries';
+import { cachedFetch } from '@/lib/data-fetcher';
 
 export function useSubjects() {
     const [subjects, setSubjects] = useState<Subject[]>([]);
@@ -10,9 +11,14 @@ export function useSubjects() {
         async function fetchSubjects() {
             try {
                 setLoading(true);
-                const data = await getSubjects();
+                // Fetch from static JSON with 24h cache
+                const data = await cachedFetch<Subject[]>(
+                    '/data/subjects.json',
+                    'pyqs_subjects'
+                );
                 setSubjects(data);
             } catch (err: any) {
+                console.error('Error fetching subjects:', err);
                 setError(err);
             } finally {
                 setLoading(false);

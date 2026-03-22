@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
+import { cachedFetch } from '@/lib/data-fetcher'
 
 export interface Notice {
     id: string
@@ -27,67 +28,49 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
     const [notices, setNotices] = useState<Notice[]>([])
     const [loading, setLoading] = useState(true)
 
-    // Initial fetch and Realtime subscription
+    // Initial fetch - Only ONE fetch per session (or from cache)
     useEffect(() => {
         const fetchNotices = async () => {
-            setLoading(true)
-            const { data, error } = await supabase
-                .from('notices')
-                .select('*')
-                .order('created_at', { ascending: false })
-
-            if (error) {
-                console.error('Error fetching notices:', error)
-            } else {
+            try {
+                setLoading(true)
+                // Fetch from static JSON with 24h cache strategy
+                const data = await cachedFetch<Notice[]>(
+                    '/data/notices.json',
+                    'pyqs_notices'
+                )
                 setNotices(data || [])
+            } catch (error) {
+                console.error('Error fetching notices:', error)
+            } finally {
+                setLoading(false)
             }
-            setLoading(false)
         }
 
         fetchNotices()
-
-        // Subscribe to real-time changes
-        const channel = supabase
-            .channel('notices-realtime')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'notices'
-                },
-                (payload) => {
-                    if (payload.eventType === 'INSERT') {
-                        setNotices((prev) => [payload.new as Notice, ...prev])
-                    } else if (payload.eventType === 'UPDATE') {
-                        setNotices((prev) =>
-                            prev.map((n) => (n.id === payload.new.id ? (payload.new as Notice) : n))
-                        )
-                    } else if (payload.eventType === 'DELETE') {
-                        setNotices((prev) => prev.filter((n) => n.id !== payload.old.id))
-                    }
-                }
-            )
-            .subscribe()
-
-        return () => {
-            supabase.removeChannel(channel)
-        }
     }, [])
 
     const addNotice = async (text: string, type: 'all' | 'signed') => {
-        const { error } = await supabase
+        const { data, error } = await supabase
             .from('notices')
             .insert({
                 text,
                 type,
                 isActive: true
             })
+            .select()
+            .single()
 
-        if (error) console.error('Error adding notice:', error)
+        if (error) {
+            console.error('Error adding notice:', error)
+        } else if (data) {
+            setNotices(prev => [data as Notice, ...prev])
+        }
     }
 
     const updateNotice = async (id: string, updates: Partial<Notice>) => {
+        // Optimistic update
+        setNotices(prev => prev.map(n => n.id === id ? { ...n, ...updates } : n))
+
         const { error } = await supabase
             .from('notices')
             .update(updates)
@@ -97,6 +80,9 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
     }
 
     const deleteNotice = async (id: string) => {
+        // Optimistic update
+        setNotices(prev => prev.filter(n => n.id !== id))
+
         const { error } = await supabase
             .from('notices')
             .delete()
@@ -109,9 +95,13 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
         const notice = notices.find(n => n.id === id)
         if (!notice) return
 
+        const newStatus = !notice.isActive
+        // Optimistic update
+        setNotices(prev => prev.map(n => n.id === id ? { ...n, isActive: newStatus } : n))
+
         const { error } = await supabase
             .from('notices')
-            .update({ isActive: !notice.isActive })
+            .update({ isActive: newStatus })
             .eq('id', id)
 
         if (error) console.error('Error toggling notice:', error)

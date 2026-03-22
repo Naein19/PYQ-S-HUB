@@ -88,17 +88,7 @@ export const metadata: Metadata = {
         creator: '@pyqshub',
     },
     icons: {
-        icon: [
-            { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-            { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-        ],
-        shortcut: '/favicon.ico',
-        apple: [
-            { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-        ],
-        other: [
-            { rel: 'mask-icon', url: '/favicon-frame1.png', color: '#4338CA' },
-        ],
+        icon: '/favicon-frame1.png',
     },
 }
 
@@ -112,6 +102,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
             <head>
                 <JsonLd />
+                {/* Preload Favicon Animation Frames to prevent repeated network requests */}
+                <link rel="preload" href="/favicon-frame1.png" as="image" />
+                <link rel="preload" href="/favicon-frame2.png" as="image" />
+                <link rel="preload" href="/favicon-frame3.png" as="image" />
+                <link rel="preload" href="/favicon-frame4.png" as="image" />
+
                 {/* Inline script: apply saved theme before first paint to prevent FOUC */}
                 <script
                     dangerouslySetInnerHTML={{
