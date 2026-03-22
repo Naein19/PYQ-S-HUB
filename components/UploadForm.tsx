@@ -6,6 +6,7 @@ import Button from './ui/Button'
 import Card from './ui/Card'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
+import { sanitizeInput } from '@/lib/security'
 
 const examCategories = [
     { label: 'CAT-1', full_name: 'Continuous Assessment Test 1' },
@@ -62,14 +63,19 @@ export default function UploadForm() {
         let filePath = ''
 
         try {
-            // 1. Generate safe filePath
+            // 1. Sanitize all inputs
+            const cleanSubjectCode = sanitizeInput(subjectCode).toUpperCase()
+            const cleanSubjectTitle = sanitizeInput(subjectTitle)
+            const cleanPaperTitle = sanitizeInput(paperTitle)
+
+            // 2. Generate safe filePath
             const fileExt = file.name.split('.').pop()
             const uniqueId = Math.random().toString(36).substring(2, 15)
             const sanitizedBaseName = file.name.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_')
             const fileName = `${Date.now()}-${uniqueId}-${sanitizedBaseName}`
-            filePath = `${subjectCode.toUpperCase()}/${fileName}.${fileExt}`
+            filePath = `${cleanSubjectCode}/${fileName}.${fileExt}`
 
-            // 2. Upload to Supabase Storage
+            // 3. Upload to Supabase Storage
             const { data: storageData, error: storageError } = await supabase.storage
                 .from('pyqs')
                 .upload(filePath, file, {
@@ -79,22 +85,22 @@ export default function UploadForm() {
 
             if (storageError) throw storageError
 
-            // 3. Get public URL
+            // 4. Get public URL
             const { data: { publicUrl } } = supabase.storage
                 .from('pyqs')
                 .getPublicUrl(filePath)
 
-            // 4. Insert metadata into public.pyqs table
+            // 5. Insert metadata into public.pyqs table
             const { error: dbError } = await supabase
                 .from('pyqs')
                 .insert({
-                    subject_code: subjectCode.toUpperCase(),
-                    subject_title: subjectTitle,
+                    subject_code: cleanSubjectCode,
+                    subject_title: cleanSubjectTitle,
                     exam_type: examType,
-                    paper_title: paperTitle,
+                    paper_title: cleanPaperTitle,
                     file_path: filePath,
                     file_url: publicUrl,
-                    mime_type: file.type, // Added based on schema from prev conversations if exists, or optional
+                    mime_type: file.type,
                 })
 
             if (dbError) {

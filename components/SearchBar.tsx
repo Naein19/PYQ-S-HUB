@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Search, X, BookOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { sanitizeInput } from '@/lib/security'
 
 interface Suggestion {
     label: string
@@ -53,7 +54,7 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
     }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = e.target.value
+        const val = sanitizeInput(e.target.value)
         setQuery(val)
         onSearch?.(val)
         if (val.length > 0) {

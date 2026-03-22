@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { cachedFetch } from '@/lib/data-fetcher'
+import { sanitizeInput } from '@/lib/security'
 
 export interface Notice {
     id: string
@@ -50,10 +51,11 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
     }, [])
 
     const addNotice = async (text: string, type: 'all' | 'signed') => {
+        const cleanText = sanitizeInput(text)
         const { data, error } = await supabase
             .from('notices')
             .insert({
-                text,
+                text: cleanText,
                 type,
                 isActive: true
             })
@@ -68,12 +70,17 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
     }
 
     const updateNotice = async (id: string, updates: Partial<Notice>) => {
+        const sanitizedUpdates = { ...updates }
+        if (updates.text) {
+            sanitizedUpdates.text = sanitizeInput(updates.text)
+        }
+
         // Optimistic update
-        setNotices(prev => prev.map(n => n.id === id ? { ...n, ...updates } : n))
+        setNotices(prev => prev.map(n => n.id === id ? { ...n, ...sanitizedUpdates } : n))
 
         const { error } = await supabase
             .from('notices')
-            .update(updates)
+            .update(sanitizedUpdates)
             .eq('id', id)
 
         if (error) console.error('Error updating notice:', error)
