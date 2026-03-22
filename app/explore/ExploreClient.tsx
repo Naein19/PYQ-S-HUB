@@ -87,7 +87,7 @@ export default function ExploreClient() {
         setFilters(prev => ({ ...prev, [key]: value }))
     }
 
-    const activeFilterCount = Object.values(filters).filter(Boolean).length
+    const activeFilterCount = Object.entries(filters).filter(([key, value]) => key !== 'search_term' && Boolean(value)).length
 
     return (
         <div className="bg-[var(--color-surface)] min-h-screen pb-20">
@@ -106,7 +106,12 @@ export default function ExploreClient() {
                                 value: s.subject_code,
                                 sublabel: getCleanSubjectTitle(s.subject_code, s.subject_title)
                             }))}
-                            onSearch={setDebouncedSearch}
+                            onSearch={(val) => {
+                                setDebouncedSearch(val)
+                                if (val.trim() !== '') {
+                                    updateFilter('subject_code', '')
+                                }
+                            }}
                         />
                         <button
                             onClick={() => setIsFilterDrawerOpen(true)}
@@ -185,15 +190,6 @@ export default function ExploreClient() {
                                         className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#4338CA]/10 text-indigo-400 border border-indigo-400/20 text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 hover:text-white transition-colors group"
                                     >
                                         <span>TIER: {filters.exam_type}</span>
-                                        <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
-                                    </button>
-                                )}
-                                {filters.search_term && (
-                                    <button
-                                        onClick={() => setDebouncedSearch('')}
-                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text)] text-[9px] font-black uppercase tracking-widest rounded-full hover:bg-red-600 hover:text-white transition-colors group"
-                                    >
-                                        <span>QUERY: {filters.search_term}</span>
                                         <X className="w-3 h-3 group-hover:rotate-90 transition-transform" />
                                     </button>
                                 )}

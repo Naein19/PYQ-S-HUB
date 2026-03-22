@@ -9,7 +9,7 @@ const courseMapping: Record<string, string> = {
     'CSE1006': 'FOUNDATION TO DATA ANALYTICS',
     'CSE1007': 'Java Programming',
     'CSE1008': 'Theory of Computation',
-    'CSE1021': 'Introduction to Problem Solving and Programming',
+    'CSE1021': 'BLOCKCHAIN',
     'CSE1022': 'Introduction to Programming and Problem Solving',
     'CSE2001': 'Computer Architecture and Organization',
     'CSE2007': 'Data Structures and Algorithms',
@@ -37,10 +37,10 @@ const courseMapping: Record<string, string> = {
     'ECE2002': 'Computer Organization and Architecture',
     // FRL
     'FRL1001': 'French for Beginners',
-    'FRL1004': 'German for Beginners',
-    'FRL1005': 'Spanish for Beginners',
-    'FRL2002': 'Japanese for Beginners',
-    'FRL2004': 'German Level II',
+    'FRL1004': 'SPANISH FOR Beginners',
+    'FRL1005': 'German for Beginners',
+    'FRL2002': 'PROFICIENCY OF SPANISH',
+    'FRL2004': 'KOREAN FOR Beginners',
     // MAT
     'MAT1003': 'Calculus and Laplace Transforms',
     'MAT2003': 'Applied Numerical Methods',

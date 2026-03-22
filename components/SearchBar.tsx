@@ -32,7 +32,9 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
                 s.sublabel?.toLowerCase().includes(query.toLowerCase())
             ).slice(0, 5)
             setFilteredSuggestions(filtered)
-            setShowSuggestions(filtered.length > 0)
+            if (filtered.length === 0) {
+                setShowSuggestions(false)
+            }
         } else {
             setFilteredSuggestions([])
             setShowSuggestions(false)
@@ -54,6 +56,9 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
         const val = e.target.value
         setQuery(val)
         onSearch?.(val)
+        if (val.length > 0) {
+            setShowSuggestions(true)
+        }
     }
 
     const handleSuggestionClick = (suggestion: Suggestion) => {

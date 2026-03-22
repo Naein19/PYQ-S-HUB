@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { getSubjectCodeFromSlug } from '@/lib/subject-titles';
 
 export interface PYQ {
     id: string;
@@ -82,7 +83,12 @@ export async function getPaginatedPapers(filters: {
         .select('*', { count: 'exact' });
 
     if (filters.subject_code && filters.subject_code !== 'ALL') {
-        query = query.eq('subject_code', filters.subject_code);
+        // If it's a slug (contains a hyphen), extract the code
+        const subjectCode = filters.subject_code.includes('-')
+            ? getSubjectCodeFromSlug(filters.subject_code)
+            : filters.subject_code;
+
+        query = query.eq('subject_code', subjectCode);
     }
 
     if (filters.exam_type && filters.exam_type !== 'ALL') {
