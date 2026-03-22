@@ -7,7 +7,7 @@ const courseMapping: Record<string, string> = {
     // CSE
     'CSE1005': 'Software Engineering',
     'CSE1006': 'FOUNDATION TO DATA ANALYTICS',
-    'CSE1007': 'Java Programming',
+    'CSE1007': 'Intro TO Cryptography',
     'CSE1008': 'Theory of Computation',
     'CSE1021': 'BLOCKCHAIN',
     'CSE1022': 'Introduction to Programming and Problem Solving',
