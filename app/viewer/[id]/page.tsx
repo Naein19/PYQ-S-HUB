@@ -2,11 +2,13 @@
 
 import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
+import { CacheManager } from '@/lib/cache'
 import Loading from '@/components/ui/Loading'
 import Button from '@/components/ui/Button'
-import { ChevronLeft, Download, Maximize2, Minimize2, ExternalLink, AlertTriangle } from 'lucide-react'
+import { ChevronLeft, Download, Maximize2, Minimize2, ExternalLink, AlertTriangle, ShieldCheck } from 'lucide-react'
 import type { PYQ } from '@/lib/queries'
+
+export const dynamic = 'force-static'
 
 export default function ViewerPage() {
     const params = useParams()
@@ -15,18 +17,31 @@ export default function ViewerPage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [isFullscreen, setIsFullscreen] = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
+
+    useEffect(() => {
+        const checkMobile = () => setIsMobile(window.innerWidth <= 768)
+        checkMobile()
+        window.addEventListener('resize', checkMobile)
+        return () => window.removeEventListener('resize', checkMobile)
+    }, [])
 
     useEffect(() => {
         const fetchPaper = async () => {
             try {
-                const { data, error } = await supabase
-                    .from('pyqs')
-                    .select('*')
-                    .eq('id', params.id)
-                    .single()
+                // Fetch ALL papers from cache/static JSON
+                const allPapers = await CacheManager.fetch<PYQ[]>(
+                    '/data/papers.json',
+                    'papers'
+                )
 
-                if (error) throw error
-                setPaper(data)
+                const found = allPapers.find(p => p.id === params.id)
+
+                if (!found) {
+                    throw new Error('Document not found in archive.')
+                }
+
+                setPaper(found)
             } catch (err: any) {
                 setError(err.message || 'Failed to locate archive document.')
             } finally {
@@ -123,15 +138,48 @@ export default function ViewerPage() {
             </div>
 
             {/* Viewer Stage */}
-            <div className="flex-1 relative bg-[#111827]">
-                <iframe
-                    src={`${paper.file_url}#toolbar=0&navpanes=0&scrollbar=0`}
-                    className="w-full h-full border-none"
-                    title={paper.paper_title}
-                />
-
-                {/* Mobile Scrim Backdrop for better immersion */}
-                <div className="absolute inset-0 pointer-events-none border-[12px] border-[#111827] opacity-20" />
+            <div className="flex-1 relative bg-[#111827] flex flex-col items-center justify-center p-6 text-center">
+                {isMobile ? (
+                    <div className="w-full max-w-sm space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <div className="w-16 h-16 bg-[#4338CA]/10 border border-[#4338CA]/30 rounded-2xl flex items-center justify-center mx-auto shadow-[0_0_30px_rgba(67,56,202,0.2)]">
+                            <ShieldCheck className="w-8 h-8 text-[#4338CA]" />
+                        </div>
+                        <div>
+                            <h2 className="text-xl font-black uppercase tracking-tighter mb-2">SECURE_PDF_ACCESS</h2>
+                            <p className="text-[10px] font-mono text-white/40 uppercase tracking-widest leading-relaxed">
+                                MOBILE_ENVIRONMENT_DETECTED: EMBEDDED_VIEWING_RESTRICTED_FOR_COMPATIBILITY
+                            </p>
+                        </div>
+                        <Button
+                            variant="primary"
+                            onClick={() => window.open(paper.file_url, '_blank')}
+                            className="w-full py-6 text-xs font-black uppercase tracking-[0.2em] bg-[#4338CA] shadow-[0_4px_20px_rgba(67,56,202,0.4)] border-none"
+                        >
+                            <ExternalLink className="w-4 h-4 mr-3" />
+                            VIEW_FILE_EXTERNALLY
+                        </Button>
+                        <p className="text-[9px] font-mono text-white/20 uppercase tracking-widest">
+                            REDIRECTS_TO_BROWSER_SYSTEM_VIEWER
+                        </p>
+                    </div>
+                ) : (
+                    <>
+                        <iframe
+                            src={`${paper.file_url}#toolbar=0&navpanes=0&scrollbar=0`}
+                            className="w-full h-full border-none"
+                            title={paper.paper_title}
+                        />
+                        {/* Fallback link if iframe stays blank */}
+                        <button
+                            onClick={() => window.open(paper.file_url, '_blank')}
+                            className="absolute bottom-4 right-4 text-[8px] font-mono text-white/20 hover:text-white/60 transition-colors uppercase tracking-widest"
+                        >
+                            Having trouble? Open externally
+                        </button>
+                        {/* Mobile Scrim Backdrop for better immersion */}
+                        <div className="absolute inset-0 pointer-events-none border-[12px] border-[#111827] opacity-20" />
+                    </>
+                )}
             </div>
 
             {/* Status Footer */}

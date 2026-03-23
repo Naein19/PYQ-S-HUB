@@ -19,6 +19,8 @@ export const metadata: Metadata = {
     ],
 }
 
+export const dynamic = 'force-static'
+
 export default function ExplorePage() {
     return (
         <Suspense fallback={<Loading fullPage />}>

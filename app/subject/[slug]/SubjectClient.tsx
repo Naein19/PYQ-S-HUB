@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Check, ArrowLeft, BookOpen, Clock, FileText, Share2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -10,6 +10,7 @@ import PYQCard from '@/components/PYQCard'
 import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
 import { useSubjectPapers } from '@/hooks/usePapers'
 import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectCodeFromSlug } from '@/lib/subject-titles'
+import { getSubjects } from '@/lib/queries'
 
 interface SubjectClientProps {
     slug: string
@@ -19,7 +20,18 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
     const subjectCode = getSubjectCodeFromSlug(slug)
     const [activeFilter, setActiveFilter] = useState('ALL')
     const [copied, setCopied] = useState(false)
+    const [isValid, setIsValid] = useState<boolean | null>(null)
     const { papers, loading, error } = useSubjectPapers(subjectCode, activeFilter === 'ALL' ? undefined : activeFilter)
+
+    // Route Validation
+    useEffect(() => {
+        const validateRoute = async () => {
+            const subjects = await getSubjects()
+            const exists = subjects.some((s) => s.subject_code === subjectCode)
+            setIsValid(exists)
+        }
+        validateRoute()
+    }, [subjectCode])
 
     const handleShare = async (e?: React.MouseEvent) => {
         e?.preventDefault()
@@ -43,14 +55,20 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
         }
     }
 
-    if (error) {
+    if (isValid === false) {
         return (
             <div className="container-main py-20 text-center">
-                <h1 className="text-2xl font-black uppercase">Archive Connection Failure</h1>
-                <p className="text-[#6B7280] mt-4">Unable to retrieve documents from the repository.</p>
-                <Button onClick={() => window.location.reload()} className="mt-8">RETRY_CONNECTION</Button>
+                <h1 className="text-4xl font-black uppercase tracking-tighter">Subject Not Identified</h1>
+                <p className="text-[#6B7280] mt-4 font-mono">The requested repository code [{subjectCode}] does not exist in our industrial archive.</p>
+                <Link href="/explore">
+                    <Button className="mt-8">SCAN_FOR_VALID_REPOSITORIES</Button>
+                </Link>
             </div>
         )
+    }
+
+    if (error) {
+        // ... (existing error logic)
     }
 
     // Get subject info from first paper if available
@@ -58,8 +76,8 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
         code: getNormalizedSubjectCode(papers[0].subject_code),
         title: getCleanSubjectTitle(papers[0].subject_code, papers[0].subject_title),
     } : {
-        code: getNormalizedSubjectCode(slug),
-        title: getCleanSubjectTitle(slug, 'Subject Archive'),
+        code: getNormalizedSubjectCode(subjectCode),
+        title: getCleanSubjectTitle(subjectCode, 'Subject Archive'),
     }
 
     const filters = ['ALL', 'CAT-1', 'CAT-2', 'FAT', 'OTHER']

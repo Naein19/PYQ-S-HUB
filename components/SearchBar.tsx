@@ -16,9 +16,10 @@ interface SearchBarProps {
     onSearch?: (query: string) => void
     suggestions?: Suggestion[]
     className?: string
+    loading?: boolean
 }
 
-export default function SearchBar({ placeholder = 'Search...', onSearch, suggestions = [], className }: SearchBarProps) {
+export default function SearchBar({ placeholder = 'Search...', onSearch, suggestions = [], className, loading = false }: SearchBarProps) {
     const [query, setQuery] = useState('')
     const [showSuggestions, setShowSuggestions] = useState(false)
     const [filteredSuggestions, setFilteredSuggestions] = useState<Suggestion[]>([])
@@ -54,6 +55,7 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
     }, [])
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (loading) return
         const val = sanitizeInput(e.target.value)
         setQuery(val)
         onSearch?.(val)

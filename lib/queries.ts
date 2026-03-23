@@ -1,5 +1,4 @@
-import { supabase } from '@/lib/supabase';
-import { getSubjectCodeFromSlug } from '@/lib/subject-titles';
+import { CacheManager } from '@/lib/cache';
 
 export interface PYQ {
     id: string;
@@ -18,97 +17,100 @@ export interface Subject {
     subject_title: string;
 }
 
-/**
- * Fetch distinct subjects (subject_code + subject_title)
- */
-export async function getSubjects() {
-    const { data, error } = await supabase
-        .from('pyqs')
-        .select('subject_code, subject_title')
-        .order('subject_code', { ascending: true });
-
-    if (error) throw error;
-
-    // Manual distinct since Supabase select('subject_code, subject_title', { count: 'exact', head: false }) 
-    // doesn't support easy "distinct on" for multiple columns in a way that matches the requirement simple.
-    // We'll use a trick or just unique the array. 
-    // Actually, a better way in Supabase for distinct if the table is large is a RPC or a View, 
-    // but for now, we'll filter unique values in JS if the dataset is manageable, or use a select trick.
-
-    const uniqueSubjects = data?.reduce((acc: Subject[], current) => {
-        const x = acc.find(item => item.subject_code === current.subject_code);
-        if (!x) {
-            return acc.concat([current]);
-        } else {
-            return acc;
-        }
-    }, []);
-
-    return uniqueSubjects || [];
+export interface Notice {
+    id: string;
+    title: string;
+    content: string;
+    type: 'all' | 'signed-in';
+    created_at: string;
 }
 
 /**
- * Fetch papers for a specific subject
+ * Fetch distinct subjects from static JSON with L1/L2 caching
  */
-export async function getPapersBySubject(subject_code: string, exam_type?: string) {
-    let query = supabase
-        .from('pyqs')
-        .select('*')
-        .eq('subject_code', subject_code)
-        .order('exam_type', { ascending: true })
-        .order('created_at', { ascending: false });
+export async function getSubjects(): Promise<Subject[]> {
+    return CacheManager.fetch<Subject[]>(
+        '/data/subjects.json',
+        'subjects',
+        24 * 60 * 60 * 1000 // 24h TTL
+    );
+}
+
+/**
+ * Fetch all notices from static JSON
+ */
+export async function getNotices(): Promise<Notice[]> {
+    return CacheManager.fetch<Notice[]>(
+        '/data/notices.json',
+        'notices',
+        24 * 60 * 60 * 1000
+    );
+}
+
+/**
+ * Fetch papers for a specific subject (Filtered locally from static JSON)
+ */
+export async function getPapersBySubject(subject_code: string, exam_type?: string): Promise<PYQ[]> {
+    const allPapers = await CacheManager.fetch<PYQ[]>(
+        '/data/papers.json',
+        'papers',
+        24 * 60 * 60 * 1000
+    );
+
+    let filtered = allPapers.filter(p => p.subject_code === subject_code);
 
     if (exam_type && exam_type !== 'ALL') {
-        query = query.eq('exam_type', exam_type);
+        filtered = filtered.filter(p => p.exam_type === exam_type);
     }
 
-    const { data, error } = await query;
-    if (error) throw error;
-    return data as PYQ[];
+    return filtered.sort((a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
 }
 
 /**
- * Search papers with filters and pagination
+ * Search papers with local filters and pagination
  */
 export async function getPaginatedPapers(filters: {
     subject_code?: string;
     exam_type?: string;
     search_term?: string;
 }, page: number = 1, limit: number = 20) {
-    const from = (page - 1) * limit;
-    const to = from + limit - 1;
+    const allPapers = await CacheManager.fetch<PYQ[]>(
+        '/data/papers.json',
+        'papers',
+        24 * 60 * 60 * 1000
+    );
 
-    let query = supabase
-        .from('pyqs')
-        .select('*', { count: 'exact' });
+    let filtered = allPapers;
 
     if (filters.subject_code && filters.subject_code !== 'ALL') {
-        // If it's a slug (contains a hyphen), extract the code
-        const subjectCode = filters.subject_code.includes('-')
-            ? getSubjectCodeFromSlug(filters.subject_code)
-            : filters.subject_code;
-
-        query = query.eq('subject_code', subjectCode);
+        filtered = filtered.filter(p => p.subject_code === filters.subject_code);
     }
 
     if (filters.exam_type && filters.exam_type !== 'ALL') {
-        query = query.eq('exam_type', filters.exam_type);
+        filtered = filtered.filter(p => p.exam_type === filters.exam_type);
     }
 
     if (filters.search_term) {
-        // Search by subject_code, subject_title, or paper_title
-        query = query.or(`subject_code.ilike.%${filters.search_term}%,subject_title.ilike.%${filters.search_term}%,paper_title.ilike.%${filters.search_term}%`);
+        const search = filters.search_term.toLowerCase();
+        filtered = filtered.filter(p =>
+            p.subject_code.toLowerCase().includes(search) ||
+            p.subject_title.toLowerCase().includes(search) ||
+            p.paper_title.toLowerCase().includes(search)
+        );
     }
 
-    const { data, error, count } = await query
-        .order('created_at', { ascending: false })
-        .range(from, to);
+    // Sort by created_at descending
+    filtered.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 
-    if (error) throw error;
+    const from = (page - 1) * limit;
+    const to = from + limit;
+    const paginatedData = filtered.slice(from, to);
 
     return {
-        data: data as PYQ[],
-        count: count || 0,
-        hasMore: count ? (from + limit < count) : false
+        data: paginatedData,
+        count: filtered.length,
+        hasMore: to < filtered.length
     };
 }

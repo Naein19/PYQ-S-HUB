@@ -101,6 +101,7 @@ export default function ExploreClient() {
                         <SearchBar
                             className="flex-1"
                             placeholder="Identify subject code or document name..."
+                            loading={loading}
                             suggestions={subjects.map(s => ({
                                 label: s.subject_code,
                                 value: s.subject_code,

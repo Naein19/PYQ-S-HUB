@@ -14,7 +14,7 @@ export function useSubjects() {
                 // Fetch from static JSON with 24h cache
                 const data = await cachedFetch<Subject[]>(
                     '/data/subjects.json',
-                    'pyqs_subjects'
+                    'subjects'
                 );
                 setSubjects(data);
             } catch (err: any) {

@@ -37,15 +37,11 @@ const nextConfig = {
                     },
                     {
                         key: 'Referrer-Policy',
-                        value: 'strict-origin-when-cross-origin',
-                    },
-                    {
-                        key: 'Permissions-Policy',
-                        value: 'camera=(), microphone=(), geolocation=(), interest-cohort=()',
+                        value: 'no-referrer',
                     },
                     {
                         key: 'Content-Security-Policy',
-                        value: "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://vitals.vercel-insight.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co; connect-src 'self' https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co https://vitals.vercel-insights.com; frame-src 'self' https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co; object-src 'self' blob:; frame-ancestors 'none'; upgrade-insecure-requests;",
+                        value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com; img-src 'self' data: https://*.supabase.co; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self' https://*.supabase.co https://vitals.vercel-insights.com; frame-src 'self' https://*.supabase.co; object-src 'self' blob:; frame-ancestors 'none'; upgrade-insecure-requests;",
                     },
                 ],
             },

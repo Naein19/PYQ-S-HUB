@@ -23,7 +23,7 @@ export function usePapers(filters: {
                 setLoading(true);
                 const data = await cachedFetch<PYQ[]>(
                     '/data/papers.json',
-                    'pyqs_all_papers'
+                    'papers'
                 );
                 setAllPapers(data);
             } catch (err: any) {
@@ -87,10 +87,9 @@ export function usePapers(filters: {
     const totalCount = filteredPapers.length;
 
     const loadMore = useCallback(() => {
-        if (hasMore) {
-            setPage(prev => prev + 1);
-        }
-    }, [hasMore]);
+        if (loading || !hasMore) return;
+        setPage(prev => prev + 1);
+    }, [loading, hasMore]);
 
     // Reset page when filters change
     useEffect(() => {

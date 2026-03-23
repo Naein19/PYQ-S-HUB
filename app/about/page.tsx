@@ -13,6 +13,8 @@ export const metadata: Metadata = {
     },
 }
 
+export const dynamic = 'force-static'
+
 export default function AboutPage() {
     return (
         <main className="animate-fade-in">

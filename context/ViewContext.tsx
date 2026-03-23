@@ -28,6 +28,12 @@ export function ViewProvider({ children }: { children: React.ReactNode }) {
     }, [])
 
     const viewPaper = (paper: PYQ) => {
+        // MOBILE_TRIGGER: Screens <= 768px always open externally to avoid iframe blocking
+        if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+            window.open(paper.file_url, '_blank')
+            return
+        }
+
         if (!isDesktop) {
             router.push(`/viewer/${paper.id}`)
             return

@@ -1,4 +1,4 @@
-import { LocalStorageCache } from './cache';
+import { CacheManager } from './cache';
 
 /**
  * Basic Input Sanitization
@@ -38,21 +38,21 @@ export const SecurityGuard = {
     isSpamming(action: string, limit: number = 20, windowMs: number = 60000): boolean {
         const key = `sec_burst_${action}`;
         const now = Date.now();
-        const data = LocalStorageCache.get<{ count: number; first: number }>(key);
+        const data = CacheManager.get<{ count: number; first: number }>(key);
 
         if (!data) {
-            LocalStorageCache.set(key, { count: 1, first: now }, windowMs);
+            CacheManager.set(key, { count: 1, first: now }, windowMs);
             return false;
         }
 
         if (now - data.first > windowMs) {
-            LocalStorageCache.set(key, { count: 1, first: now }, windowMs);
+            CacheManager.set(key, { count: 1, first: now }, windowMs);
             return false;
         }
 
         if (data.count > limit) return true;
 
-        LocalStorageCache.set(key, { ...data, count: data.count + 1 }, windowMs);
+        CacheManager.set(key, { ...data, count: data.count + 1 }, windowMs);
         return false;
     }
 };

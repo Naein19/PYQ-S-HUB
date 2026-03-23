@@ -97,17 +97,13 @@ import { AuthProvider } from '@/context/AuthContext'
 import { LoadingProvider } from '@/context/LoadingContext'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { NoticeProvider } from '@/context/NoticeContext'
+import RootPreloader from '@/components/core/Preloader'
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
             <head>
                 <JsonLd />
-                {/* Preconnect to critical origins */}
-                <link rel="preconnect" href="https://vvpunocthcpgwtdywnny.supabase.co" />
-                <link rel="preconnect" href="https://fonts.googleapis.com" />
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-
                 {/* Preload Favicon Animation Frames to prevent repeated network requests */}
                 <link rel="preload" href="/favicon-frame1.png" as="image" />
                 <link rel="preload" href="/favicon-frame2.png" as="image" />
@@ -122,6 +118,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 />
             </head>
             <body className="bg-[var(--color-surface)] text-[var(--color-text)] min-h-screen flex flex-col font-sans">
+                <RootPreloader />
                 <AnimatedFavicon />
                 <ThemeProvider>
                     <AuthProvider>

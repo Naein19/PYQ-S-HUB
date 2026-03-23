@@ -32,6 +32,8 @@ export async function generateMetadata({ params }: SubjectPageProps): Promise<Me
     }
 }
 
+export const dynamic = 'force-static'
+
 export default function SubjectPage({ params }: SubjectPageProps) {
     return <SubjectClient slug={params.slug} />
 }
