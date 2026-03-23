@@ -1,52 +1,46 @@
-'use client'
-
 import Hero from '@/components/Hero'
 import PYQCard from '@/components/PYQCard'
 import ExamTypeCard from '@/components/pyq/ExamTypeCard'
-import MetadataStrip from '@/components/pyq/MetadataStrip'
 import SubjectCard from '@/components/pyq/SubjectCard'
 import Link from 'next/link'
-import { ArrowRight, BookOpen, ShieldCheck, Zap, Mail, MessageSquare, Globe, Send, Phone } from 'lucide-react'
-import Loading from '@/components/ui/Loading'
+import { ArrowRight, ShieldCheck } from 'lucide-react'
 import { examTypes } from '@/lib/mock-data'
 import Button from '@/components/ui/Button'
-import Card from '@/components/ui/Card'
-import { useSubjects } from '@/hooks/useSubjects'
-import { usePapers } from '@/hooks/usePapers'
-import { useMemo } from 'react'
 import Image from 'next/image'
+import { getServerPapers, getServerSubjects } from '@/lib/server/data-server'
+import { Suspense } from 'react'
 import SubjectCardSkeleton from '@/components/pyq/SubjectCardSkeleton'
 import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
 
-export default function HomePage() {
-    const { subjects, loading: subjectsLoading } = useSubjects()
-    const recentPapersFilters = useMemo(() => ({}), [])
-    const { papers: recentPYQs, loading: papersLoading } = usePapers(recentPapersFilters, 1)
+export default async function HomePage() {
+    // Server-side fetching
+    const [allSubjects, allPapers] = await Promise.all([
+        getServerSubjects(),
+        getServerPapers()
+    ]);
+
+    const subjects = allSubjects.slice(0, 8);
+    const recentPYQs = allPapers.slice(0, 3);
 
     return (
         <div>
-            {/* Section 1: Hero (Already in Components) */}
+            {/* Section 1: Hero */}
             <Hero />
 
-
-            {/* Section 3: About Section - Industrial high-fidelity */}
-
-
-            {/* Section 4: Exam Type Cards Grid - Industrial backgrounds */}
+            {/* Section 2: Exam Types */}
             <section id="exams" className="relative py-16 lg:py-24 overflow-hidden bg-[#111827] min-h-[calc(100vh-80px)] flex items-center">
-                {/* Background Image Overlay with subtle movement */}
                 <div className="absolute inset-0 z-0 opacity-30 pointer-events-none grayscale contrast-125 animate-float" style={{ animationDuration: '10s' }}>
                     <Image
                         src="/assets/exam_tiers.png"
                         alt="Exam Tiers"
                         fill
+                        priority
                         className="object-cover opacity-50 brightness-150"
                         sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-[#111827]/90" />
                 </div>
 
-                {/* Decorative gradients for depth */}
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#4338CA]/10 rounded-full blur-[120px] pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#6D28D9]/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -103,19 +97,17 @@ export default function HomePage() {
                         </Link>
                     </div>
 
-                    {subjectsLoading ? (
+                    <Suspense fallback={
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {[...Array(8)].map((_, i) => (
-                                <SubjectCardSkeleton key={i} />
-                            ))}
+                            {[...Array(8)].map((_, i) => <SubjectCardSkeleton key={i} />)}
                         </div>
-                    ) : (
+                    }>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                            {subjects.slice(0, 8).map((subject) => (
+                            {subjects.map((subject) => (
                                 <SubjectCard key={subject.subject_code} subject={subject} />
                             ))}
                         </div>
-                    )}
+                    </Suspense>
                 </div>
             </section>
 
@@ -139,26 +131,22 @@ export default function HomePage() {
                         </Link>
                     </div>
 
-                    {papersLoading ? (
+                    <Suspense fallback={
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {[...Array(3)].map((_, i) => (
-                                <PYQCardSkeleton key={i} />
-                            ))}
+                            {[...Array(3)].map((_, i) => <PYQCardSkeleton key={i} />)}
                         </div>
-                    ) : (
+                    }>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {recentPYQs.slice(0, 3).map((pyq) => (
+                            {recentPYQs.map((pyq) => (
                                 <PYQCard key={pyq.id} pyq={pyq} />
                             ))}
                         </div>
-                    )}
+                    </Suspense>
                 </div>
             </section>
 
-
-            {/* Section 5: Final CTA - Cinematic industrial scale */}
+            {/* Section 5: Final CTA */}
             <section className="relative py-16 lg:py-24 overflow-hidden bg-[#111827] min-h-[calc(100vh-80px)] flex items-center">
-                {/* Background Image with Cinematic Overlay */}
                 <div className="absolute inset-0 z-0">
                     <Image
                         src="/assets/industrial_library_bg.png"
@@ -199,21 +187,6 @@ export default function HomePage() {
                                     SCAN_REPOSITORIES
                                 </Button>
                             </Link>
-                        </div>
-
-                        <div className="mt-20 flex flex-wrap justify-center gap-12 opacity-30 grayscale contrast-125">
-                            <div className="flex flex-col items-center">
-                                <span className="text-4xl font-black text-white tabular-nums">3.2K</span>
-                                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#6B7280]">ACTIVE_STUDENTS</span>
-                            </div>
-                            <div className="flex flex-col items-center">
-                                <span className="text-4xl font-black text-white tabular-nums">12K+</span>
-                                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#6B7280]">VERIFIED_PAPERS</span>
-                            </div>
-                            <div className="flex flex-col items-center">
-                                <span className="text-4xl font-black text-white tabular-nums">24MS</span>
-                                <span className="text-[10px] font-mono font-black uppercase tracking-widest text-[#6B7280]">ARCHIVE_LATENCY</span>
-                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { Check, Download, Eye, FileText, Share2, Folder, ShieldCheck } from 'lucide-react'
 import { useState } from 'react'

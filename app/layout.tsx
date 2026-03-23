@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
 import Navbar from '@/components/layout/Navbar'
-import Footer from '@/components/layout/Footer'
+import dynamic from 'next/dynamic'
+const Footer = dynamic(() => import('@/components/layout/Footer'), { ssr: true })
 import '@/styles/globals.css'
 import { ViewProvider } from '@/context/ViewContext'
 
@@ -102,6 +103,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
             <head>
                 <JsonLd />
+                {/* Preconnect to critical origins */}
+                <link rel="preconnect" href="https://vvpunocthcpgwtdywnny.supabase.co" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
                 {/* Preload Favicon Animation Frames to prevent repeated network requests */}
                 <link rel="preload" href="/favicon-frame1.png" as="image" />
                 <link rel="preload" href="/favicon-frame2.png" as="image" />
