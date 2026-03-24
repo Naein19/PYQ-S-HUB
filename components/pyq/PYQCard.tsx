@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import posthog from 'posthog-js'
 import { ExternalLink, Eye, FileText, Share2, Folder, Download, ShieldCheck } from 'lucide-react'
 import Badge from '@/components/Badge'
 import Card from '@/components/ui/Card'
@@ -16,11 +15,6 @@ export default function PYQCard({ pyq }: PYQCardProps) {
 
     const handleDownload = async (e: React.MouseEvent) => {
         e.preventDefault()
-        posthog.capture('download_clicked', {
-            file: pyq.paper_title,
-            subject: pyq.subject_code,
-            file_url: pyq.file_url
-        })
         try {
             const response = await fetch(pyq.file_url)
             const blob = await response.blob()
@@ -36,15 +30,6 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             console.error('Download failed:', error)
             window.open(pyq.file_url, '_blank')
         }
-    }
-
-    const handleViewPaper = () => {
-        posthog.capture('pdf_open', {
-            subject: pyq.subject_code,
-            year: new Date(pyq.created_at).getFullYear().toString(),
-            file: pyq.paper_title
-        })
-        viewPaper(pyq)
     }
 
     return (
@@ -99,8 +84,8 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                         <span>{Math.floor(Math.random() * 50) + 40}</span>
                     </div>
                     <button
-                        onClick={handleViewPaper}
-                        className="flex items-center gap-1.5 text-xs font-mono text-[var(--muted)] hover:text-[#4338CA] transition-colors"
+                        onClick={() => viewPaper(pyq)}
+                        className="flex items-center gap-1.5 text-xs font-mono text-[var(--color-muted)] hover:text-[#4338CA] transition-colors"
                     >
                         <ExternalLink className="w-3.5 h-3.5" />
                         <span>VIEW</span>

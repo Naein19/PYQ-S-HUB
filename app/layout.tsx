@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, JetBrains_Mono } from 'next/font/google'
+import Script from 'next/script'
 import Navbar from '@/components/layout/Navbar'
 import dynamic from 'next/dynamic'
 const Footer = dynamic(() => import('@/components/layout/Footer'), { ssr: true })
@@ -11,7 +12,6 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import TabManager from '@/components/layout/TabManager'
 import AnimatedFavicon from '@/components/AnimatedFavicon'
 import NoticeTicker from '@/components/layout/NoticeTicker'
-import PostHogProvider from '@/components/PostHogProvider'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -111,12 +111,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <link rel="preload" href="/favicon-frame3.png" as="image" />
                 <link rel="preload" href="/favicon-frame4.png" as="image" />
 
-                {/* Inline script: apply saved theme before first paint to prevent FOUC */}
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `(function(){try{var t=localStorage.getItem('pyqs-theme');var d=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='dark'||(t===null&&d)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
                     }}
                 />
+                {/* Google Analytics Tag */}
+                <Script
+                    src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+                    strategy="afterInteractive"
+                />
+                <Script id="google-analytics" strategy="afterInteractive">
+                    {`
+                        window.dataLayer = window.dataLayer || [];
+                        function gtag(){dataLayer.push(arguments);}
+                        gtag('js', new Date());
+
+                        gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
+                    `}
+                </Script>
             </head>
             <body className="bg-[var(--color-surface)] text-[var(--color-text)] min-h-screen flex flex-col font-sans">
                 <RootPreloader />
@@ -126,13 +139,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <NoticeProvider>
                             <LoadingProvider>
                                 <ViewProvider>
-                                    <PostHogProvider>
-                                        <NoticeTicker />
-                                        <Navbar />
-                                        <main className="flex-1">{children}</main>
-                                        <Footer />
-                                        <TabManager />
-                                    </PostHogProvider>
+                                    <NoticeTicker />
+                                    <Navbar />
+                                    <main className="flex-1">{children}</main>
+                                    <Footer />
+                                    <TabManager />
                                 </ViewProvider>
                             </LoadingProvider>
                         </NoticeProvider>

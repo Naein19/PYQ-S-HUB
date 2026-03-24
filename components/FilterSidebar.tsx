@@ -1,5 +1,6 @@
+'use client'
+
 import React from 'react'
-import posthog from 'posthog-js'
 import { FilterState } from '@/app/explore/ExploreClient'
 import { departments, subjects } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
@@ -25,11 +26,7 @@ export default function FilterSidebar({ filters, onChange }: FilterSidebarProps)
     const examCategories = ['CAT-1', 'CAT-2', 'FAT']
 
     const updateFilter = (key: keyof FilterState, value: string) => {
-        const newValue = filters[key] === value ? '' : value
-        if (key === 'year' && newValue !== '') {
-            posthog.capture('year_selected', { year: newValue })
-        }
-        onChange({ ...filters, [key]: newValue })
+        onChange({ ...filters, [key]: filters[key] === value ? '' : value })
     }
 
     const FilterSection = ({ title, children }: { title: string; children: React.ReactNode }) => (
