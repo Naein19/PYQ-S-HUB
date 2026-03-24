@@ -11,6 +11,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import TabManager from '@/components/layout/TabManager'
 import AnimatedFavicon from '@/components/AnimatedFavicon'
 import NoticeTicker from '@/components/layout/NoticeTicker'
+import PostHogProvider from '@/components/PostHogProvider'
 
 const inter = Inter({
     subsets: ['latin'],
@@ -125,11 +126,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                         <NoticeProvider>
                             <LoadingProvider>
                                 <ViewProvider>
-                                    <NoticeTicker />
-                                    <Navbar />
-                                    <main className="flex-1">{children}</main>
-                                    <Footer />
-                                    <TabManager />
+                                    <PostHogProvider>
+                                        <NoticeTicker />
+                                        <Navbar />
+                                        <main className="flex-1">{children}</main>
+                                        <Footer />
+                                        <TabManager />
+                                    </PostHogProvider>
                                 </ViewProvider>
                             </LoadingProvider>
                         </NoticeProvider>

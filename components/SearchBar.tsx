@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect, useRef } from 'react'
+import posthog from 'posthog-js'
 import { Search, X, BookOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { sanitizeInput } from '@/lib/security'
@@ -64,9 +65,15 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
         }
     }
 
+    const handleSearch = (searchValue: string) => {
+        if (!searchValue.trim()) return
+        posthog.capture('search_used', { query: searchValue })
+        onSearch?.(searchValue)
+    }
+
     const handleSuggestionClick = (suggestion: Suggestion) => {
         setQuery(suggestion.value)
-        onSearch?.(suggestion.value)
+        handleSearch(suggestion.value)
         setShowSuggestions(false)
     }
 
@@ -80,6 +87,8 @@ export default function SearchBar({ placeholder = 'Search...', onSearch, suggest
         } else if (e.key === 'Enter') {
             if (selectedIndex >= 0 && selectedIndex < filteredSuggestions.length) {
                 handleSuggestionClick(filteredSuggestions[selectedIndex])
+            } else {
+                handleSearch(query)
             }
         } else if (e.key === 'Escape') {
             setShowSuggestions(false)
