@@ -3,10 +3,12 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { BookOpen, User, Lock, ArrowRight, AlertCircle, CheckCircle2 } from 'lucide-react'
+import { BookOpen, User, Lock, ArrowRight, AlertCircle, CheckCircle2, Mail } from 'lucide-react'
 import Loading from '@/components/ui/Loading'
 import { supabase } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
+import { cn } from '@/lib/utils'
+import { normalizeEmail, isVitapEmail } from '@/lib/validation'
 
 export default function LoginPage() {
     const router = useRouter()
@@ -17,24 +19,22 @@ export default function LoginPage() {
     const [showForgot, setShowForgot] = useState(false)
     const [message, setMessage] = useState<string | null>(null)
 
-    const validateEmailDomain = (email: string) => {
-        return email.toLowerCase().endsWith('@vitapstudent.ac.in')
-    }
-
     const handleSendResetEmail = async (e: React.FormEvent) => {
         e.preventDefault()
         setLoading(true)
         setError(null)
         setMessage(null)
 
-        if (!validateEmailDomain(email)) {
-            setError('Only VIT-AP student emails are allowed')
+        const normalizedEmail = normalizeEmail(email)
+
+        if (!isVitapEmail(normalizedEmail)) {
+            setError('Enter a valid VIT-AP student email')
             setLoading(false)
             return
         }
 
         try {
-            const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+            const { error: resetError } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
                 redirectTo: `${window.location.origin}/reset-password`,
             })
 
@@ -53,9 +53,17 @@ export default function LoginPage() {
         setLoading(true)
         setError(null)
 
+        const normalizedEmail = normalizeEmail(email)
+
+        if (!isVitapEmail(normalizedEmail)) {
+            setError('Enter a valid VIT-AP student email')
+            setLoading(false)
+            return
+        }
+
         try {
             const { data, error: authError } = await supabase.auth.signInWithPassword({
-                email,
+                email: normalizedEmail,
                 password,
             })
 
@@ -72,6 +80,8 @@ export default function LoginPage() {
         }
     }
 
+    const isEmailValid = email === '' || isVitapEmail(email)
+
     return (
         <div className="min-h-[calc(100vh-5rem)] bg-[var(--color-surface)] flex items-center justify-center px-6 py-12 animate-fade-in">
             <div className="w-full max-w-md">
@@ -85,13 +95,13 @@ export default function LoginPage() {
                     <p className="text-[10px] font-mono font-black text-[#4338CA] uppercase tracking-[0.3em] mb-4">
                         Industrial Authentication
                     </p>
-                    <h1 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4 leading-none">
+                    <h1 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4 leading-none transition-colors">
                         Get Started.
                     </h1>
-                    <p className="text-[var(--color-muted)] font-medium">Verify your credentials to manage the repository.</p>
+                    <p className="text-[var(--color-muted)] font-medium transition-colors">Verify your credentials to manage the repository.</p>
                 </div>
 
-                <div className="card-frame bg-[var(--color-card)] relative overflow-hidden border border-[var(--color-border)]">
+                <div className="card-frame p-10 bg-[var(--color-card)] relative overflow-hidden border border-[var(--color-border)] shadow-xl transition-colors">
                     {/* Subtle progress bar if loading */}
                     {loading && (
                         <div className="absolute top-0 left-0 right-0 h-1 bg-[var(--color-border)] overflow-hidden">
@@ -103,24 +113,43 @@ export default function LoginPage() {
                         <form onSubmit={handleLogin} className="flex flex-col gap-8">
                             {/* Email */}
                             <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
-                                    <User className="w-3 h-3" />
-                                    User Identity (Email)
+                                <label className="flex items-center justify-between gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
+                                    <div className="flex items-center gap-2">
+                                        <Mail className={cn("w-3 h-3", !isEmailValid && email !== '' ? "text-red-500" : "")} />
+                                        User Identity (Email)
+                                    </div>
+                                    {!isEmailValid && email !== '' && (
+                                        <span className="text-[8px] text-red-500 normal-case font-bold animate-pulse transition-colors">INVALID_FORMAT</span>
+                                    )}
                                 </label>
                                 <input
                                     type="email"
                                     required
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="USER.22XXX1234@VITAPSTUDENT.AC.IN"
-                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all uppercase tracking-tight"
+                                    onChange={(e) => {
+                                        const val = e.target.value.toLowerCase().replace(/\s+/g, '').replace(/\.@/g, '@');
+                                        setEmail(val);
+                                    }}
+                                    placeholder="name.regno@vitapstudent.ac.in"
+                                    className={cn(
+                                        "w-full bg-[var(--color-surface)] border rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 transition-all uppercase tracking-tight",
+                                        !isEmailValid && email !== ''
+                                            ? "border-red-500/50 focus:ring-red-500 focus:bg-red-500/5"
+                                            : "border-[var(--color-border)] focus:ring-[#4338CA] focus:bg-[var(--color-card)]"
+                                    )}
                                 />
+                                <p className={cn(
+                                    "text-[9px] font-medium leading-relaxed transition-colors",
+                                    !isEmailValid && email !== '' ? "text-red-500" : "text-[var(--color-muted)]"
+                                )}>
+                                    Use your VIT-AP student email (must end with @vitapstudent.ac.in)
+                                </p>
                             </div>
 
                             {/* Password */}
                             <div className="space-y-3">
                                 <div className="flex justify-between items-center">
-                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                         <Lock className="w-3 h-3" />
                                         Access Key (Password)
                                     </label>
@@ -142,7 +171,7 @@ export default function LoginPage() {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="••••••••••••"
-                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all"
+                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all"
                                 />
                             </div>
 
@@ -155,8 +184,11 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
-                                disabled={loading}
-                                className="w-full py-4 text-sm font-black uppercase tracking-[0.2em] group"
+                                disabled={loading || !isVitapEmail(email)}
+                                className={cn(
+                                    "w-full py-4 text-sm font-black uppercase tracking-[0.2em] group shadow-[4px_4px_0px_rgba(67,56,202,0.2)] hover:shadow-[6px_6px_0px_rgba(67,56,202,0.3)] transition-all",
+                                    (loading || !isVitapEmail(email)) && "opacity-50 grayscale cursor-not-allowed shadow-none hover:shadow-none"
+                                )}
                             >
                                 {loading ? (
                                     <>
@@ -175,18 +207,37 @@ export default function LoginPage() {
                         <form onSubmit={handleSendResetEmail} className="flex flex-col gap-8">
                             {/* Email */}
                             <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
-                                    <User className="w-3 h-3" />
-                                    User Identity (Email)
+                                <label className="flex items-center justify-between gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
+                                    <div className="flex items-center gap-2">
+                                        <Mail className={cn("w-3 h-3", !isEmailValid && email !== '' ? "text-red-500" : "")} />
+                                        User Identity (Email)
+                                    </div>
+                                    {!isEmailValid && email !== '' && (
+                                        <span className="text-[8px] text-red-500 normal-case font-bold animate-pulse transition-colors">INVALID_FORMAT</span>
+                                    )}
                                 </label>
                                 <input
                                     type="email"
                                     required
                                     value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="USER.22XXX1234@VITAPSTUDENT.AC.IN"
-                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all uppercase tracking-tight"
+                                    onChange={(e) => {
+                                        const val = e.target.value.toLowerCase().replace(/\s+/g, '').replace(/\.@/g, '@');
+                                        setEmail(val);
+                                    }}
+                                    placeholder="name.regno@vitapstudent.ac.in"
+                                    className={cn(
+                                        "w-full bg-[var(--color-surface)] border rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 transition-all uppercase tracking-tight",
+                                        !isEmailValid && email !== ''
+                                            ? "border-red-500/50 focus:ring-red-500 focus:bg-red-500/5"
+                                            : "border-[var(--color-border)] focus:ring-[#4338CA] focus:bg-[var(--color-card)]"
+                                    )}
                                 />
+                                <p className={cn(
+                                    "text-[9px] font-medium leading-relaxed transition-colors",
+                                    !isEmailValid && email !== '' ? "text-red-500" : "text-[var(--color-muted)]"
+                                )}>
+                                    Use your VIT-AP student email (must end with @vitapstudent.ac.in)
+                                </p>
                             </div>
 
                             {error && (
@@ -205,8 +256,11 @@ export default function LoginPage() {
 
                             <Button
                                 type="submit"
-                                disabled={loading}
-                                className="w-full py-4 text-sm font-black uppercase tracking-[0.2em] group"
+                                disabled={loading || !isVitapEmail(email)}
+                                className={cn(
+                                    "w-full py-4 text-sm font-black uppercase tracking-[0.2em] group shadow-[4px_4px_0px_rgba(67,56,202,0.2)] hover:shadow-[6px_6px_0px_rgba(67,56,202,0.3)] transition-all",
+                                    (loading || !isVitapEmail(email)) && "opacity-50 grayscale cursor-not-allowed shadow-none hover:shadow-none"
+                                )}
                             >
                                 {loading ? (
                                     <>
@@ -228,32 +282,25 @@ export default function LoginPage() {
                                     setError(null)
                                     setMessage(null)
                                 }}
-                                className="text-[10px] font-mono font-bold text-[var(--color-muted)] hover:text-[var(--color-text)] uppercase tracking-widest"
+                                className="text-[10px] font-mono font-black text-[var(--color-muted)] hover:text-[var(--color-text)] uppercase tracking-widest transition-colors"
                             >
                                 ← BACK TO LOGIN
                             </button>
                         </form>
                     )}
 
-                    <div className="mt-10 pt-10 border-t border-[var(--color-border)] text-center">
-                        <p className="text-[8px] font-mono text-[var(--color-muted)] uppercase tracking-[0.3em]">
+                    <div className="mt-10 pt-10 border-t border-[var(--color-border)]/10 text-center">
+                        <p className="text-[8px] font-mono font-black text-[var(--color-muted)] uppercase tracking-[0.3em] transition-colors">
                             SECURE ADMINISTRATIVE GATEWAY
                         </p>
                         <div className="mt-10 text-center">
-                            <Link href="/" className="text-[10px] font-mono font-bold text-[var(--color-muted)] hover:text-[var(--color-text)] uppercase tracking-widest">
+                            <Link href="/" className="text-[10px] font-mono font-black text-[var(--color-muted)] hover:text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                 ← RETURN TO PUBLIC REPOSITORY
                             </Link>
                         </div>
                     </div>
 
                 </div>
-
-                {/* Footer Meta */}
-                {/* <div className="mt-10 text-center">
-                    <Link href="/" className="text-[10px] font-mono font-bold text-[#6B7280] hover:text-[#111827] uppercase tracking-widest">
-                        ← RETURN TO PUBLIC REPOSITORY
-                    </Link>
-                </div> */}
             </div>
         </div>
     )

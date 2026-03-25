@@ -7,6 +7,7 @@ import Card from './ui/Card'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
 import { sanitizeInput } from '@/lib/security'
+import { useAuth } from '@/context/AuthContext'
 
 const examCategories = [
     { label: 'CAT-1', full_name: 'Continuous Assessment Test 1' },
@@ -14,7 +15,8 @@ const examCategories = [
     { label: 'FAT', full_name: 'Final Assessment Test' },
 ]
 
-export default function UploadForm() {
+export default function UploadForm({ onUploadSuccess }: { onUploadSuccess?: () => void }) {
+    const { role } = useAuth()
     const [file, setFile] = useState<File | null>(null)
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState(false)
@@ -35,7 +37,7 @@ export default function UploadForm() {
     const validateAndSetFile = (droppedFile: File | undefined) => {
         if (!droppedFile) return
 
-        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg']
+        const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png']
         if (!allowedTypes.includes(droppedFile.type)) {
             setError('Invalid file type. Please upload a PDF or an image (JPG, PNG).')
             return
@@ -52,6 +54,13 @@ export default function UploadForm() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        // 1. Strict Admin Authorization Check
+        if (role !== 'admin') {
+            setError('Unauthorized access: Only admins can upload files.')
+            return
+        }
+
         if (!file) {
             setError('Please select a file to upload.')
             return
@@ -63,19 +72,25 @@ export default function UploadForm() {
         let filePath = ''
 
         try {
-            // 1. Sanitize all inputs
-            const cleanSubjectCode = sanitizeInput(subjectCode).toUpperCase()
-            const cleanSubjectTitle = sanitizeInput(subjectTitle)
-            const cleanPaperTitle = sanitizeInput(paperTitle)
+            // 2. Secure Backend Re-verification
+            const { data: { user: verifiedUser }, error: authError } = await supabase.auth.getUser()
+            if (authError || !verifiedUser || verifiedUser.user_metadata?.role !== 'admin') {
+                throw new Error('Unauthorized access: Admin privileges required for industrial ingestion.')
+            }
 
-            // 2. Generate safe filePath
+            // 3. Sanitize and strictly limit input lengths
+            const cleanSubjectCode = sanitizeInput(subjectCode).toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 10)
+            const cleanSubjectTitle = sanitizeInput(subjectTitle).slice(0, 100)
+            const cleanPaperTitle = sanitizeInput(paperTitle).slice(0, 150)
+
+            // 4. Generate safe filePath with high-entropy UUID
             const fileExt = file.name.split('.').pop()
-            const uniqueId = Math.random().toString(36).substring(2, 15)
-            const sanitizedBaseName = file.name.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_')
-            const fileName = `${Date.now()}-${uniqueId}-${sanitizedBaseName}`
-            filePath = `${cleanSubjectCode}/${fileName}.${fileExt}`
+            const uniqueId = crypto.randomUUID()
+            const sanitizedBaseName = file.name.split('.')[0].replace(/[^a-zA-Z0-9]/g, '_').slice(0, 50)
+            const fileName = `${Date.now()}-${uniqueId}-${sanitizedBaseName}.${fileExt}`
+            filePath = `${cleanSubjectCode}/${fileName}`
 
-            // 3. Upload to Supabase Storage
+            // 5. Upload to Supabase Storage ("pyqs" bucket)
             const { data: storageData, error: storageError } = await supabase.storage
                 .from('pyqs')
                 .upload(filePath, file, {
@@ -83,14 +98,19 @@ export default function UploadForm() {
                     upsert: false,
                 })
 
-            if (storageError) throw storageError
+            if (storageError) {
+                if (storageError.message.includes('bucket not found')) {
+                    throw new Error('Storage configuration error: "pyqs" bucket not found.')
+                }
+                throw storageError
+            }
 
-            // 4. Get public URL
+            // 6. Get public URL
             const { data: { publicUrl } } = supabase.storage
                 .from('pyqs')
                 .getPublicUrl(filePath)
 
-            // 5. Insert metadata into public.pyqs table
+            // 7. Insert metadata into public.pyqs table
             const { error: dbError } = await supabase
                 .from('pyqs')
                 .insert({
@@ -110,9 +130,11 @@ export default function UploadForm() {
             }
 
             setSuccess(true)
+            onUploadSuccess?.()
             resetForm()
         } catch (err: any) {
-            setError(err.message || 'An error occurred during the ingestion process.')
+            console.error('Upload Process Error:', err)
+            setError(err.message || 'The upload process failed. Please ensure you have admin privileges and try again.')
         } finally {
             setLoading(false)
         }

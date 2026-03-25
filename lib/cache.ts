@@ -106,6 +106,20 @@ export const CacheManager = {
         return request;
     },
 
+    /**
+     * Deduplicate any asynchronous operation by key
+     */
+    async deduplicate<T>(key: string, promiseFn: () => Promise<T>): Promise<T> {
+        if (pendingRequests[key]) return pendingRequests[key];
+
+        const promise = promiseFn().finally(() => {
+            delete pendingRequests[key];
+        });
+
+        pendingRequests[key] = promise;
+        return promise;
+    },
+
     remove(key: string): void {
         const fullKey = key.startsWith('pyqs_') ? key : `pyqs_${key}`;
         delete l1Cache[fullKey];

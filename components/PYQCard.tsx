@@ -1,13 +1,16 @@
 'use client'
 
 import Link from 'next/link'
-import { Check, Download, Eye, FileText, Share2, Folder, ShieldCheck } from 'lucide-react'
+import { Check, Download, Eye, FileText, Share2, Folder, ShieldCheck, Trash2 } from 'lucide-react'
 import { useState } from 'react'
+import { useRouter, usePathname } from 'next/navigation'
 import Badge from './Badge'
 import type { PYQ } from '@/lib/queries'
 import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectSlug } from '@/lib/subject-titles'
 import { useView } from '@/context/ViewContext'
 import { useSwipe } from '@/hooks/useSwipe'
+import { useAuth } from '@/context/AuthContext'
+import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 
 interface PYQCardProps {
@@ -16,7 +19,67 @@ interface PYQCardProps {
 
 export default function PYQCard({ pyq }: PYQCardProps) {
     const { viewPaper } = useView()
+    const { role } = useAuth()
+    const pathname = usePathname()
+    const router = useRouter()
     const [copied, setCopied] = useState(false)
+    const [isVisible, setIsVisible] = useState(true)
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [showConfirm, setShowConfirm] = useState(false)
+
+    // Only show delete in Explore or Admin sections
+    const canManage = role === 'admin' && (pathname === '/explore' || pathname.startsWith('/admin'))
+
+    const navigateToSubject = (e: React.MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        router.push(`/subject/${getSubjectSlug(pyq.subject_code)}`)
+    }
+
+    const handleDelete = async (e?: React.MouseEvent) => {
+        e?.preventDefault()
+        e?.stopPropagation()
+
+        if (!showConfirm) {
+            setShowConfirm(true)
+            setTimeout(() => setShowConfirm(false), 3000)
+            return
+        }
+
+        try {
+            setIsDeleting(true)
+
+            // Senior Security: Re-verify session before sensitive action
+            const { data: { user }, error: authError } = await supabase.auth.getUser()
+            if (authError || !user) throw new Error('Security verification failed. Please sign in again.')
+
+            // 1. Delete from Supabase Storage
+            const { error: storageError } = await supabase.storage
+                .from('pyqs')
+                .remove([pyq.file_path])
+
+            if (storageError) throw storageError
+
+            // 2. Delete from Supabase Database
+            const { error: dbError } = await supabase
+                .from('pyqs')
+                .delete()
+                .eq('id', pyq.id)
+
+            if (dbError) throw dbError
+
+            // 3. Dispatch global event for real-time hiding in usePapers hooks
+            window.dispatchEvent(new CustomEvent('pyq-deleted', { detail: { id: pyq.id } }))
+
+            setIsVisible(false)
+        } catch (error: any) {
+            console.error('Deletion failed:', error)
+            alert(`Failed to delete: ${error.message || 'Unknown error'}`)
+            setShowConfirm(false)
+        } finally {
+            setIsDeleting(false)
+        }
+    }
 
     const handleDownload = async (e?: React.MouseEvent) => {
         e?.preventDefault()
@@ -41,7 +104,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
     const handleShare = async (e?: React.MouseEvent) => {
         e?.preventDefault()
         e?.stopPropagation()
-        const shareUrl = `${window.location.origin}/subject/${pyq.subject_code}`
+        const shareUrl = `${window.location.origin}/subject/${getSubjectSlug(pyq.subject_code)}`
 
         try {
             if (navigator.share) {
@@ -65,6 +128,8 @@ export default function PYQCard({ pyq }: PYQCardProps) {
         onSwipeRight: () => viewPaper(pyq),
         threshold: 80
     })
+
+    if (!isVisible) return null
 
     return (
         <article
@@ -94,14 +159,14 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                 >
                     {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5 text-[var(--color-text)]" />}
                 </button>
-                <Link
-                    href={`/subject/${getSubjectSlug(pyq.subject_code, pyq.subject_title)}`}
+                <button
+                    onClick={navigateToSubject}
                     className="w-11 h-11 bg-[var(--color-text)]/10 hover:bg-[var(--color-text)] hover:text-[var(--color-surface)] flex items-center justify-center border border-[var(--color-border)] rounded-xl shadow-sm transition-all active:scale-95"
                     title="View All Files"
                     aria-label="View All Files"
                 >
                     <Folder className="w-5 h-5" />
-                </Link>
+                </button>
             </div>
 
             {/* Header */}
@@ -141,6 +206,20 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                         <Eye className="w-3.5 h-3.5 transition-transform duration-500 group-hover/btn:scale-110" />
                         <span>VIEW_FILE</span>
                     </button>
+                    {canManage && (
+                        <button
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className={cn(
+                                "flex items-center gap-2 px-5 py-2.5 bg-red-500/10 text-red-500 text-[10px] font-black uppercase tracking-widest rounded-xl border border-red-500/20 hover:bg-red-500/20 transition-all cursor-pointer",
+                                isDeleting && "opacity-50 cursor-not-allowed"
+                            )}
+                            title="Delete Source File & Metadata"
+                        >
+                            <Trash2 className={cn("w-3.5 h-3.5", isDeleting && "animate-pulse")} />
+                            <span>{isDeleting ? 'SYNCING...' : showConfirm ? 'CONFIRM?' : 'DELETE'}</span>
+                        </button>
+                    )}
                 </div>
                 <button
                     onClick={handleDownload}
@@ -169,13 +248,26 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                     >
                         {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
                     </button>
-                    <Link
-                        href={`/subject/${getSubjectSlug(pyq.subject_code, pyq.subject_title)}`}
+                    <button
+                        onClick={navigateToSubject}
                         className="w-11 h-11 flex items-center justify-center text-[var(--color-text)] bg-[var(--color-text)]/5 rounded-xl active:scale-95 transition-all border border-[var(--color-border)]/10"
                         aria-label="View Folder"
                     >
                         <Folder className="w-5 h-5" />
-                    </Link>
+                    </button>
+                    {canManage && (
+                        <button
+                            onClick={handleDelete}
+                            disabled={isDeleting}
+                            className={cn(
+                                "w-11 h-11 flex items-center justify-center text-red-500 bg-red-500/10 rounded-xl active:scale-95 transition-all border border-red-500/20",
+                                showConfirm && "bg-red-500 text-white border-red-500"
+                            )}
+                            aria-label="Delete"
+                        >
+                            <Trash2 className={cn("w-5 h-5", isDeleting && "animate-pulse")} />
+                        </button>
+                    )}
                 </div>
                 <button
                     onClick={handleDownload}

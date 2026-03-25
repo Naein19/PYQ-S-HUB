@@ -29,11 +29,60 @@ export default function AdminPage() {
     const { notices, addNotice, updateNotice, deleteNotice, toggleNotice } = useNotices()
     const [isExpanded, setIsExpanded] = useState(false)
     const [isSectionCollapsed, setIsSectionCollapsed] = useState(false)
+    const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
     const displayLimit = 5
 
-    // Activity feed data - memoized to prevent infinite loops
-    const filters = useMemo(() => ({}), [])
-    const { papers: recentPYQs, loading: papersLoading, error: papersError, hasMore, loadMore, loadingMore } = usePapers(filters, 1)
+    // Activity feed data - Live fetch from Supabase
+    const [recentPYQs, setRecentPYQs] = useState<any[]>([])
+    const [papersLoading, setPapersLoading] = useState(true)
+    const [papersError, setPapersError] = useState<any>(null)
+    const [hasMore, setHasMore] = useState(false)
+    const [loadingMore, setLoadingMore] = useState(false)
+    const [page, setPage] = useState(1)
+
+    const fetchPapers = async (pageNumber: number, append: boolean = false) => {
+        try {
+            if (append) setLoadingMore(true); else setPapersLoading(true)
+
+            const { data, error, count } = await supabase
+                .from('pyqs')
+                .select('*', { count: 'exact' })
+                .order('created_at', { ascending: false })
+                .range((pageNumber - 1) * 20, pageNumber * 20 - 1)
+
+            if (error) throw error
+
+            setRecentPYQs(prev => append ? [...prev, ...(data || [])] : (data || []))
+            setHasMore((data?.length || 0) + (append ? recentPYQs.length : 0) < (count || 0))
+        } catch (err) {
+            setPapersError(err)
+        } finally {
+            setPapersLoading(false)
+            setLoadingMore(false)
+        }
+    }
+
+    useEffect(() => {
+        fetchPapers(1)
+    }, [])
+
+    // Real-time sync listener for deletions made elsewhere (e.g. Explore section)
+    useEffect(() => {
+        const handleGlobalDelete = (event: any) => {
+            const deletedId = event.detail?.id
+            if (deletedId) {
+                setRecentPYQs(prev => prev.filter(p => p.id !== deletedId))
+            }
+        }
+        window.addEventListener('pyq-deleted', handleGlobalDelete as any)
+        return () => window.removeEventListener('pyq-deleted', handleGlobalDelete as any)
+    }, [])
+
+    const loadMore = () => {
+        const nextPage = page + 1
+        setPage(nextPage)
+        fetchPapers(nextPage, true)
+    }
 
     useEffect(() => {
         if (!authLoading) {
@@ -98,7 +147,7 @@ export default function AdminPage() {
                         <div className="pb-4 border-b border-[var(--color-border)]/10">
                             <h2 className="text-xl font-black text-[var(--color-text)] uppercase tracking-tighter">ARCHIVE INGESTION</h2>
                         </div>
-                        <UploadForm />
+                        <UploadForm onUploadSuccess={() => fetchPapers(1)} />
                     </div>
 
                     {/* Recent Repository Updates */}
@@ -142,12 +191,64 @@ export default function AdminPage() {
                                                         <span className="shrink-0">{new Date(pyq.created_at || '').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }).toUpperCase()}</span>
                                                     </div>
                                                 </div>
-                                                <Link
-                                                    href={`/viewer/${pyq.id}`}
-                                                    className="w-8 h-8 rounded-sm border border-[var(--color-border)] flex items-center justify-center bg-[var(--color-card)] hover:bg-[var(--color-border)] hover:text-[var(--color-card)] transition-all shadow-[2px_2px_0px_var(--color-border)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none shrink-0"
-                                                >
-                                                    <ChevronRight className="w-4 h-4" />
-                                                </Link>
+                                                <div className="flex items-center gap-2 shrink-0">
+                                                    <button
+                                                        onClick={async () => {
+                                                            if (confirmDeleteId !== pyq.id) {
+                                                                setConfirmDeleteId(pyq.id)
+                                                                setTimeout(() => setConfirmDeleteId(null), 3000)
+                                                                return
+                                                            }
+                                                            try {
+                                                                // Senior Security: Re-verify session before sensitive action
+                                                                const { data: { user }, error: authError } = await supabase.auth.getUser()
+                                                                if (authError || !user) throw new Error('Security verification failed. Please sign in again.')
+
+                                                                // 1. Storage remove - explicitly check for error
+                                                                const { error: storageError } = await supabase.storage.from('pyqs').remove([pyq.file_path])
+                                                                if (storageError) {
+                                                                    console.error('Storage removal error:', storageError)
+                                                                    // We continue to DB delete if storage fails (maybe file already gone),
+                                                                    // but we should log it.
+                                                                }
+
+                                                                // 2. DB delete - explicitly check for error
+                                                                const { error: dbError } = await supabase.from('pyqs').delete().eq('id', pyq.id)
+                                                                if (dbError) throw dbError
+
+                                                                // 3. Sync local state immediately to avoid ghost items
+                                                                setRecentPYQs(prev => prev.filter(p => p.id !== pyq.id))
+
+                                                                // 4. Sync local blacklist for other components (Experience/Explore)
+                                                                window.dispatchEvent(new CustomEvent('pyq-deleted', { detail: { id: pyq.id } }))
+
+                                                                setConfirmDeleteId(null)
+                                                            } catch (err) {
+                                                                console.error('Delete failed:', err)
+                                                                alert('Failed to delete resource totally. Please check your permissions.')
+                                                            }
+                                                        }}
+                                                        className={cn(
+                                                            "h-8 rounded-sm border flex items-center justify-center transition-all shadow-[2px_2px_0px_rgba(239,68,68,0.2)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none",
+                                                            confirmDeleteId === pyq.id
+                                                                ? "bg-red-500 text-white border-red-600 shadow-[2px_2px_0px_#B91C1C] px-3 w-auto"
+                                                                : "border-red-500/20 bg-red-500/5 text-red-500 hover:bg-red-500/10 w-8"
+                                                        )}
+                                                        title={confirmDeleteId === pyq.id ? "Click again to confirm" : "Delete Paper"}
+                                                    >
+                                                        {confirmDeleteId === pyq.id ? (
+                                                            <span className="text-[10px] font-black italic uppercase tracking-tighter">Confirm</span>
+                                                        ) : (
+                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                        )}
+                                                    </button>
+                                                    <Link
+                                                        href={`/viewer/${pyq.id}`}
+                                                        className="w-8 h-8 rounded-sm border border-[var(--color-border)] flex items-center justify-center bg-[var(--color-card)] hover:bg-[var(--color-border)] hover:text-[var(--color-card)] transition-all shadow-[2px_2px_0px_var(--color-border)] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none shrink-0"
+                                                    >
+                                                        <ChevronRight className="w-4 h-4" />
+                                                    </Link>
+                                                </div>
                                             </div>
                                         ))}
 

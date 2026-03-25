@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next'
-import { Inter, JetBrains_Mono } from 'next/font/google'
+// import { Inter, JetBrains_Mono } from 'next/font/google'
 import Script from 'next/script'
 import Navbar from '@/components/layout/Navbar'
 import dynamic from 'next/dynamic'
@@ -12,7 +12,12 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import TabManager from '@/components/layout/TabManager'
 import AnimatedFavicon from '@/components/AnimatedFavicon'
 import NoticeTicker from '@/components/layout/NoticeTicker'
+import GoogleAnalytics from '@/components/core/Analytics'
 
+// Standard system font fallbacks to fix build errors when Google Fonts are unreachable
+const inter = { variable: '--font-inter' }
+const jetbrains = { variable: '--font-jetbrains' }
+/* 
 const inter = Inter({
     subsets: ['latin'],
     variable: '--font-inter',
@@ -24,6 +29,7 @@ const jetbrains = JetBrains_Mono({
     variable: '--font-jetbrains',
     display: 'swap',
 })
+*/
 
 import JsonLd from '@/components/SEO/JsonLd'
 
@@ -100,6 +106,8 @@ import { ThemeProvider } from '@/context/ThemeContext'
 import { NoticeProvider } from '@/context/NoticeContext'
 import RootPreloader from '@/components/core/Preloader'
 
+import { PaperProvider } from '@/context/PaperContext'
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
@@ -117,19 +125,25 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     }}
                 />
                 {/* Google Analytics Tag */}
-                <Script
-                    src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-                    strategy="afterInteractive"
-                />
-                <Script id="google-analytics" strategy="afterInteractive">
-                    {`
-                        window.dataLayer = window.dataLayer || [];
-                        function gtag(){dataLayer.push(arguments);}
-                        gtag('js', new Date());
+                {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_GA_ID && (
+                    <>
+                        <Script
+                            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+                            strategy="afterInteractive"
+                        />
+                        <Script id="google-analytics" strategy="afterInteractive">
+                            {`
+                                window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
 
-                        gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');
-                    `}
-                </Script>
+                                gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                                    page_path: window.location.pathname,
+                                });
+                            `}
+                        </Script>
+                    </>
+                )}
             </head>
             <body className="bg-[var(--color-surface)] text-[var(--color-text)] min-h-screen flex flex-col font-sans">
                 <RootPreloader />
@@ -138,17 +152,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <AuthProvider>
                         <NoticeProvider>
                             <LoadingProvider>
-                                <ViewProvider>
-                                    <NoticeTicker />
-                                    <Navbar />
-                                    <main className="flex-1">{children}</main>
-                                    <Footer />
-                                    <TabManager />
-                                </ViewProvider>
+                                <PaperProvider>
+                                    <ViewProvider>
+                                        <NoticeTicker />
+                                        <Navbar />
+                                        <main className="flex-1">{children}</main>
+                                        <Footer />
+                                        <TabManager />
+                                    </ViewProvider>
+                                </PaperProvider>
                             </LoadingProvider>
                         </NoticeProvider>
                     </AuthProvider>
                 </ThemeProvider>
+                <GoogleAnalytics />
                 <Analytics />
                 <SpeedInsights />
             </body>

@@ -35,6 +35,7 @@ const courseMapping: Record<string, string> = {
     'ECE2005': 'Microcontroller and Applications',
     'ECE2014': 'Microprocessor and Microcontroller',
     'ECE2002': 'Computer Organization and Architecture',
+    'ECE2003': 'Control Systems Engineering',
     // FRL
     'FRL1001': 'French for Beginners',
     'FRL1004': 'SPANISH FOR Beginners',

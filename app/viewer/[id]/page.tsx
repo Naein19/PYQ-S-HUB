@@ -6,7 +6,7 @@ import { CacheManager } from '@/lib/cache'
 import Loading from '@/components/ui/Loading'
 import Button from '@/components/ui/Button'
 import { ChevronLeft, Download, Maximize2, Minimize2, ExternalLink, AlertTriangle, ShieldCheck } from 'lucide-react'
-import type { PYQ } from '@/lib/queries'
+import { getPaperById, type PYQ } from '@/lib/queries'
 
 export const dynamic = 'force-static'
 
@@ -29,16 +29,22 @@ export default function ViewerPage() {
     useEffect(() => {
         const fetchPaper = async () => {
             try {
-                // Fetch ALL papers from cache/static JSON
+                // 1. First try fetching from cache/static JSON (Performance optimized)
                 const allPapers = await CacheManager.fetch<PYQ[]>(
                     '/data/papers.json',
                     'papers'
                 )
 
-                const found = allPapers.find(p => p.id === params.id)
+                let found = allPapers.find(p => p.id === params.id)
+
+                // 2. Fallback to live Supabase fetch if not in cache (Fix for new uploads)
+                if (!found && typeof params.id === 'string') {
+                    console.log('Document not in cache, attempting live fetch...')
+                    found = await getPaperById(params.id) || undefined
+                }
 
                 if (!found) {
-                    throw new Error('Document not found in archive.')
+                    throw new Error('Document not found in archive. Please try again after the system syncs.')
                 }
 
                 setPaper(found)

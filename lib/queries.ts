@@ -1,4 +1,5 @@
 import { CacheManager } from '@/lib/cache';
+import { supabase } from '@/lib/supabase';
 
 export interface PYQ {
     id: string;
@@ -113,4 +114,22 @@ export async function getPaginatedPapers(filters: {
         count: filtered.length,
         hasMore: to < filtered.length
     };
+}
+
+/**
+ * Fetch a single paper by ID (Fallback to live Supabase fetch)
+ */
+export async function getPaperById(id: string): Promise<PYQ | null> {
+    const { data, error } = await supabase
+        .from('pyqs')
+        .select('*')
+        .eq('id', id)
+        .single()
+
+    if (error) {
+        console.error('Error fetching paper by ID:', error)
+        return null
+    }
+
+    return data as PYQ
 }

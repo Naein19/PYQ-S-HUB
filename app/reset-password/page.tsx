@@ -8,6 +8,8 @@ import Loading from '@/components/ui/Loading'
 import { supabase } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
+import { isVitapEmail } from '@/lib/validation'
+import { cn } from '@/lib/utils'
 
 export default function ResetPasswordPage() {
     const router = useRouter()
@@ -23,8 +25,14 @@ export default function ResetPasswordPage() {
         const checkSession = async () => {
             try {
                 const { data } = await supabase.auth.getSession()
-                if (data?.session) {
-                    setSessionValid(true)
+                if (data?.session?.user?.email) {
+                    // Final safety check: ensure the email in the reset session is a valid student email
+                    if (isVitapEmail(data.session.user.email)) {
+                        setSessionValid(true)
+                    } else {
+                        setError('Unauthorized identity detected. Access denied.')
+                        setSessionValid(false)
+                    }
                 } else {
                     setError('Invalid or expired reset link')
                     setSessionValid(false)
@@ -77,14 +85,17 @@ export default function ResetPasswordPage() {
 
     if (checkingSession) {
         return (
-            <div className="min-h-[calc(100vh-5rem)] bg-[var(--color-surface)] flex items-center justify-center">
-                <Loading size="lg" />
+            <div className="min-h-[calc(100vh-5rem)] bg-[var(--color-surface)] flex items-center justify-center transition-colors duration-300">
+                <div className="flex flex-col items-center gap-4">
+                    <Loading size="lg" />
+                    <p className="text-[10px] font-mono font-black text-[#4338CA] animate-pulse uppercase tracking-[0.2em]">Verifying Identity...</p>
+                </div>
             </div>
         )
     }
 
     return (
-        <div className="min-h-[calc(100vh-5rem)] bg-[var(--color-surface)] flex items-center justify-center px-6 py-12 animate-fade-in">
+        <div className="min-h-[calc(100vh-5rem)] bg-[var(--color-surface)] flex items-center justify-center px-6 py-12 animate-fade-in transition-colors duration-300">
             <div className="w-full max-w-md">
                 <div className="flex flex-col items-center mb-10 text-center">
                     <Link href="/" className="mb-8 group">
@@ -95,13 +106,13 @@ export default function ResetPasswordPage() {
                     <p className="text-[10px] font-mono font-black text-[#4338CA] uppercase tracking-[0.3em] mb-4">
                         Security Protocol
                     </p>
-                    <h1 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4 leading-none">
+                    <h1 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4 leading-none transition-colors">
                         Reset Access.
                     </h1>
-                    <p className="text-[var(--color-muted)] font-medium">Update your security token to restore access.</p>
+                    <p className="text-[var(--color-muted)] font-medium transition-colors">Update your security token to restore access.</p>
                 </div>
 
-                <Card className="p-10 relative overflow-hidden">
+                <Card className="p-10 relative overflow-hidden transition-colors border-[var(--color-border)] shadow-xl">
                     {loading && (
                         <div className="absolute top-0 left-0 right-0 h-1 bg-[var(--color-border)] overflow-hidden">
                             <div className="h-full bg-[#4338CA] animate-progress" style={{ width: '50%' }}></div>
@@ -128,7 +139,7 @@ export default function ResetPasswordPage() {
                             <div className="space-y-6">
                                 {/* New Password */}
                                 <div className="space-y-3">
-                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                         <Lock className="w-3 h-3" />
                                         New Access Key
                                     </label>
@@ -139,13 +150,13 @@ export default function ResetPasswordPage() {
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         placeholder="••••••••••••"
-                                        className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all disabled:opacity-50"
+                                        className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all disabled:opacity-50"
                                     />
                                 </div>
 
                                 {/* Confirm Password */}
                                 <div className="space-y-3">
-                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
                                         <Lock className="w-3 h-3" />
                                         Confirm Access Key
                                     </label>
@@ -156,7 +167,7 @@ export default function ResetPasswordPage() {
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         placeholder="••••••••••••"
-                                        className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] transition-all disabled:opacity-50"
+                                        className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all disabled:opacity-50"
                                     />
                                 </div>
                             </div>
@@ -171,7 +182,10 @@ export default function ResetPasswordPage() {
                             <Button
                                 type="submit"
                                 disabled={loading || !sessionValid}
-                                className="w-full py-4 text-sm font-black uppercase tracking-[0.2em] group"
+                                className={cn(
+                                    "w-full py-4 text-sm font-black uppercase tracking-[0.2em] group shadow-[4px_4px_0px_rgba(67,56,202,0.2)] hover:shadow-[6px_6px_0px_rgba(67,56,202,0.3)] transition-all",
+                                    (loading || !sessionValid) && "opacity-50 grayscale cursor-not-allowed shadow-none hover:shadow-none"
+                                )}
                             >
                                 {loading ? (
                                     <>
@@ -189,7 +203,7 @@ export default function ResetPasswordPage() {
                             {!sessionValid && (
                                 <Link
                                     href="/login"
-                                    className="text-[10px] font-mono font-bold text-[#4338CA] hover:underline uppercase tracking-tight text-center"
+                                    className="text-[10px] font-mono font-black text-[#4338CA] hover:underline uppercase tracking-tight text-center transition-colors"
                                 >
                                     Return to Login
                                 </Link>
@@ -198,8 +212,8 @@ export default function ResetPasswordPage() {
                     )}
                 </Card>
 
-                <div className="mt-10 pt-10 border-t border-[var(--color-border)] text-center">
-                    <p className="text-[8px] font-mono text-[var(--color-muted)] uppercase tracking-[0.3em]">
+                <div className="mt-10 pt-10 border-t border-[var(--color-border)]/10 text-center">
+                    <p className="text-[8px] font-mono font-black text-[var(--color-muted)] uppercase tracking-[0.3em] transition-colors">
                         SECURE ADMINISTRATIVE GATEWAY
                     </p>
                 </div>

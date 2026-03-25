@@ -35,7 +35,7 @@ export function middleware(request: NextRequest) {
     const response = NextResponse.next();
 
     // Security Headers
-    response.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://vitals.vercel-insights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co; connect-src 'self' https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co https://vitals.vercel-insights.com; frame-src 'self' https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co; object-src 'self' blob:; frame-ancestors 'none'; upgrade-insecure-requests;");
+    response.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://va.vercel-scripts.com https://vitals.vercel-insights.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob: https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co https://www.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co https://vitals.vercel-insights.com https://www.google-analytics.com; frame-src 'self' https://vvpunocthcpgwtdywnny.supabase.co https://*.supabase.co; object-src 'self' blob:; frame-ancestors 'none'; upgrade-insecure-requests;");
     response.headers.set('X-Frame-Options', 'DENY');
     response.headers.set('X-Content-Type-Options', 'nosniff');
     response.headers.set('Referrer-Policy', 'no-referrer');

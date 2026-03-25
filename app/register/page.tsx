@@ -8,6 +8,7 @@ import Card from '@/components/ui/Card'
 import { supabase } from '@/lib/supabase'
 import { departments } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
+import { normalizeEmail, isVitapEmail } from '@/lib/validation'
 
 export default function RegisterPage() {
     const [formData, setFormData] = useState({
@@ -22,10 +23,6 @@ export default function RegisterPage() {
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
-
-    const validateEmail = (email: string) => {
-        return email.toLowerCase().endsWith('@vitapstudent.ac.in')
-    }
 
     const getSemesterOptions = (programType: string) => {
         const maxSem = programType === 'BTech' ? 8 : 4
@@ -45,14 +42,16 @@ export default function RegisterPage() {
         setError(null)
         setSuccess(false)
 
-        // Basic Validation
-        if (!formData.name || !formData.email || !formData.password || !formData.department) {
+        // PART 1 & 4: Normalize and Validate before Auth
+        const normalizedEmail = normalizeEmail(formData.email)
+
+        if (!formData.name || !normalizedEmail || !formData.password || !formData.department) {
             setError('All fields are required.')
             return
         }
 
-        if (!validateEmail(formData.email)) {
-            setError('Only VIT-AP student email addresses are allowed.')
+        if (!isVitapEmail(normalizedEmail)) {
+            setError('Enter a valid VIT-AP email (e.g., name.regno@vitapstudent.ac.in)')
             return
         }
 
@@ -65,7 +64,7 @@ export default function RegisterPage() {
 
         try {
             const { error: signUpError } = await supabase.auth.signUp({
-                email: formData.email,
+                email: normalizedEmail,
                 password: formData.password,
                 options: {
                     data: {
@@ -86,6 +85,8 @@ export default function RegisterPage() {
             setIsLoading(false)
         }
     }
+
+    const isEmailValid = formData.email === '' || isVitapEmail(formData.email)
 
     return (
         <div className="min-h-[calc(100vh-5rem)] bg-[var(--color-surface)] flex items-center justify-center px-6 py-16 animate-fade-in transition-colors duration-300">
@@ -113,7 +114,7 @@ export default function RegisterPage() {
                             </div>
                             <h2 className="text-xl font-black text-[#111827] uppercase tracking-tight mb-3">Verification Sent</h2>
                             <p className="text-sm text-[#6B7280] leading-relaxed mb-8">
-                                We've sent a verification link to <span className="font-bold text-[#111827]">{formData.email}</span>. Please check your inbox to activate your account.
+                                We've sent a verification link to <span className="font-bold text-[#111827]">{normalizeEmail(formData.email)}</span>. Please check your inbox to activate your account.
                             </p>
                             <Link href="/login" className="w-full">
                                 <Button variant="secondary" className="w-full py-3 text-xs font-black uppercase tracking-widest">
@@ -149,24 +150,43 @@ export default function RegisterPage() {
                                     placeholder="ENT_STRING_NAME"
                                     className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all uppercase tracking-tight"
                                 />
-
                             </div>
 
-                            {/* Email */}
+                            {/* Email Section */}
                             <div className="space-y-3">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
-                                    <Mail className="w-3 h-3" />
-                                    Academic Email
+                                <label className="flex items-center justify-between gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest transition-colors">
+                                    <div className="flex items-center gap-2">
+                                        <Mail className={cn("w-3 h-3", !isEmailValid && formData.email !== '' ? "text-red-500" : "")} />
+                                        Academic Email
+                                    </div>
+                                    {!isEmailValid && formData.email !== '' && (
+                                        <span className="text-[8px] text-red-500 normal-case font-bold animate-pulse">INVALID_FORMAT</span>
+                                    )}
                                 </label>
                                 <input
                                     type="email"
                                     required
                                     value={formData.email}
-                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    placeholder="IDENT_STRING@VITAPSTUDENT.AC.IN"
-                                    className="w-full bg-[var(--color-surface)] border border-[var(--color-border)] rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 focus:ring-[#4338CA] focus:bg-[var(--color-card)] transition-all uppercase tracking-tight"
+                                    onChange={(e) => {
+                                        // PART 1 & 3: Normalize and Auto-fix typos
+                                        const val = e.target.value.toLowerCase().replace(/\s+/g, '').replace(/\.@/g, '@');
+                                        setFormData({ ...formData, email: val });
+                                    }}
+                                    placeholder="name.regno@vitapstudent.ac.in"
+                                    className={cn(
+                                        "w-full bg-[var(--color-surface)] border rounded-sm px-4 py-3 text-xs font-bold text-[var(--color-text)] placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-2 transition-all uppercase tracking-tight",
+                                        !isEmailValid && formData.email !== ''
+                                            ? "border-red-500/50 focus:ring-red-500 focus:bg-red-500/5"
+                                            : "border-[var(--color-border)] focus:ring-[#4338CA] focus:bg-[var(--color-card)]"
+                                    )}
                                 />
-
+                                {/* PART 6: Helper Text */}
+                                <p className={cn(
+                                    "text-[9px] font-medium leading-relaxed transition-colors",
+                                    !isEmailValid && formData.email !== '' ? "text-red-500" : "text-[var(--color-muted)]"
+                                )}>
+                                    Use your VIT-AP student email (must end with @vitapstudent.ac.in)
+                                </p>
                             </div>
 
                             {/* Program Type & Department */}
@@ -226,7 +246,6 @@ export default function RegisterPage() {
                                                     : "bg-[var(--color-card)] text-[var(--color-text)] border-[var(--color-border)]/10 hover:border-[var(--color-border)]"
                                             )}
                                         >
-
                                             SEM {opt.value}
                                         </button>
                                     ))}
@@ -262,7 +281,11 @@ export default function RegisterPage() {
                             <Button
                                 type="submit"
                                 isLoading={isLoading}
-                                className="w-full py-4 text-sm font-black uppercase tracking-[0.2em] group"
+                                disabled={!isVitapEmail(formData.email)}
+                                className={cn(
+                                    "w-full py-4 text-sm font-black uppercase tracking-[0.2em] group shadow-[4px_4px_0px_rgba(67,56,202,0.2)] hover:shadow-[6px_6px_0px_rgba(67,56,202,0.3)] transition-all",
+                                    !isVitapEmail(formData.email) && "opacity-50 grayscale cursor-not-allowed shadow-none hover:shadow-none"
+                                )}
                             >
                                 GENERATE IDENTITY
                                 {!isLoading && <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-1" />}
@@ -272,7 +295,7 @@ export default function RegisterPage() {
 
                     {!success && (
                         <div className="mt-10 pt-10 border-t border-[var(--color-border)]/10 text-center">
-                            <p className="text-[10px] font-mono font-bold text-[var(--color-muted)] uppercase tracking-widest mb-6 transition-colors">
+                            <p className="text-[10px] font-mono font-black text-[var(--color-muted)] uppercase tracking-widest mb-6 transition-colors">
                                 Already have an identity?
                             </p>
                             <Link href="/login">

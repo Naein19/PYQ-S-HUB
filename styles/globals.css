@@ -4,6 +4,8 @@
 
 @layer base {
     :root {
+        --font-inter: 'Inter', system-ui, -apple-system, sans-serif;
+        --font-jetbrains: 'JetBrains Mono', ui-monospace, monospace;
         --color-surface: #EAE0D5;
         --color-surface-rgb: 234, 224, 213;
         --color-card: #FFFFFF;
