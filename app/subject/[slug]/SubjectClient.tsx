@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense } from 'react'
+import { useState, useEffect, Suspense, useMemo } from 'react'
 import Link from 'next/link'
 import { Check, ArrowLeft, BookOpen, Clock, FileText, Share2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -15,23 +15,36 @@ import { PYQ } from '@/lib/queries'
 
 interface SubjectClientProps {
     slug: string
+    initialPapers?: PYQ[]
 }
 
-export default function SubjectClient({ slug }: SubjectClientProps) {
+export default function SubjectClient({ slug, initialPapers = [] }: SubjectClientProps) {
     const subjectCode = getSubjectCodeFromSlug(slug)
     const [activeFilter, setActiveFilter] = useState('ALL')
     const [copied, setCopied] = useState(false)
-    const [isValid, setIsValid] = useState<boolean | null>(null)
+    const [isValid, setIsValid] = useState<boolean | null>(initialPapers.length > 0 ? true : null)
+
     const { allPapers, loading: papersLoading } = usePaperContext()
-    const { papers, loading: filterLoading, error } = useSubjectPapers(subjectCode, activeFilter === 'ALL' ? undefined : activeFilter)
+    const { papers: fetchedPapers, loading: filterLoading } = useSubjectPapers(subjectCode, activeFilter === 'ALL' ? undefined : activeFilter)
+
+    // Use initialPapers if available and no filter is active, otherwise use fetchedPapers
+    const papers = useMemo(() => {
+        if (activeFilter === 'ALL' && initialPapers.length > 0 && fetchedPapers.length === 0) {
+            return initialPapers;
+        }
+        return fetchedPapers;
+    }, [activeFilter, initialPapers, fetchedPapers]);
+
+    const loading = filterLoading && initialPapers.length === 0;
 
     // Instant Route Validation using Centralized State
     useEffect(() => {
+        if (isValid !== null) return;
         if (!papersLoading && allPapers.length > 0) {
             const exists = allPapers.some((p: PYQ) => p.subject_code === subjectCode)
             setIsValid(exists)
         }
-    }, [allPapers, papersLoading, subjectCode])
+    }, [allPapers, papersLoading, subjectCode, isValid])
 
     const handleShare = async () => {
         try {
@@ -171,7 +184,7 @@ export default function SubjectClient({ slug }: SubjectClientProps) {
                     </Card>
                 ) : (
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {papers.map((pyq) => (
+                        {papers.map((pyq: PYQ) => (
                             <PYQCard key={pyq.id} pyq={pyq} />
                         ))}
                     </div>

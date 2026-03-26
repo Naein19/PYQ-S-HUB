@@ -1,15 +1,19 @@
 import { MetadataRoute } from 'next'
-import { getSubjects, Subject } from '@/lib/queries'
+import { Subject } from '@/lib/queries'
 import { getSubjectSlug } from '@/lib/subject-titles'
+import fs from 'fs'
+import path from 'path'
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://pyqs-hub.vercel.app'
 
     let subjects: Subject[] = []
     try {
-        subjects = await getSubjects()
+        const filePath = path.join(process.cwd(), 'public/data/subjects.json')
+        const fileContent = fs.readFileSync(filePath, 'utf8')
+        subjects = JSON.parse(fileContent)
     } catch (e) {
-        console.error('Failed to fetch subjects for sitemap', e)
+        console.error('Failed to read subjects for sitemap from filesystem', e)
     }
 
     const subjectUrls = subjects.map((subject: Subject) => ({

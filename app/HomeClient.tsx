@@ -15,13 +15,20 @@ import { Suspense } from 'react';
 import SubjectCardSkeleton from '@/components/pyq/SubjectCardSkeleton';
 import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton';
 
-export default function HomeClient() {
-    const [subjects, setSubjects] = useState<Subject[]>([]);
-    const [recentPYQs, setRecentPYQs] = useState<PYQ[]>([]);
-    const [loading, setLoading] = useState(true);
+export default function HomeClient({
+    initialSubjects = [],
+    initialRecentPYQs = []
+}: {
+    initialSubjects?: Subject[],
+    initialRecentPYQs?: PYQ[]
+}) {
+    const [subjects, setSubjects] = useState<Subject[]>(initialSubjects);
+    const [recentPYQs, setRecentPYQs] = useState<PYQ[]>(initialRecentPYQs);
+    const [loading, setLoading] = useState(initialSubjects.length === 0);
 
     useEffect(() => {
         const loadHomeData = async () => {
+            if (initialSubjects.length > 0 && initialRecentPYQs.length > 0) return;
             try {
                 const [subjectsData, papersData] = await Promise.all([
                     getSubjects(),
@@ -36,7 +43,7 @@ export default function HomeClient() {
             }
         };
         loadHomeData();
-    }, []);
+    }, [initialSubjects.length, initialRecentPYQs.length]);
 
     return (
         <div>

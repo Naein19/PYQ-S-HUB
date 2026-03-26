@@ -1,9 +1,33 @@
 import { Metadata } from 'next'
 import SubjectClient from './SubjectClient'
 import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectCodeFromSlug } from '@/lib/subject-titles'
+import fs from 'fs'
+import path from 'path'
+import { Subject, PYQ } from '@/lib/queries'
 
 interface SubjectPageProps {
     params: { slug: string }
+}
+
+// Helper to generate slug consistently with build-time logic
+function getSubjectSlug(code: string, title?: string): string {
+    const safeTitle = title ? title.toLowerCase().replace(/[^a-z0-9]+/g, '-') : 'archive'
+    return `${code.toLowerCase()}-${safeTitle}`
+}
+
+export async function generateStaticParams() {
+    try {
+        const filePath = path.join(process.cwd(), 'public/data/subjects.json')
+        const fileContent = fs.readFileSync(filePath, 'utf8')
+        const subjects: Subject[] = JSON.parse(fileContent)
+
+        return subjects.map((s) => ({
+            slug: getSubjectSlug(s.subject_code, s.subject_title),
+        }))
+    } catch (error) {
+        console.error('Error generating static params for subject:', error)
+        return []
+    }
 }
 
 export async function generateMetadata({ params }: SubjectPageProps): Promise<Metadata> {
@@ -34,6 +58,19 @@ export async function generateMetadata({ params }: SubjectPageProps): Promise<Me
 
 export const dynamic = 'force-static'
 
-export default function SubjectPage({ params }: SubjectPageProps) {
-    return <SubjectClient slug={params.slug} />
+export default async function SubjectPage({ params }: SubjectPageProps) {
+    const subjectCode = getSubjectCodeFromSlug(params.slug)
+
+    // Pre-fetch papers for this subject to pass to client
+    let initialPapers: PYQ[] = []
+    try {
+        const filePath = path.join(process.cwd(), 'public/data/papers.json')
+        const fileContent = fs.readFileSync(filePath, 'utf8')
+        const allPapers: PYQ[] = JSON.parse(fileContent)
+        initialPapers = allPapers.filter(p => p.subject_code === subjectCode)
+    } catch (error) {
+        console.error('Error reading papers.json in SubjectPage:', error)
+    }
+
+    return <SubjectClient slug={params.slug} initialPapers={initialPapers} />
 }
