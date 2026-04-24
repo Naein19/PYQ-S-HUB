@@ -37,6 +37,13 @@ export default function DashboardPage() {
     const filters = useMemo(() => ({}), [])
     const { papers: recentPYQs, loading: papersLoading } = usePapers(filters, 1)
     const { subjects, loading: subjectsLoading } = useSubjects()
+    const [extractionToken, setExtractionToken] = React.useState('')
+    const [mounted, setMounted] = React.useState(false)
+
+    useEffect(() => {
+        setMounted(true)
+        setExtractionToken(Math.random().toString(36).substr(2, 9).toUpperCase())
+    }, [])
 
     useEffect(() => {
         if (!authLoading && !user) {
@@ -47,7 +54,8 @@ export default function DashboardPage() {
     if (!user && !authLoading) return null
 
     return (
-        <div className="bg-[var(--color-surface)] min-h-screen animate-fade-in pb-20">
+        <>
+            <div className="bg-[var(--color-surface)] min-h-screen animate-fade-in pb-20">
             {/* Top Security Bar */}
             <div className="bg-[var(--color-border)] text-white py-2 overflow-hidden border-b border-[#4338CA]/30">
                 <div className="container-main flex items-center justify-between">
@@ -62,7 +70,7 @@ export default function DashboardPage() {
                         </div>
                     </div>
                     <div className="font-mono text-[9px] font-black uppercase tracking-[0.2em] text-white/50">
-                        EXTRACTION_TOKEN: {Math.random().toString(36).substr(2, 9).toUpperCase()}
+                        EXTRACTION_TOKEN: {extractionToken || 'INITIALIZING...'}
                     </div>
                 </div>
             </div>
@@ -284,6 +292,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
-        </div>
+            </div>
+        </>
     )
 }

@@ -13,6 +13,7 @@ import TabManager from '@/components/layout/TabManager'
 import AnimatedFavicon from '@/components/AnimatedFavicon'
 import NoticeTicker from '@/components/layout/NoticeTicker'
 import GoogleAnalytics from '@/components/core/Analytics'
+import FloatingSupportButton from '@/components/FloatingSupportButton'
 
 // Standard system font fallbacks to fix build errors when Google Fonts are unreachable
 const inter = { variable: '--font-inter' }
@@ -157,6 +158,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                                         <NoticeTicker />
                                         <Navbar />
                                         <main className="flex-1">{children}</main>
+                                        <FloatingSupportButton />
                                         <Footer />
                                         <TabManager />
                                     </ViewProvider>

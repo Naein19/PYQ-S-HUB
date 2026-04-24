@@ -43,9 +43,9 @@ const courseMapping: Record<string, string> = {
     'FRL2002': 'PROFICIENCY OF SPANISH',
     'FRL2004': 'KOREAN FOR Beginners',
     // MAT
-    'MAT1003': 'Calculus and Laplace Transforms',
+    'MAT1003': 'Discrete Mathematical Structures',
     'MAT2003': 'Applied Numerical Methods',
-    'MAT1011': 'Calculus for Engineers',
+    'MAT1011': 'Applied Statistics',
     // MGT
     'MGT1040': 'Financial Management',
     'MGT2006': 'Entrepreneurship',

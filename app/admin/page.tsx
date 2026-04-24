@@ -16,6 +16,8 @@ import { useNotices } from '@/context/NoticeContext'
 import { Trash2, Plus, Power, Megaphone, ChevronRight, ChevronDown, ChevronUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import Badge from '@/components/Badge'
+import AdminSupportTickets from '@/components/AdminSupportTickets'
+import AdminCollapsibleSection from '@/components/AdminCollapsibleSection'
 
 const adminStats = [
     { label: 'Total Paper Archive', value: '1,240', icon: FileText },
@@ -294,10 +296,12 @@ export default function AdminPage() {
                             </Card>
                         )}
 
-                        {/* NOTICE MANAGEMENT SECTION */}
-                        <div id="notices" className="pt-12 space-y-8">
-                            <div className="pb-4 border-b border-[#111827]/10 flex items-center justify-between">
-                                <h2 className="text-xl font-black text-[var(--color-text)] uppercase tracking-tighter">GLOBAL NOTICES</h2>
+                        <AdminCollapsibleSection 
+                            title="GLOBAL NOTICES" 
+                            badge="NETWORK_ACTIVE"
+                            defaultOpen={false}
+                        >
+                            <div className="pt-4 flex justify-end">
                                 <Button
                                     size="sm"
                                     variant="primary"
@@ -309,7 +313,7 @@ export default function AdminPage() {
                                 </Button>
                             </div>
 
-                            <div className="space-y-4">
+                            <div className="space-y-4 mt-8">
                                 {notices.map((notice) => (
                                     <Card key={notice.id} noHover className="bg-[var(--color-card)] border-dashed border-2 border-[var(--color-border)]/30">
                                         <div className="flex flex-col gap-4">
@@ -364,7 +368,10 @@ export default function AdminPage() {
                                     </Card>
                                 ))}
                             </div>
-                        </div>
+                        </AdminCollapsibleSection>
+
+                        {/* SUPPORT TICKETS SECTION */}
+                        <AdminSupportTickets />
                     </div>
                 </div>
             </div>

@@ -153,11 +153,11 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             <div className="hidden md:flex absolute top-4 right-4 gap-3 z-20">
                 <button
                     onClick={handleShare}
-                    className="w-11 h-11 bg-[var(--color-card)] hover:bg-[var(--color-text)] hover:text-[var(--color-surface)] flex items-center justify-center border border-[var(--color-border)] rounded-xl shadow-sm transition-all active:scale-95"
+                    className="w-11 h-11 bg-[var(--color-card)] hover:border-[#4338CA] hover:shadow-md flex items-center justify-center border border-[var(--color-border)] rounded-xl transition-all duration-200 ease-in-out active:scale-95 group/share"
                     title="Share Repository"
                     aria-label="Share Repository"
                 >
-                    {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5 text-[var(--color-text)]" />}
+                    {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5 text-[var(--color-text)] group-hover/share:text-[#4338CA] transition-colors" />}
                 </button>
                 <button
                     onClick={navigateToSubject}

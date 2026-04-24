@@ -17,7 +17,8 @@ import {
     AlertCircle,
     ShieldCheck,
     Activity,
-    BookOpen
+    BookOpen,
+    Ticket
 } from 'lucide-react'
 import Loading from '@/components/ui/Loading'
 import { useAuth } from '@/context/AuthContext'
@@ -25,6 +26,7 @@ import { supabase } from '@/lib/supabase'
 import Button from '@/components/ui/Button'
 import Card from '@/components/ui/Card'
 import Select from '@/components/ui/Select'
+import SupportTicketModal from '@/components/SupportTicketModal'
 import { departments } from '@/lib/mock-data'
 import { cn } from '@/lib/utils'
 
@@ -52,6 +54,7 @@ export default function SettingsPage() {
     const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
     const [isDeletingAccount, setIsDeletingAccount] = useState(false)
     const [showDeleteModal, setShowDeleteModal] = useState(false)
+    const [showSupportModal, setShowSupportModal] = useState(false)
     const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
 
     useEffect(() => {
@@ -236,7 +239,11 @@ export default function SettingsPage() {
                                 <p className="text-[11px] text-[#6B7280] font-medium leading-relaxed mb-6">
                                     Identity errors or archival discrepancies? Submit a synchronization ticket to high-level clearance.
                                 </p>
-                                <Button variant="secondary" className="w-full text-[10px] font-black tracking-widest uppercase py-3">
+                                <Button 
+                                    variant="secondary" 
+                                    onClick={() => setShowSupportModal(true)}
+                                    className="w-full text-[10px] font-black tracking-widest uppercase py-3"
+                                >
                                     OPEN_TICKET
                                 </Button>
                             </div>
@@ -460,6 +467,12 @@ export default function SettingsPage() {
                     </div>
                 </div>
             )}
+
+            {/* Support Ticket Modal */}
+            <SupportTicketModal 
+                isOpen={showSupportModal} 
+                onClose={() => setShowSupportModal(false)} 
+            />
         </div>
     )
 }
