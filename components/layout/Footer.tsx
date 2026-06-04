@@ -26,7 +26,7 @@ const footerLinks = {
 }
 
 const socialLinks = [
-    { icon: Mail, href: 'mailto:naveen.23bce9344@vitapstudent.ac.in', label: 'Email' },
+    { icon: Mail, href: 'mailto:contact@naveen-tadaka.me', label: 'Email' },
     { icon: Github, href: 'https://github.com/Naein19', label: 'GitHub' },
     { icon: Linkedin, href: 'https://www.linkedin.com/in/naveen-tadaka', label: 'LinkedIn' },
 ]

@@ -18,7 +18,7 @@ export default function JsonLd() {
         "contactPoint": {
             "@type": "ContactPoint",
             "contactType": "technical support",
-            "email": "support@pyqshub.vercel.app"
+            "email": "contact@naveen-tadaka.me"
         }
     };
 

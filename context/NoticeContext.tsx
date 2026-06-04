@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
-import { cachedFetch } from '@/lib/data-fetcher'
 import { sanitizeInput } from '@/lib/security'
 
 export interface Notice {
@@ -29,25 +28,57 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
     const [notices, setNotices] = useState<Notice[]>([])
     const [loading, setLoading] = useState(true)
 
-    // Initial fetch - Only ONE fetch per session (or from cache)
+    // Initial fetch from Supabase + Real-time subscription
     useEffect(() => {
-        const fetchNotices = async () => {
+        const setupNotices = async () => {
             try {
                 setLoading(true)
-                // Fetch from static JSON with 24h cache strategy
-                const data = await cachedFetch<Notice[]>(
-                    '/data/notices.json',
-                    'pyqs_notices'
-                )
-                setNotices(data || [])
+                // Fetch initial notices from Supabase
+                const { data, error } = await supabase
+                    .from('notices')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+
+                if (error) {
+                    console.error('Error fetching notices:', error)
+                } else {
+                    setNotices(data || [])
+                }
+
+                // Set up real-time subscription for INSERT/UPDATE/DELETE
+                const subscription = supabase
+                    .channel('notices_channel')
+                    .on(
+                        'postgres_changes',
+                        { event: '*', schema: 'public', table: 'notices' },
+                        (payload: any) => {
+                            if (payload.eventType === 'INSERT') {
+                                setNotices(prev => [payload.new as Notice, ...prev])
+                            } else if (payload.eventType === 'UPDATE') {
+                                setNotices(prev =>
+                                    prev.map(n => n.id === payload.new.id ? (payload.new as Notice) : n)
+                                )
+                            } else if (payload.eventType === 'DELETE') {
+                                setNotices(prev => prev.filter(n => n.id !== payload.old.id))
+                            }
+                        }
+                    )
+                    .subscribe()
+
+                return () => {
+                    subscription.unsubscribe()
+                }
             } catch (error) {
-                console.error('Error fetching notices:', error)
+                console.error('Error setting up notices:', error)
             } finally {
                 setLoading(false)
             }
         }
 
-        fetchNotices()
+        const cleanup = setupNotices()
+        return () => {
+            cleanup?.then(fn => fn?.())
+        }
     }, [])
 
     const addNotice = async (text: string, type: 'all' | 'signed') => {
