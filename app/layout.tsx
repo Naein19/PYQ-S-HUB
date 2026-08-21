@@ -116,12 +116,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang="en" suppressHydrationWarning className={`${inter.variable} ${jetbrains.variable} scroll-smooth`}>
             <head>
                 <JsonLd />
-                {/* Preload Favicon Animation Frames to prevent repeated network requests */}
-                <link rel="preload" href="/favicon-frame1.png" as="image" />
-                <link rel="preload" href="/favicon-frame2.png" as="image" />
-                <link rel="preload" href="/favicon-frame3.png" as="image" />
-                <link rel="preload" href="/favicon-frame4.png" as="image" />
-
                 <script
                     dangerouslySetInnerHTML={{
                         __html: `(function(){try{var t=localStorage.getItem('pyqs-theme');var d=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='dark'||(t===null&&d)){document.documentElement.classList.add('dark')}}catch(e){}})()`,
