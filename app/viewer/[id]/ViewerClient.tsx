@@ -41,7 +41,6 @@ export default function ViewerPage({ initialPaper }: { initialPaper: PYQ | null 
 
                 // 2. Fallback to live Supabase fetch if not in cache (Fix for new uploads)
                 if (!found && typeof params.id === 'string') {
-                    console.log('Document not in cache, attempting live fetch...')
                     found = await getPaperById(params.id) || undefined
                 }
 

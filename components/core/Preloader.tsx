@@ -12,8 +12,6 @@ export default function RootPreloader() {
     useEffect(() => {
         const preloadData = async () => {
             try {
-                console.log('[Preloader] Priming global cache...');
-
                 // 1. Preload Subjects
                 const subjectsPromise = getSubjects();
 
@@ -28,8 +26,6 @@ export default function RootPreloader() {
 
                 // Wait for all to finish
                 await Promise.all([subjectsPromise, papersPromise, noticesPromise]);
-
-                console.log('[Preloader] Cache primed successfully. Edge requests now minimized.');
             } catch (error) {
                 console.error('[Preloader] Failed to prime cache:', error);
             }

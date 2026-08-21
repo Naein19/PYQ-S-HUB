@@ -35,8 +35,6 @@ export const ticketService = {
             }])
             .select()
 
-        console.log("INSERT RESPONSE:", response.data, response.error)
-
         if (response.error) throw response.error
         return response.data?.[0]
     },
@@ -46,8 +44,6 @@ export const ticketService = {
             .from('support_tickets')
             .select('*')
             .order('created_at', { ascending: false })
-
-        console.log("FETCH RESPONSE:", response.data, response.error)
 
         if (response.error) {
             console.error(response.error)
