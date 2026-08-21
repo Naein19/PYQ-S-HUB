@@ -36,35 +36,35 @@ export default function CookiesPage() {
             </section>
 
             {/* Content Section */}
-            <section className="bg-white py-24 lg:py-32">
+            <section className="bg-[var(--color-surface)] py-24 lg:py-32">
                 <div className="container-main">
                     <div className="max-w-[800px] mx-auto">
                         <div className="space-y-16">
                             {/* Section 1 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     01 // ESSENTIAL_COOKIES
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Archive Sustainability.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Archive Sustainability.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     These cookies are strictly necessary for the operation of PYQ’s Hub. They enable
                                     core technical functions such as securing your login, maintaining your session
                                     during navigation, and preventing duplicate server requests.
                                 </p>
                                 <div className="space-y-4">
-                                    <div className="flex gap-6 p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm">
+                                    <div className="flex gap-6 p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm">
                                         <Cookie className="w-6 h-6 text-[#4338CA] shrink-0" />
                                         <div>
-                                            <h4 className="font-black text-[#111827] uppercase tracking-tight mb-1">AUTH_TOKEN</h4>
-                                            <p className="text-sm text-[#6B7280]">Maintains your encrypted identity session with Supabase. Mandatory for repository access.</p>
+                                            <h4 className="font-black text-[var(--color-text)] uppercase tracking-tight mb-1">AUTH_TOKEN</h4>
+                                            <p className="text-sm text-[var(--color-muted)]">Maintains your encrypted identity session with Supabase. Mandatory for repository access.</p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-6 p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm">
+                                    <div className="flex gap-6 p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm">
                                         <Cog className="w-6 h-6 text-[#4338CA] shrink-0" />
                                         <div>
-                                            <h4 className="font-black text-[#111827] uppercase tracking-tight mb-1">SESSION_PREF</h4>
-                                            <p className="text-sm text-[#6B7280]">Stores interface parameters such as list/grid view types and filter persistence.</p>
+                                            <h4 className="font-black text-[var(--color-text)] uppercase tracking-tight mb-1">SESSION_PREF</h4>
+                                            <p className="text-sm text-[var(--color-muted)]">Stores interface parameters such as list/grid view types and filter persistence.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -72,30 +72,30 @@ export default function CookiesPage() {
 
                             {/* Section 2 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     02 // THIRD_PARTY_INTEGRATION
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Security Proxies.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Security Proxies.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     We do not allow marketing or advertising cookies from third parties. Our only external
                                     cookie interactions are with Supabase (Database Auth) and our production infrastructure partners,
                                     both of which follow strict non-tracking security standards.
                                 </p>
-                                <div className="p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm flex items-center gap-4">
+                                <div className="p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm flex items-center gap-4">
                                     <ShieldCheck className="w-8 h-8 text-[#4338CA]" />
-                                    <p className="font-bold text-[#111827] uppercase tracking-tight text-sm">NO MARKETING OR TRACKING PIXELS DETECTED IN ARCHIVE.</p>
+                                    <p className="font-bold text-[var(--color-text)] uppercase tracking-tight text-sm">NO MARKETING OR TRACKING PIXELS DETECTED IN ARCHIVE.</p>
                                 </div>
                             </div>
 
                             {/* Section 3 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     03 // CLIENT_SIDE_CONTROLS
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Full Control.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Full Control.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed">
                                     You can modify your browser settings to decline all cookies. However, please note that
                                     the archive synchronization and authentication protocols will be non-functional
                                     without essential session technical cookies.
@@ -107,9 +107,9 @@ export default function CookiesPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-[#F3F4F6] border-t border-[#111827]/5">
+            <section className="py-24 bg-[var(--color-surface)] border-t border-[var(--color-border)]/5">
                 <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter mb-10">
+                    <h2 className="text-3xl md:text-5xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-10">
                         TRANSPARENT SYSTEM OPERATIONS
                     </h2>
                     <Link href="/explore">

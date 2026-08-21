@@ -59,9 +59,9 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
     if (isValid === false) {
         return (
             <div className="min-h-screen bg-[var(--color-surface)] flex items-center justify-center p-6">
-                <Card className="max-w-md w-full p-10 text-center border-dashed border-[#111827]/20">
+                <Card className="max-w-md w-full p-10 text-center border-dashed border-[var(--color-border)]/20">
                     <h2 className="text-2xl font-black uppercase tracking-tighter mb-4">Repository Not Found</h2>
-                    <p className="text-[#6B7280] mb-8 font-mono text-xs uppercase tracking-widest leading-relaxed">
+                    <p className="text-[var(--color-muted)] mb-8 font-mono text-xs uppercase tracking-widest leading-relaxed">
                         The requested subject identifier "{subjectCode}" does not exist in our industrial archives.
                     </p>
                     <Link href="/explore">
@@ -90,7 +90,7 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
                 <div className="mb-10">
                     <Link
                         href="/explore"
-                        className="inline-flex items-center gap-3 text-xs font-mono font-bold text-[#6B7280] hover:text-[#111827] uppercase tracking-[0.2em] transition-all group"
+                        className="inline-flex items-center gap-3 text-xs font-mono font-bold text-[var(--color-muted)] hover:text-[var(--color-text)] uppercase tracking-[0.2em] transition-all group"
                     >
                         <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
                         Back to Repository
@@ -103,20 +103,20 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-8">
                             <div className="flex items-center gap-6">
                                 <div className="w-16 h-16 rounded-sm border-2 border-[var(--color-border)] bg-[#D4C9BC] flex items-center justify-center flex-shrink-0">
-                                    <BookOpen className="w-8 h-8 text-[#111827]" />
+                                    <BookOpen className="w-8 h-8 text-[var(--color-text)]" />
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="text-[10px] font-mono font-bold text-[#4338CA] uppercase tracking-[0.3em] mb-1">
                                         {subjectInfo.code}
                                     </span>
-                                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-[#111827] uppercase tracking-tighter leading-[0.85]">
+                                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-[var(--color-text)] uppercase tracking-tighter leading-[0.85]">
                                         {subjectInfo.title}
                                     </h1>
                                 </div>
                             </div>
                             <button
                                 onClick={handleShare}
-                                className="icon-3d w-12 h-12 bg-white hover:bg-[#111827] hover:text-white transition-colors duration-150 flex-shrink-0"
+                                className="icon-3d w-12 h-12 hover:bg-[var(--color-text)] hover:text-[var(--color-surface)] transition-colors duration-150 flex-shrink-0"
                                 title="Share Repository"
                             >
                                 {copied ? <Check className="w-5 h-5 text-green-500" /> : <Share2 className="w-5 h-5" />}
@@ -132,8 +132,8 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
                                     className={cn(
                                         "px-4 py-1.5 text-[10px] font-mono font-black uppercase tracking-widest border transition-all",
                                         activeFilter === category
-                                            ? "bg-[#111827] text-white border-[#111827]"
-                                            : "bg-transparent text-[#6B7280] border-[#111827]/10 hover:border-[#111827] hover:text-[#111827]"
+                                            ? "bg-[#111827] text-white border-[var(--color-border)]"
+                                            : "bg-transparent text-[var(--color-muted)] border-[var(--color-border)]/10 hover:border-[var(--color-border)] hover:text-[var(--color-text)]"
                                     )}
                                 >
                                     {category}
@@ -155,7 +155,7 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
                                 Documents Available
                             </p>
                         </div>
-                        <div className="mt-8 flex items-center gap-3 text-xs font-mono text-[#6B7280]">
+                        <div className="mt-8 flex items-center gap-3 text-xs font-mono text-[var(--color-muted)]">
                             <Clock className="w-4 h-4" />
                             <span>LAST_SYNC: ACTIVE</span>
                         </div>
@@ -165,7 +165,7 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
                 {/* Section Title */}
                 <div className="flex items-center justify-between mb-10 pb-6 border-b border-[var(--color-border)]">
                     <h2 className="text-2xl font-black text-[var(--color-text)] uppercase tracking-tighter">THE QUESTION ARCHIVE.</h2>
-                    <p className="text-[10px] font-mono font-bold text-[#6B7280] uppercase tracking-widest hidden sm:block">
+                    <p className="text-[10px] font-mono font-bold text-[var(--color-muted)] uppercase tracking-widest hidden sm:block">
                         {filterLoading ? 'STATUS: SYNCHRONIZING...' : `${papers.length} IDENTIFIED DOCUMENTS`}
                     </p>
                 </div>
@@ -178,8 +178,8 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
                         ))}
                     </div>
                 ) : papers.length === 0 ? (
-                    <Card className="py-32 text-center border-dashed border-[#111827]/30 bg-transparent">
-                        <p className="text-lg font-bold text-[#6B7280] uppercase tracking-widest">NO DOCUMENTS MATCHING "{activeFilter}" IN THIS REPOSITORY</p>
+                    <Card className="py-32 text-center border-dashed border-[var(--color-border)]/30 bg-transparent">
+                        <p className="text-lg font-bold text-[var(--color-muted)] uppercase tracking-widest">NO DOCUMENTS MATCHING "{activeFilter}" IN THIS REPOSITORY</p>
                         <Button variant="ghost" className="mt-4 uppercase text-[10px] font-black tracking-widest" onClick={() => setActiveFilter('ALL')}>RESET_FILTERS</Button>
                     </Card>
                 ) : (
@@ -192,10 +192,10 @@ export default function SubjectClient({ slug, initialPapers = [] }: SubjectClien
 
                 {/* Related CTA */}
                 <div className="mt-32">
-                    <Card noHover className="bg-white p-12 flex flex-col md:flex-row items-center justify-between gap-10 border-2 border-[#111827] shadow-[var(--shadow-offset)_var(--shadow-offset)_0px_var(--color-border)]">
+                    <Card noHover className="bg-[var(--color-card)] p-12 flex flex-col md:flex-row items-center justify-between gap-10 border-2 border-[var(--color-border)] shadow-[var(--shadow-offset)_var(--shadow-offset)_0px_var(--color-border)]">
                         <div className="max-w-xl">
                             <h3 className="text-3xl font-black uppercase tracking-tighter mb-4 leading-none">Can&apos;t find a specific paper?</h3>
-                            <p className="text-[#6B7280] text-lg">Help us expand the industrial archive by contributing your own question papers.</p>
+                            <p className="text-[var(--color-muted)] text-lg">Help us expand the industrial archive by contributing your own question papers.</p>
                         </div>
                         <Link href="/dashboard">
                             <Button size="lg" className="px-10 font-black uppercase tracking-widest">

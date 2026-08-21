@@ -7,6 +7,10 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import { useTheme } from '@/context/ThemeContext'
 
+// Inlined instead of fetched from an external host (grainy-gradients.vercel.app)
+// so the footer never depends on a third-party domain being up.
+const NOISE_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='500' height='500'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>"
+
 const footerLinks = {
     Platform: [
         { label: 'Explore PYQs', href: '/explore' },
@@ -39,7 +43,10 @@ export default function Footer() {
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
                 <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#4338CA]/5 blur-[120px] rounded-full animate-glow" />
                 <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#6D28D9]/5 blur-[120px] rounded-full animate-glow" style={{ animationDelay: '2s' }} />
-                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] mix-blend-overlay" />
+                <div
+                    className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
+                    style={{ backgroundImage: `url("data:image/svg+xml,${NOISE_SVG}")` }}
+                />
             </div>
 
             <div className="container-main relative z-10">

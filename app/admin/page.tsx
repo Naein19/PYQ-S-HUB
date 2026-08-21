@@ -90,7 +90,7 @@ export default function AdminPage() {
         if (!authLoading) {
             if (!user) {
                 router.push('/login')
-            } else if (user.user_metadata?.role !== 'admin') {
+            } else if (user.app_metadata?.role !== 'admin') {
                 router.push('/forbidden')
             }
         }

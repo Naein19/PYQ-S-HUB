@@ -109,12 +109,12 @@ export default function RegisterPage() {
 
                     {success ? (
                         <div className="flex flex-col items-center text-center py-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                            <div className="w-16 h-16 bg-green-50 rounded-full flex items-center justify-center mb-6">
-                                <CheckCircle2 className="w-8 h-8 text-green-600" />
+                            <div className="w-16 h-16 bg-green-50 dark:bg-green-950/40 rounded-full flex items-center justify-center mb-6">
+                                <CheckCircle2 className="w-8 h-8 text-green-600 dark:text-green-400" />
                             </div>
-                            <h2 className="text-xl font-black text-[#111827] uppercase tracking-tight mb-3">Verification Sent</h2>
-                            <p className="text-sm text-[#6B7280] leading-relaxed mb-8">
-                                We've sent a verification link to <span className="font-bold text-[#111827]">{normalizeEmail(formData.email)}</span>. Please check your inbox to activate your account.
+                            <h2 className="text-xl font-black text-[var(--color-text)] uppercase tracking-tight mb-3">Verification Sent</h2>
+                            <p className="text-sm text-[var(--color-muted)] leading-relaxed mb-8">
+                                We've sent a verification link to <span className="font-bold text-[var(--color-text)]">{normalizeEmail(formData.email)}</span>. Please check your inbox to activate your account.
                             </p>
                             <Link href="/login" className="w-full">
                                 <Button variant="secondary" className="w-full py-3 text-xs font-black uppercase tracking-widest">

@@ -74,7 +74,7 @@ export default function UploadForm({ onUploadSuccess }: { onUploadSuccess?: () =
         try {
             // 2. Secure Backend Re-verification
             const { data: { user: verifiedUser }, error: authError } = await supabase.auth.getUser()
-            if (authError || !verifiedUser || verifiedUser.user_metadata?.role !== 'admin') {
+            if (authError || !verifiedUser || verifiedUser.app_metadata?.role !== 'admin') {
                 throw new Error('Unauthorized access: Admin privileges required for industrial ingestion.')
             }
 

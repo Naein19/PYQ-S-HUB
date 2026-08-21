@@ -36,18 +36,18 @@ export default function TermsPage() {
             </section>
 
             {/* Content Section */}
-            <section className="bg-white py-24 lg:py-32">
+            <section className="bg-[var(--color-surface)] py-24 lg:py-32">
                 <div className="container-main">
                     <div className="max-w-[800px] mx-auto">
                         <div className="space-y-16">
                             {/* Section 1 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     01 // ELIGIBILITY_PARAMS
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Institutional Access.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Institutional Access.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     Access to the premium verified repositories is restricted to active students and educators
                                     within the engineering domain. Users are responsible for maintaining the security
                                     of their authentication tokens.
@@ -60,12 +60,12 @@ export default function TermsPage() {
 
                             {/* Section 2 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     02 // LICENSE_STRUCTURE
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Non-Commercial Archive.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Non-Commercial Archive.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     PYQ’s Hub grants a limited, revocable license to access and view archival documents.
                                     Redistribution, commercial resale, or large-scale data scraping of the central
                                     repository is strictly prohibited by our automated security systems.
@@ -76,7 +76,7 @@ export default function TermsPage() {
                                         { icon: CheckSquare, text: "Users retain ownership of their self-uploaded study materials." },
                                         { icon: AlertTriangle, text: "Institutional copyright holders can request document removal via DMCA protocol." }
                                     ].map((item, idx) => (
-                                        <li key={idx} className="flex gap-4 items-center text-sm font-bold text-[#111827] uppercase tracking-tight">
+                                        <li key={idx} className="flex gap-4 items-center text-sm font-bold text-[var(--color-text)] uppercase tracking-tight">
                                             <item.icon className="w-4 h-4 text-[#4338CA]" />
                                             {item.text}
                                         </li>
@@ -86,12 +86,12 @@ export default function TermsPage() {
 
                             {/* Section 3 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     03 // LIABILITY_MODELS
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Operational Continuity.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Operational Continuity.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed">
                                     While we strive for 100% archive uptime, PYQ’s Hub is not liable for data loss or
                                     temporary repository desynchronization. We reserve the right to update these
                                     parameters to reflect technical advancements and legal requirements.
@@ -103,9 +103,9 @@ export default function TermsPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-[#F3F4F6] border-t border-[#111827]/5">
+            <section className="py-24 bg-[var(--color-surface)] border-t border-[var(--color-border)]/5">
                 <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter mb-10">
+                    <h2 className="text-3xl md:text-5xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-10">
                         COMPLIANT ARCHIVE ACCESS
                     </h2>
                     <Link href="/explore">

@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Check, Download, Eye, FileText, Share2, Folder, ShieldCheck, Trash2 } from 'lucide-react'
+import { Check, Download, Eye, FileText, Share2, Folder, ShieldCheck, Trash2, Bookmark } from 'lucide-react'
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Badge from './Badge'
@@ -12,6 +12,7 @@ import { useSwipe } from '@/hooks/useSwipe'
 import { useAuth } from '@/context/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
+import { logActivity, toggleSavePaper } from '@/lib/activity'
 
 interface PYQCardProps {
     pyq: PYQ
@@ -19,16 +20,38 @@ interface PYQCardProps {
 
 export default function PYQCard({ pyq }: PYQCardProps) {
     const { viewPaper } = useView()
-    const { role } = useAuth()
+    const { user, role, savedPaperIds, setSavedPaper } = useAuth()
     const pathname = usePathname()
     const router = useRouter()
     const [copied, setCopied] = useState(false)
     const [isVisible, setIsVisible] = useState(true)
     const [isDeleting, setIsDeleting] = useState(false)
     const [showConfirm, setShowConfirm] = useState(false)
+    const [isSaving, setIsSaving] = useState(false)
+    const isSaved = savedPaperIds.has(pyq.id)
 
     // Only show delete in Explore or Admin sections
     const canManage = role === 'admin' && (pathname === '/explore' || pathname.startsWith('/admin'))
+
+    const handleToggleSave = async (e?: React.MouseEvent) => {
+        e?.preventDefault()
+        e?.stopPropagation()
+
+        if (!user) {
+            router.push('/login')
+            return
+        }
+
+        setIsSaving(true)
+        try {
+            const saved = await toggleSavePaper(pyq.id, user.id)
+            setSavedPaper(pyq.id, saved)
+        } catch (error) {
+            console.error('Save failed:', error)
+        } finally {
+            setIsSaving(false)
+        }
+    }
 
     const navigateToSubject = (e: React.MouseEvent) => {
         e.preventDefault()
@@ -84,6 +107,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
     const handleDownload = async (e?: React.MouseEvent) => {
         e?.preventDefault()
         e?.stopPropagation()
+        logActivity(pyq.id, 'download', user?.id)
         try {
             const response = await fetch(pyq.file_url)
             const blob = await response.blob()
@@ -137,10 +161,10 @@ export default function PYQCard({ pyq }: PYQCardProps) {
             onTouchMove={onTouchMove}
             onTouchEnd={onTouchEnd}
             className={cn(
-                "bg-[var(--color-card)] border border-[var(--color-border)] p-3 md:p-5 flex flex-col gap-4 relative group/card transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden rounded-[2rem]",
+                "bg-[var(--color-card)] border border-[var(--color-border)] p-3 md:p-5 flex flex-col gap-4 relative group/card transition-all duration-500 ease-[cubic-bezier(0.34,1.56,0.64,1)] overflow-hidden rounded-[2rem] cinematic-border",
                 offsetX > 20 && "translate-x-2 border-green-500/30 bg-green-500/5",
                 offsetX < -20 && "-translate-x-2 border-blue-500/30 bg-blue-500/5 shadow-[var(--shadow-offset)_var(--shadow-offset)_0px_var(--color-border)]",
-                "hover:-translate-y-3 hover:shadow-[0_20px_40px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]"
+                "hover:border-[#4338CA]/60 hover:-translate-y-2 hover:shadow-[calc(var(--shadow-offset)*1.5)_calc(var(--shadow-offset)*1.5)_0px_rgba(67,56,202,0.15)]"
             )}
             style={{
                 boxShadow: 'var(--shadow-offset) var(--shadow-offset) 0px var(--color-border)',
@@ -151,6 +175,20 @@ export default function PYQCard({ pyq }: PYQCardProps) {
 
             {/* Subject Archive & Share Shortcuts (Desktop Only) */}
             <div className="hidden md:flex absolute top-4 right-4 gap-3 z-20">
+                <button
+                    onClick={handleToggleSave}
+                    disabled={isSaving}
+                    className={cn(
+                        "w-11 h-11 flex items-center justify-center border rounded-xl transition-all duration-200 ease-in-out active:scale-95",
+                        isSaved
+                            ? "bg-[#4338CA] border-[#4338CA] text-white shadow-md"
+                            : "bg-[var(--color-card)] border-[var(--color-border)] hover:border-[#4338CA] hover:shadow-md text-[var(--color-text)]"
+                    )}
+                    title={user ? (isSaved ? 'Remove from Saved' : 'Save for Later') : 'Sign in to save'}
+                    aria-label={isSaved ? 'Remove from Saved' : 'Save for Later'}
+                >
+                    <Bookmark className={cn("w-5 h-5", isSaved && "fill-current")} />
+                </button>
                 <button
                     onClick={handleShare}
                     className="w-11 h-11 bg-[var(--color-card)] hover:border-[#4338CA] hover:shadow-md flex items-center justify-center border border-[var(--color-border)] rounded-xl transition-all duration-200 ease-in-out active:scale-95 group/share"
@@ -180,7 +218,7 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                         <FileText className="w-6 h-6 text-[var(--color-text)]" />
                     </div>
                 </button>
-                <div className="min-w-0 pr-24 md:pr-28">
+                <div className="min-w-0 pr-36 md:pr-40">
                     <h3 className="text-xs md:text-sm font-black text-[var(--color-text)] leading-snug line-clamp-2 break-words group-hover/card:text-[#4338CA] dark:group-hover/card:text-indigo-400 transition-colors duration-500 uppercase tracking-tight">
                         {pyq.paper_title}
                     </h3>
@@ -247,6 +285,19 @@ export default function PYQCard({ pyq }: PYQCardProps) {
                         aria-label="Share"
                     >
                         {copied ? <Check className="w-5 h-5 text-green-600" /> : <Share2 className="w-5 h-5" />}
+                    </button>
+                    <button
+                        onClick={handleToggleSave}
+                        disabled={isSaving}
+                        className={cn(
+                            "w-11 h-11 flex items-center justify-center rounded-xl active:scale-95 transition-all border",
+                            isSaved
+                                ? "bg-[#4338CA] border-[#4338CA] text-white"
+                                : "text-[var(--color-text)] bg-[var(--color-text)]/5 border-[var(--color-border)]/10"
+                        )}
+                        aria-label={isSaved ? 'Remove from Saved' : 'Save for Later'}
+                    >
+                        <Bookmark className={cn("w-5 h-5", isSaved && "fill-current")} />
                     </button>
                     <button
                         onClick={navigateToSubject}

@@ -39,11 +39,11 @@ export default function SemesterWisePage() {
             <section className="py-20">
                 <div className="container-main">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                        <div className="p-12 border border-[#111827]/10 bg-white relative group overflow-hidden">
+                        <div className="p-12 border border-[var(--color-border)]/10 bg-[var(--color-card)] relative group overflow-hidden">
                             <div className="absolute -right-8 -top-8 w-32 h-32 bg-[#4338CA]/5 rounded-full blur-2xl group-hover:bg-[#4338CA]/10 transition-all duration-500" />
                             <Calendar className="w-12 h-12 text-[#4338CA] mb-8" />
-                            <h2 className="text-4xl font-black text-[#111827] uppercase tracking-tighter mb-6">Fall Semester</h2>
-                            <p className="text-[#6B7280] mb-10 leading-relaxed">
+                            <h2 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Fall Semester</h2>
+                            <p className="text-[var(--color-muted)] mb-10 leading-relaxed">
                                 Access papers for the July-December cycle.
                                 Includes CAT-1, CAT-2, and FAT resources for all core engineering modules.
                             </p>
@@ -54,11 +54,11 @@ export default function SemesterWisePage() {
                             </Link>
                         </div>
 
-                        <div className="p-12 border border-[#111827]/10 bg-white relative group overflow-hidden">
+                        <div className="p-12 border border-[var(--color-border)]/10 bg-[var(--color-card)] relative group overflow-hidden">
                             <div className="absolute -right-8 -top-8 w-32 h-32 bg-indigo-500/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-all duration-500" />
-                            <Calendar className="w-12 h-12 text-indigo-600 mb-8" />
-                            <h2 className="text-4xl font-black text-[#111827] uppercase tracking-tighter mb-6">Winter Semester</h2>
-                            <p className="text-[#6B7280] mb-10 leading-relaxed">
+                            <Calendar className="w-12 h-12 text-indigo-600 dark:text-indigo-400 mb-8" />
+                            <h2 className="text-4xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Winter Semester</h2>
+                            <p className="text-[var(--color-muted)] mb-10 leading-relaxed">
                                 Access papers for the January-May cycle.
                                 Optimized for fast delivery of recent module assessments.
                             </p>

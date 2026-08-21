@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import { sanitizeInput } from '@/lib/security'
+import { CacheManager } from '@/lib/cache'
 
 export interface Notice {
     id: string
@@ -34,10 +35,12 @@ export function NoticeProvider({ children }: { children: React.ReactNode }) {
             try {
                 setLoading(true)
                 // Fetch initial notices from Supabase
-                const { data, error } = await supabase
-                    .from('notices')
-                    .select('*')
-                    .order('created_at', { ascending: false })
+                const { data, error } = await CacheManager.deduplicate('notices_initial_fetch', async () =>
+                    supabase
+                        .from('notices')
+                        .select('*')
+                        .order('created_at', { ascending: false })
+                )
 
                 if (error) {
                     console.error('Error fetching notices:', error)

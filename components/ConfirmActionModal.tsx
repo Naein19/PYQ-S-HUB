@@ -38,8 +38,8 @@ export default function ConfirmActionModal({
             />
             
             <div className={cn(
-                "relative w-full max-w-md bg-[#FBF9F7] border-4 rounded-sm shadow-[20px_20px_0px_#111827] overflow-hidden animate-in zoom-in-95 duration-200",
-                variant === 'danger' ? "border-red-600" : "border-[#111827]"
+                "relative w-full max-w-md bg-[var(--color-card)] border-4 rounded-sm shadow-[20px_20px_0px_var(--color-border)] overflow-hidden animate-in zoom-in-95 duration-200",
+                variant === 'danger' ? "border-red-600" : "border-[var(--color-border)]"
             )}>
                 <div className={cn(
                     "px-6 py-4 flex items-center justify-between text-white",
@@ -59,7 +59,7 @@ export default function ConfirmActionModal({
                 </div>
 
                 <div className="p-8 sm:p-10">
-                    <p className="text-sm font-bold text-[#111827] uppercase tracking-tight mb-8 leading-relaxed">
+                    <p className="text-sm font-bold text-[var(--color-text)] uppercase tracking-tight mb-8 leading-relaxed">
                         {message}
                     </p>
 
@@ -86,7 +86,7 @@ export default function ConfirmActionModal({
                     </div>
                 </div>
 
-                <div className="bg-[#111827]/5 border-t border-[#111827]/10 px-6 py-2 flex items-center justify-end font-mono text-[8px] font-black text-[#111827]/30 uppercase tracking-[0.4em]">
+                <div className="bg-[var(--color-text)]/5 border-t border-[var(--color-border)]/10 px-6 py-2 flex items-center justify-end font-mono text-[8px] font-black text-[var(--color-text)]/30 uppercase tracking-[0.4em]">
                     <span>SECURITY_CLEARANCE_REQUIRED</span>
                 </div>
             </div>
