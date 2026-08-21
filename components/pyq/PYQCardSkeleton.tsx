@@ -1,10 +1,11 @@
 'use client'
 
 import React from 'react'
+import Card from '@/components/ui/Card'
 
 export default function PYQCardSkeleton() {
     return (
-        <article className="card p-3 md:p-5 flex flex-col gap-4 relative">
+        <Card size="sm" noHover className="flex flex-col h-full gap-4 relative">
             {/* Subject Archive & Share Shortcuts Skeleton */}
             <div className="hidden md:flex absolute top-4 right-4 gap-3 z-10">
                 <div className="w-11 h-11 skeleton" />
@@ -27,10 +28,10 @@ export default function PYQCardSkeleton() {
             </div>
 
             {/* Footer Skeleton */}
-            <div className="flex items-center justify-between pt-4 border-t border-[#111827]/10">
+            <div className="flex items-center justify-between pt-4 border-t border-[var(--color-border)]/10">
                 <div className="h-11 w-28 skeleton" />
                 <div className="h-4 w-20 skeleton" />
             </div>
-        </article>
+        </Card>
     )
 }

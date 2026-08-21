@@ -89,7 +89,7 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                 onClick={onClose} 
             />
             
-            <div className="relative w-full max-w-xl bg-[#FBF9F7] border-4 border-[#111827] rounded-sm shadow-[20px_20px_0px_#111827] overflow-hidden animate-in zoom-in-95 duration-200">
+            <div className="relative w-full max-w-xl bg-[var(--color-card)] border-4 border-[var(--color-border)] rounded-sm shadow-[20px_20px_0px_var(--color-border)] overflow-hidden animate-in zoom-in-95 duration-200">
                 <div className="bg-[#111827] text-white px-6 py-4 flex items-center justify-between">
                     <span className="text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
                         <Flag className="w-4 h-4 text-[#4338CA]" />
@@ -106,10 +106,10 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                             <div className="w-16 h-16 bg-green-50 border-2 border-green-500 rounded-sm flex items-center justify-center mx-auto mb-6 shadow-[6px_6px_0px_#10B981]">
                                 <CheckCircle2 className="w-8 h-8 text-green-600" />
                             </div>
-                            <h2 className="text-2xl font-black text-[#111827] uppercase tracking-tighter mb-4">
+                            <h2 className="text-2xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4">
                                 TICKET_LOGGED.
                             </h2>
-                            <p className="text-sm font-medium text-[#6B7280]">
+                            <p className="text-sm font-medium text-[var(--color-muted)]">
                                 Thanks. We’ve received your feedback.
                             </p>
                         </div>
@@ -117,13 +117,13 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                         <form onSubmit={handleSubmit} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                         Issue Type
                                     </label>
                                     <select
                                         value={issueType}
                                         onChange={(e) => setIssueType(e.target.value as TicketIssueType)}
-                                        className="w-full bg-white border-2 border-[#111827] rounded-sm px-3 py-2.5 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all"
+                                        className="w-full bg-[var(--color-card)] border-2 border-[var(--color-border)] rounded-sm px-3 py-2.5 text-xs font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all"
                                     >
                                         {issueTypes.map(type => (
                                             <option key={type} value={type}>{type.toUpperCase()}</option>
@@ -132,7 +132,7 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                    <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                         <Layers className="w-3 h-3 text-[#4338CA]/40" />
                                         Subject Code (Opt.)
                                     </label>
@@ -141,13 +141,13 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                                         value={subjectCode}
                                         onChange={(e) => setSubjectCode(e.target.value)}
                                         placeholder="E.G. CSE1007"
-                                        className="w-full bg-white border-2 border-[#111827] rounded-sm px-3 py-2.5 text-xs font-bold placeholder:text-[#111827]/20 focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase"
+                                        className="w-full bg-[var(--color-card)] border-2 border-[var(--color-border)] rounded-sm px-3 py-2.5 text-xs font-bold placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase"
                                     />
                                 </div>
                             </div>
 
                             <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                     <Mail className="w-3 h-3 text-[#4338CA]/40" />
                                     Terminal Contact Email
                                 </label>
@@ -157,12 +157,12 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="YOUR@IDENTITY.COM"
-                                    className="w-full bg-white border-2 border-[#111827] rounded-sm px-3 py-2.5 text-xs font-bold placeholder:text-[#111827]/20 focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase"
+                                    className="w-full bg-[var(--color-card)] border-2 border-[var(--color-border)] rounded-sm px-3 py-2.5 text-xs font-bold placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase"
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                     <FileText className="w-3 h-3 text-[#4338CA]/40" />
                                     Issue Description
                                 </label>
@@ -172,7 +172,7 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
                                     placeholder="DESCRIBE THE ARCHIVAL DISCREPANCY..."
-                                    className="w-full bg-white border-2 border-[#111827] rounded-sm px-3 py-2.5 text-xs font-bold placeholder:text-[#111827]/20 focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase resize-none"
+                                    className="w-full bg-[var(--color-card)] border-2 border-[var(--color-border)] rounded-sm px-3 py-2.5 text-xs font-bold placeholder:text-[var(--color-text)]/20 focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase resize-none"
                                 />
                             </div>
 
@@ -204,7 +204,7 @@ export default function SupportTicketModal({ isOpen, onClose, context }: Support
                     )}
                 </div>
 
-                <div className="bg-[#111827]/5 border-t border-[#111827]/10 px-6 py-2 flex items-center justify-between font-mono text-[8px] font-black text-[#111827]/30 uppercase tracking-[0.4em]">
+                <div className="bg-[var(--color-text)]/5 border-t border-[var(--color-border)]/10 px-6 py-2 flex items-center justify-between font-mono text-[8px] font-black text-[var(--color-text)]/30 uppercase tracking-[0.4em]">
                     <span>STATUS: READY_FOR_SYNC</span>
                     <span>PROTO: SUPPORT_V1</span>
                 </div>

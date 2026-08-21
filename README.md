@@ -119,5 +119,5 @@ This platform is built on the foundation of academic integrity. Every document i
 
 <p align="center">
   <b>Built for VITAP Excellence with Neo-Industrial Standards.</b><br>
-  <sub>Managed by Naveen | Version 1.0.0-Stable | 2026.03</sub>
+  <sub>Managed by Naveen | Version 2.1.2-Stable | 2026.03</sub>
 </p>

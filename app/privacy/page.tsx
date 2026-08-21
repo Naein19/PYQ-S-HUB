@@ -38,51 +38,51 @@ export default function PrivacyPage() {
             </section>
 
             {/* Content Section */}
-            <section className="bg-white py-24 lg:py-32">
+            <section className="bg-[var(--color-surface)] py-24 lg:py-32">
                 <div className="container-main">
                     <div className="max-w-[800px] mx-auto">
                         <div className="space-y-16">
                             {/* Section 1 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     01 // DATA_COLLECTION
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Minimalist Architecture.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Minimalist Architecture.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     We only collect the essential data required for authentication and archive synchronization.
                                     This includes your email address and basic profile information used strictly for
                                     granting access to specialized repositories.
                                 </p>
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div className="p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm text-center">
+                                    <div className="p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm text-center">
                                         <Lock className="w-6 h-6 text-[#4338CA] mx-auto mb-4" />
-                                        <h4 className="font-black text-[10px] text-[#111827] uppercase tracking-widest">NO_RESALE</h4>
+                                        <h4 className="font-black text-[10px] text-[var(--color-text)] uppercase tracking-widest">NO_RESALE</h4>
                                     </div>
-                                    <div className="p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm text-center">
+                                    <div className="p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm text-center">
                                         <EyeOff className="w-6 h-6 text-[#4338CA] mx-auto mb-4" />
-                                        <h4 className="font-black text-[10px] text-[#111827] uppercase tracking-widest">NO_TRACKING</h4>
+                                        <h4 className="font-black text-[10px] text-[var(--color-text)] uppercase tracking-widest">NO_TRACKING</h4>
                                     </div>
-                                    <div className="p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm text-center">
+                                    <div className="p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm text-center">
                                         <ShieldCheck className="w-6 h-6 text-[#4338CA] mx-auto mb-4" />
-                                        <h4 className="font-black text-[10px] text-[#111827] uppercase tracking-widest">ENCRYPTED</h4>
+                                        <h4 className="font-black text-[10px] text-[var(--color-text)] uppercase tracking-widest">ENCRYPTED</h4>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Section 2 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     02 // SECURITY_INFRASTRUCTURE
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Supabase Powered Security.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Supabase Powered Security.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     All user authentication and database operations are processed through Supabase,
                                     ensuring that your password never touches our servers. Your data is protected by
                                     PostgreSQL Row-Level Security, guaranteeing that only you can access your personal settings.
                                 </p>
-                                <p className="text-lg text-[#4B5563] leading-relaxed">
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed">
                                     We employ TLS encryption for all data in transit and industry-standard hashing protocols
                                     for all stored credentials.
                                 </p>
@@ -90,16 +90,16 @@ export default function PrivacyPage() {
 
                             {/* Section 3 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     03 // YOUR_RIGHTS
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Total Data Agency.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Total Data Agency.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     You have full agency over your archival data. You can request a full data export or
                                     permanent deletion of your account at any time via the user preferences panel.
                                 </p>
-                                <p className="text-sm font-mono text-[#6B7280] bg-[#F3F4F6] p-4 border-l-2 border-[#4338CA]">
+                                <p className="text-sm font-mono text-[var(--color-muted)] bg-[var(--color-surface)] p-4 border-l-2 border-[#4338CA]">
                                     LAST_UPDATE_TIMESTAMP: MARCH_2026_01
                                 </p>
                             </div>
@@ -109,9 +109,9 @@ export default function PrivacyPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-[#F3F4F6] border-t border-[#111827]/5">
+            <section className="py-24 bg-[var(--color-surface)] border-t border-[var(--color-border)]/5">
                 <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter mb-10">
+                    <h2 className="text-3xl md:text-5xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-10">
                         TRUSTED ACADEMIC ARCHIVING
                     </h2>
                     <Link href="/explore">

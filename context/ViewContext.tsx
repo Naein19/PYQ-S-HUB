@@ -5,6 +5,8 @@ import type { PYQ } from '@/lib/queries'
 import DesktopWindow from '@/components/ui/DesktopWindow'
 import SidebarBubbles from '@/components/ui/SidebarBubbles'
 import { useRouter } from 'next/navigation'
+import { logActivity } from '@/lib/activity'
+import { useAuth } from '@/context/AuthContext'
 
 const MAX_BUBBLES = 4
 
@@ -16,6 +18,7 @@ const ViewContext = createContext<ViewContextType | undefined>(undefined)
 
 export function ViewProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter()
+    const { user } = useAuth()
     const [isDesktop, setIsDesktop] = useState(false)
     const [activePaper, setActivePaper] = useState<PYQ | null>(null)
     const [bubblePapers, setBubblePapers] = useState<PYQ[]>([])
@@ -28,6 +31,8 @@ export function ViewProvider({ children }: { children: React.ReactNode }) {
     }, [])
 
     const viewPaper = (paper: PYQ) => {
+        logActivity(paper.id, 'view', user?.id)
+
         // MOBILE_TRIGGER: Screens <= 768px always open externally to avoid iframe blocking
         if (typeof window !== 'undefined' && window.innerWidth <= 768) {
             window.open(paper.file_url, '_blank')

@@ -147,7 +147,7 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#FBF9F7] pb-20 animate-fade-in font-sans">
+        <div className="min-h-screen bg-[var(--color-surface)] pb-20 animate-fade-in font-sans">
             {/* Context Header */}
             <div className="bg-[#111827] text-white py-4 border-b border-[#4338CA]/30">
                 <div className="container-main flex items-center justify-between">
@@ -170,13 +170,13 @@ export default function SettingsPage() {
             <div className="container-main pt-12 lg:pt-20">
                 <div className="max-w-5xl mx-auto">
                     {/* Page Title */}
-                    <div className="mb-16 pb-8 border-b-2 border-[#111827]">
+                    <div className="mb-16 pb-8 border-b-2 border-[var(--color-border)]">
                         <div className="flex items-center gap-3 mb-4">
                             <div className="px-2 py-0.5 bg-[#4338CA] text-white text-[9px] font-mono font-black uppercase tracking-widest rounded-sm">
                                 SYSTEM_PREFERENCES
                             </div>
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-black text-[#111827] uppercase tracking-tighter leading-none">
+                        <h1 className="text-4xl md:text-6xl font-black text-[var(--color-text)] uppercase tracking-tighter leading-none">
                             IDENTITY <br /> CONFIG.
                         </h1>
                     </div>
@@ -185,17 +185,17 @@ export default function SettingsPage() {
                     {message && (
                         <div className={cn(
                             "mb-10 p-5 border-l-4 rounded-sm animate-in slide-in-from-top-4 duration-300",
-                            message.type === 'success' ? "bg-green-50 border-green-500" : "bg-red-50 border-red-500"
+                            message.type === 'success' ? "bg-green-50 dark:bg-green-950/40 border-green-500" : "bg-red-50 dark:bg-red-950/40 border-red-500"
                         )}>
                             <div className="flex items-center gap-3">
                                 {message.type === 'success' ? (
-                                    <CheckCircle2 className="w-5 h-5 text-green-600" />
+                                    <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400" />
                                 ) : (
-                                    <AlertCircle className="w-5 h-5 text-red-600" />
+                                    <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
                                 )}
                                 <p className={cn(
                                     "text-xs font-black uppercase tracking-tight",
-                                    message.type === 'success' ? "text-green-800" : "text-red-800"
+                                    message.type === 'success' ? "text-green-800 dark:text-green-300" : "text-red-800 dark:text-red-300"
                                 )}>
                                     {message.text}
                                 </p>
@@ -207,7 +207,7 @@ export default function SettingsPage() {
                         {/* Sidebar */}
                         <aside className="lg:col-span-4 space-y-8">
                             <section>
-                                <h3 className="text-[10px] font-mono font-black text-[#111827] uppercase tracking-[0.3em] mb-6 flex items-center gap-2 text-[#6B7280]">
+                                <h3 className="text-[10px] font-mono font-black text-[var(--color-muted)] uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
                                     <Fingerprint className="w-3 h-3" />
                                     IMMUTABLE_IDENTITY
                                 </h3>
@@ -223,7 +223,7 @@ export default function SettingsPage() {
                                         </div>
                                         <div className="pt-4 border-t border-white/10 flex items-center justify-between">
                                             <div className="flex flex-col gap-1">
-                                                <span className="text-[9px] font-mono font-black text-white/30 uppercase tracking-widest text-[#6B7280]">CREATED_ON</span>
+                                                <span className="text-[9px] font-mono font-black text-white/30 uppercase tracking-widest">CREATED_ON</span>
                                                 <div className="flex items-center gap-2 text-[11px] font-bold text-white/80">
                                                     <Calendar className="w-3 h-3 opacity-40" />
                                                     {new Date(user.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -234,9 +234,9 @@ export default function SettingsPage() {
                                 </Card>
                             </section>
 
-                            <div className="p-6 bg-[#EAE0D5] border-2 border-[#111827]/10 rounded-sm">
-                                <h4 className="text-[10px] font-black text-[#111827] uppercase tracking-widest mb-4">Support Terminal</h4>
-                                <p className="text-[11px] text-[#6B7280] font-medium leading-relaxed mb-6">
+                            <div className="p-6 bg-[var(--color-card)] border-2 border-[var(--color-border)]/10 rounded-sm">
+                                <h4 className="text-[10px] font-black text-[var(--color-text)] uppercase tracking-widest mb-4">Support Terminal</h4>
+                                <p className="text-[11px] text-[var(--color-muted)] font-medium leading-relaxed mb-6">
                                     Identity errors or archival discrepancies? Submit a synchronization ticket to high-level clearance.
                                 </p>
                                 <Button 
@@ -253,13 +253,13 @@ export default function SettingsPage() {
                         <div className="lg:col-span-8 space-y-16">
                             {/* Profile Configuration */}
                             <section>
-                                <div className="flex items-center gap-3 mb-8 pb-4 border-b border-[#111827]/10">
+                                <div className="flex items-center gap-3 mb-8 pb-4 border-b border-[var(--color-border)]/10">
                                     <User className="w-5 h-5 text-[#4338CA]" />
-                                    <h2 className="text-xl font-black text-[#111827] uppercase tracking-tighter">PROFILE_SYNCHRONIZATION</h2>
+                                    <h2 className="text-xl font-black text-[var(--color-text)] uppercase tracking-tighter">PROFILE_SYNCHRONIZATION</h2>
                                 </div>
                                 <form onSubmit={handleUpdateProfile} className="space-y-8">
                                     <div className="space-y-3">
-                                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                             Full Name (Legal Identity)
                                         </label>
                                         <input
@@ -267,7 +267,7 @@ export default function SettingsPage() {
                                             required
                                             value={profileData.full_name}
                                             onChange={(e) => setProfileData({ ...profileData, full_name: e.target.value })}
-                                            className="w-full bg-white border-2 border-[#111827] rounded-sm px-4 py-3 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase tracking-tight"
+                                            className="w-full bg-[var(--color-card)] text-[var(--color-text)] border-2 border-[var(--color-border)] rounded-sm px-4 py-3 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all uppercase tracking-tight"
                                         />
                                     </div>
 
@@ -300,7 +300,7 @@ export default function SettingsPage() {
                                     </div>
 
                                     <div className="space-y-3">
-                                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                        <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                             Active Semester Cycle
                                         </label>
                                         <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
@@ -312,8 +312,8 @@ export default function SettingsPage() {
                                                     className={cn(
                                                         "py-3 text-[11px] font-black border transition-all rounded-sm",
                                                         profileData.semester === opt.value
-                                                            ? "bg-[#111827] text-white border-[#111827] shadow-[4px_4px_0px_#4338CA]"
-                                                            : "bg-white text-[#111827] border-[#111827]/10 hover:border-[#111827]"
+                                                            ? "bg-[var(--color-text)] text-[var(--color-surface)] border-[var(--color-text)] shadow-[4px_4px_0px_#4338CA]"
+                                                            : "bg-[var(--color-card)] text-[var(--color-text)] border-[var(--color-border)]/10 hover:border-[var(--color-border)]"
                                                     )}
                                                 >
                                                     {opt.value}
@@ -335,14 +335,14 @@ export default function SettingsPage() {
 
                             {/* Security & Access */}
                             <section>
-                                <div className="flex items-center gap-3 mb-8 pb-4 border-b border-[#111827]/10">
+                                <div className="flex items-center gap-3 mb-8 pb-4 border-b border-[var(--color-border)]/10">
                                     <Lock className="w-5 h-5 text-[#4338CA]" />
-                                    <h2 className="text-xl font-black text-[#111827] uppercase tracking-tighter">SECURITY_TOKENS</h2>
+                                    <h2 className="text-xl font-black text-[var(--color-text)] uppercase tracking-tighter">SECURITY_TOKENS</h2>
                                 </div>
                                 <form onSubmit={handleUpdatePassword} className="space-y-8">
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                         <div className="space-y-3">
-                                            <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                            <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                                 New Security Token
                                             </label>
                                             <input
@@ -350,12 +350,12 @@ export default function SettingsPage() {
                                                 required
                                                 value={passwordData.new}
                                                 onChange={(e) => setPasswordData({ ...passwordData, new: e.target.value })}
-                                                className="w-full bg-white border-2 border-[#111827] rounded-sm px-4 py-3 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all"
+                                                className="w-full bg-[var(--color-card)] text-[var(--color-text)] border-2 border-[var(--color-border)] rounded-sm px-4 py-3 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all"
                                                 placeholder="••••••••••••"
                                             />
                                         </div>
                                         <div className="space-y-3">
-                                            <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[#111827] uppercase tracking-widest">
+                                            <label className="flex items-center gap-2 text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-widest">
                                                 Confirm Token
                                             </label>
                                             <input
@@ -363,7 +363,7 @@ export default function SettingsPage() {
                                                 required
                                                 value={passwordData.confirm}
                                                 onChange={(e) => setPasswordData({ ...passwordData, confirm: e.target.value })}
-                                                className="w-full bg-white border-2 border-[#111827] rounded-sm px-4 py-3 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all"
+                                                className="w-full bg-[var(--color-card)] text-[var(--color-text)] border-2 border-[var(--color-border)] rounded-sm px-4 py-3 text-sm font-bold focus:outline-none focus:ring-4 focus:ring-[#4338CA]/10 transition-all"
                                                 placeholder="••••••••••••"
                                             />
                                         </div>
@@ -381,7 +381,7 @@ export default function SettingsPage() {
                                         <button
                                             type="button"
                                             onClick={() => user.email && supabase.auth.resetPasswordForEmail(user.email)}
-                                            className="text-[10px] font-black text-[#6B7280] hover:text-[#111827] uppercase tracking-[0.2em] underline underline-offset-4"
+                                            className="text-[10px] font-black text-[var(--color-muted)] hover:text-[var(--color-text)] uppercase tracking-[0.2em] underline underline-offset-4"
                                         >
                                             Trigger Recovery Key Reset
                                         </button>
@@ -391,14 +391,14 @@ export default function SettingsPage() {
 
                             {/* Danger Zone */}
                             <section className="pt-12 border-t-2 border-red-500/20">
-                                <div className="bg-red-50/50 border border-red-500/20 p-10 rounded-sm">
+                                <div className="bg-red-50 dark:bg-red-950/30 border border-red-500/20 p-10 rounded-sm">
                                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                                         <div>
-                                            <div className="flex items-center gap-2 text-red-600 mb-2">
+                                            <div className="flex items-center gap-2 text-red-600 dark:text-red-400 mb-2">
                                                 <ShieldAlert className="w-5 h-5" />
                                                 <h3 className="text-lg font-black uppercase tracking-tight">TERMINAL_DELETION</h3>
                                             </div>
-                                            <p className="text-xs font-medium text-red-900/60 leading-relaxed max-w-md">
+                                            <p className="text-xs font-medium text-red-900/60 dark:text-red-300/70 leading-relaxed max-w-md">
                                                 Initiating this protocol will permanently purge your academic identity and all associated archives. This action is <span className="font-black italic">IRREVERSIBLE</span>.
                                             </p>
                                         </div>
@@ -421,7 +421,7 @@ export default function SettingsPage() {
                 <div className="fixed inset-0 z-[200] flex items-center justify-center p-6 sm:p-0">
                     <div className="absolute inset-0 bg-[#111827]/90 backdrop-blur-sm animate-in fade-in duration-300" onClick={() => setShowDeleteModal(false)} />
 
-                    <div className="relative w-full max-w-md bg-white border-4 border-red-600 rounded-sm shadow-[20px_20px_0px_#111827] overflow-hidden animate-in zoom-in-95 duration-200">
+                    <div className="relative w-full max-w-md bg-[var(--color-card)] border-4 border-red-600 rounded-sm shadow-[20px_20px_0px_var(--color-border)] overflow-hidden animate-in zoom-in-95 duration-200">
                         <div className="bg-red-600 text-white px-6 py-4 flex items-center justify-between">
                             <span className="text-xs font-black uppercase tracking-[0.3em] flex items-center gap-2">
                                 <ShieldAlert className="w-4 h-4" />
@@ -433,14 +433,14 @@ export default function SettingsPage() {
                         </div>
 
                         <div className="p-10 text-center">
-                            <div className="w-20 h-20 bg-red-50 border-2 border-red-500 rounded-full flex items-center justify-center mx-auto mb-8">
-                                <Trash2 className="w-10 h-10 text-red-600" />
+                            <div className="w-20 h-20 bg-red-50 dark:bg-red-950/40 border-2 border-red-500 rounded-full flex items-center justify-center mx-auto mb-8">
+                                <Trash2 className="w-10 h-10 text-red-600 dark:text-red-400" />
                             </div>
-                            <h2 className="text-2xl font-black text-[#111827] uppercase tracking-tighter mb-4 leading-tight">
+                            <h2 className="text-2xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4 leading-tight">
                                 CONFIRM TOTAL <br /> IDENTITY PURGE?
                             </h2>
-                            <p className="text-sm font-medium text-[#6B7280] leading-relaxed mb-10">
-                                This will erase <span className="text-[#111827] font-black">{user.email}</span> from the central archive. You will lose access to all peer resources and personal logs.
+                            <p className="text-sm font-medium text-[var(--color-muted)] leading-relaxed mb-10">
+                                This will erase <span className="text-[var(--color-text)] font-black">{user.email}</span> from the central archive. You will lose access to all peer resources and personal logs.
                             </p>
 
                             <div className="flex flex-col gap-4">
@@ -461,7 +461,7 @@ export default function SettingsPage() {
                             </div>
                         </div>
 
-                        <div className="bg-[#F9FAFB] border-t border-[#111827]/5 px-6 py-3 flex items-center justify-center font-mono text-[9px] font-black text-[#111827]/20 uppercase tracking-[0.4em]">
+                        <div className="bg-[var(--color-surface)] border-t border-[var(--color-border)]/10 px-6 py-3 flex items-center justify-center font-mono text-[9px] font-black text-[var(--color-text)]/30 uppercase tracking-[0.4em]">
                             PURGE_SEQ: 0x948271
                         </div>
                     </div>

@@ -83,17 +83,17 @@ export default function CSELandingClient() {
             </section>
 
             {/* Preparation Tip Section */}
-            <section className="bg-white py-20 border-t border-[#111827]/5">
+            <section className="bg-[var(--color-surface)] py-20 border-t border-[var(--color-border)]/5">
                 <div className="container-main">
-                    <div className="max-w-4xl mx-auto p-12 border border-[#111817]/10 bg-[#F9FAFB] relative overflow-hidden group">
+                    <div className="max-w-4xl mx-auto p-12 border border-[var(--color-border)]/10 bg-[var(--color-card)] relative overflow-hidden group">
                         <div className="absolute -right-12 -top-12 w-48 h-48 bg-[#4338CA]/5 rounded-full blur-3xl group-hover:bg-[#4338CA]/10 transition-colors duration-500" />
                         <div className="relative z-10 flex flex-col md:flex-row items-start gap-8">
-                            <div className="w-16 h-16 bg-[#4338CA] text-white flex items-center justify-center rounded-sm shrink-0 shadow-[4px_4px_0px_#111827]">
+                            <div className="w-16 h-16 bg-[#4338CA] text-white flex items-center justify-center rounded-sm shrink-0 shadow-[4px_4px_0px_var(--color-border)]">
                                 <Book className="w-8 h-8" />
                             </div>
                             <div>
-                                <h3 className="text-2xl font-black text-[#111827] uppercase tracking-tighter mb-4">Preparation Protocol // CSE</h3>
-                                <p className="text-[#6B7280] leading-relaxed mb-6">
+                                <h3 className="text-2xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-4">Preparation Protocol // CSE</h3>
+                                <p className="text-[var(--color-muted)] leading-relaxed mb-6">
                                     Analyze patterns of implementation-heavy questions. Our archive contains specific module variations.
                                 </p>
                                 <Link href="/explore">

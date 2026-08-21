@@ -13,6 +13,7 @@ import TabManager from '@/components/layout/TabManager'
 import AnimatedFavicon from '@/components/AnimatedFavicon'
 import NoticeTicker from '@/components/layout/NoticeTicker'
 import GoogleAnalytics from '@/components/core/Analytics'
+import PostHogAnalytics from '@/components/core/PostHogAnalytics'
 import FloatingSupportButton from '@/components/FloatingSupportButton'
 
 // Standard system font fallbacks to fix build errors when Google Fonts are unreachable
@@ -106,6 +107,7 @@ import { LoadingProvider } from '@/context/LoadingContext'
 import { ThemeProvider } from '@/context/ThemeContext'
 import { NoticeProvider } from '@/context/NoticeContext'
 import RootPreloader from '@/components/core/Preloader'
+import ChunkErrorHandler from '@/components/core/ChunkErrorHandler'
 
 import { PaperProvider } from '@/context/PaperContext'
 
@@ -147,6 +149,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 )}
             </head>
             <body className="bg-[var(--color-surface)] text-[var(--color-text)] min-h-screen flex flex-col font-sans">
+                <ChunkErrorHandler />
                 <RootPreloader />
                 <AnimatedFavicon />
                 <ThemeProvider>
@@ -168,6 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     </AuthProvider>
                 </ThemeProvider>
                 <GoogleAnalytics />
+                <PostHogAnalytics />
                 <Analytics />
                 <SpeedInsights />
             </body>

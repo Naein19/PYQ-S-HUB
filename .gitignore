@@ -88,3 +88,7 @@ pnpm-lock.yaml
 .vercel
 
 # Public output (optional, keep empty tracked)
+
+.claude
+.claude*
+.claude/*

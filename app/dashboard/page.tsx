@@ -19,9 +19,9 @@ import {
 } from 'lucide-react'
 import Card from '@/components/ui/Card'
 import Button from '@/components/ui/Button'
-import { usePapers } from '@/hooks/usePapers'
 import { useSubjects } from '@/hooks/useSubjects'
-import { getCleanSubjectTitle, getNormalizedSubjectCode } from '@/lib/subject-titles'
+import { usePaperContext } from '@/context/PaperContext'
+import { getCleanSubjectTitle, getNormalizedSubjectCode, getSubjectSlug } from '@/lib/subject-titles'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/context/AuthContext'
 import { useRouter } from 'next/navigation'
@@ -29,16 +29,21 @@ import { useEffect } from 'react'
 import Loading from '@/components/ui/Loading'
 import PYQCardSkeleton from '@/components/pyq/PYQCardSkeleton'
 import SubjectRowSkeleton from '@/components/pyq/SubjectRowSkeleton'
+import { getUserStats, getRecentActivityPaperIds, getSavedPaperIds, type UserStats } from '@/lib/activity'
+import type { PYQ } from '@/lib/queries'
 
 export default function DashboardPage() {
     const { user, loading: authLoading } = useAuth()
     const router = useRouter()
 
-    const filters = useMemo(() => ({}), [])
-    const { papers: recentPYQs, loading: papersLoading } = usePapers(filters, 1)
+    const { allPapers, loading: papersLoading } = usePaperContext()
     const { subjects, loading: subjectsLoading } = useSubjects()
     const [extractionToken, setExtractionToken] = React.useState('')
     const [mounted, setMounted] = React.useState(false)
+    const [stats, setStats] = React.useState<UserStats>({ viewed: 0, downloaded: 0, saved: 0 })
+    const [statsLoading, setStatsLoading] = React.useState(true)
+    const [recentActivityIds, setRecentActivityIds] = React.useState<string[]>([])
+    const [savedIds, setSavedIds] = React.useState<string[]>([])
 
     useEffect(() => {
         setMounted(true)
@@ -50,6 +55,36 @@ export default function DashboardPage() {
             router.push('/login')
         }
     }, [user, authLoading, router])
+
+    useEffect(() => {
+        if (!user) return
+        setStatsLoading(true)
+        Promise.all([
+            getUserStats(user.id),
+            getRecentActivityPaperIds(user.id, 4),
+            getSavedPaperIds(user.id),
+        ]).then(([userStats, activityIds, saved]) => {
+            setStats(userStats)
+            setRecentActivityIds(activityIds)
+            setSavedIds(saved)
+            setStatsLoading(false)
+        })
+    }, [user])
+
+    const recentActivityPapers = useMemo(
+        () => recentActivityIds
+            .map(id => allPapers.find(p => p.id === id))
+            .filter((p): p is PYQ => !!p),
+        [recentActivityIds, allPapers]
+    )
+
+    const savedPapers = useMemo(
+        () => savedIds
+            .map(id => allPapers.find(p => p.id === id))
+            .filter((p): p is PYQ => !!p)
+            .slice(0, 2),
+        [savedIds, allPapers]
+    )
 
     if (!user && !authLoading) return null
 
@@ -80,7 +115,7 @@ export default function DashboardPage() {
                 <div className="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-8 lg:gap-12 pb-12 border-b-2 border-[var(--color-border)]">
                     <div className="flex-1">
                         <div className="flex items-center gap-3 mb-6">
-                            <div className="px-3 py-1 bg-[var(--color-border)] text-[var(--color-card)] text-[10px] font-mono font-black uppercase tracking-widest rounded-sm">
+                            <div className="px-3 py-1 bg-[var(--color-text)] text-[var(--color-surface)] text-[10px] font-mono font-black uppercase tracking-widest rounded-sm">
                                 IDENTITY_VERIFIED
                             </div>
                             <span className="text-[10px] font-mono font-bold text-[var(--color-text)]/30 uppercase tracking-[0.3em]">
@@ -98,26 +133,26 @@ export default function DashboardPage() {
 
                     <div className="grid grid-cols-2 gap-4 h-full">
                         <div className="p-6 bg-[var(--color-card)] border border-[var(--color-border)] rounded-sm flex flex-col justify-between min-w-[200px]">
-                            <span className="text-[9px] font-mono font-black text-[var(--color-text)]/40 uppercase tracking-[0.2em] mb-4">EXTRACTION_CAP</span>
+                            <span className="text-[9px] font-mono font-black text-[var(--color-text)]/40 uppercase tracking-[0.2em] mb-4">ARCHIVE_COVERAGE</span>
                             <div>
                                 <div className="text-3xl font-black text-[var(--color-text)] mb-1 tabular-nums transition-all">
-                                    {authLoading ? '.../100' : `${user?.user_metadata?.extraction_used || 34}/100`}
+                                    {statsLoading ? `.../${allPapers.length || '...'}` : `${stats.viewed}/${allPapers.length}`}
                                 </div>
                                 <div className="w-full bg-[var(--color-surface)] h-1.5 mt-2 overflow-hidden rounded-full border border-[var(--color-border)]/10">
                                     <div
                                         className="bg-[var(--color-text)] h-full transition-all duration-1000"
-                                        style={{ width: `${authLoading ? 0 : (user?.user_metadata?.extraction_used || 34)}%` }}
+                                        style={{ width: `${statsLoading || !allPapers.length ? 0 : Math.min(100, (stats.viewed / allPapers.length) * 100)}%` }}
                                     />
                                 </div>
                             </div>
                         </div>
                         <div className="p-6 bg-[#4338CA] text-white rounded-sm flex flex-col justify-between min-w-[200px] border border-[var(--color-border)]">
-                            <span className="text-[9px] font-mono font-black text-white/40 uppercase tracking-[0.2em] mb-4">TOTAL_SESSIONS</span>
+                            <span className="text-[9px] font-mono font-black text-white/40 uppercase tracking-[0.2em] mb-4">TOTAL_ACTIVITY</span>
                             <div>
                                 <div className="text-3xl font-black text-white mb-1 tabular-nums">
-                                    {authLoading ? '...' : (user?.user_metadata?.total_sessions || 124)}
+                                    {statsLoading ? '...' : (stats.viewed + stats.downloaded + stats.saved)}
                                 </div>
-                                <div className="text-[9px] font-mono font-black uppercase tracking-[0.2em] text-white/60">AVG_VELOCITY: 4.2H</div>
+                                <div className="text-[9px] font-mono font-black uppercase tracking-[0.2em] text-white/60">SAVED: {statsLoading ? '...' : stats.saved}</div>
                             </div>
                         </div>
                     </div>
@@ -172,30 +207,40 @@ export default function DashboardPage() {
                         <section>
                             <h3 className="text-[10px] font-mono font-black text-[var(--color-text)] uppercase tracking-[0.3em] mb-6 flex items-center gap-2">
                                 <Target className="w-3 h-3" />
-                                PREP_VELOCITY
+                                SAVED_FOR_LATER
                             </h3>
-                            <div className="space-y-4">
-                                <div className="p-5 bg-[var(--color-surface)] border border-[var(--color-border)] group hover:bg-[var(--color-border)] transition-all cursor-pointer">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[8px] font-mono font-black text-[var(--color-text)]/60 group-hover:text-[var(--color-card)]/60 uppercase tracking-[0.2em]">CURRENT_FOCUS</span>
-                                        <ChevronRight className="w-4 h-4 text-[var(--color-text)] group-hover:text-[var(--color-card)] group-hover:translate-x-1 transition-all" />
-                                    </div>
-                                    <h4 className="font-black text-[var(--color-text)] group-hover:text-[var(--color-card)] uppercase tracking-tighter">DATA STRUCTURES // CS301</h4>
-                                    <div className="mt-4 flex items-center gap-4">
-                                        <div className="flex-1 bg-[var(--color-card)]/50 h-1 rounded-full overflow-hidden">
-                                            <div className="bg-[var(--color-text)] group-hover:bg-[var(--color-card)] h-full w-[45%]" />
-                                        </div>
-                                        <span className="text-[10px] font-mono font-black text-[var(--color-text)] group-hover:text-[var(--color-card)]">45%</span>
-                                    </div>
+                            {statsLoading ? (
+                                <div className="space-y-4">
+                                    <SubjectRowSkeleton />
+                                    <SubjectRowSkeleton />
                                 </div>
-                                <div className="p-5 bg-[var(--color-card)] border border-[var(--color-border)] group hover:bg-[var(--color-border)] transition-all cursor-pointer">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <span className="text-[8px] font-mono font-black text-[var(--color-text)]/30 group-hover:text-[var(--color-card)]/60 uppercase tracking-[0.2em]">UPNEXT_QUEUE</span>
-                                        <ChevronRight className="w-4 h-4 text-[var(--color-text)] group-hover:text-[var(--color-card)] group-hover:translate-x-1 transition-all" />
-                                    </div>
-                                    <h4 className="font-black text-[var(--color-text)] group-hover:text-[var(--color-card)] uppercase tracking-tighter">OPERATING SYSTEMS // CS401</h4>
+                            ) : savedPapers.length > 0 ? (
+                                <div className="space-y-4">
+                                    {savedPapers.map((paper) => (
+                                        <Link
+                                            key={paper.id}
+                                            href={`/subject/${getSubjectSlug(paper.subject_code, paper.subject_title)}`}
+                                            className="block p-5 bg-[var(--color-card)] border border-[var(--color-border)] group hover:bg-[var(--color-border)] transition-all"
+                                        >
+                                            <div className="flex items-center justify-between mb-2">
+                                                <span className="text-[8px] font-mono font-black text-[var(--color-text)]/30 group-hover:text-[var(--color-card)]/60 uppercase tracking-[0.2em]">
+                                                    {getNormalizedSubjectCode(paper.subject_code)}
+                                                </span>
+                                                <ChevronRight className="w-4 h-4 text-[var(--color-text)] group-hover:text-[var(--color-card)] group-hover:translate-x-1 transition-all" />
+                                            </div>
+                                            <h4 className="font-black text-[var(--color-text)] group-hover:text-[var(--color-card)] uppercase tracking-tighter line-clamp-1">
+                                                {paper.paper_title}
+                                            </h4>
+                                        </Link>
+                                    ))}
                                 </div>
-                            </div>
+                            ) : (
+                                <div className="p-5 bg-[var(--color-card)] border border-dashed border-[var(--color-border)]/40 text-center">
+                                    <p className="text-xs font-mono text-[var(--color-muted)] uppercase tracking-widest">
+                                        No papers saved yet
+                                    </p>
+                                </div>
+                            )}
                         </section>
                     </div>
 
@@ -204,9 +249,9 @@ export default function DashboardPage() {
                         {/* Metrics Bar */}
                         <div className="grid grid-cols-3 gap-6">
                             {[
-                                { label: 'EXTRACTED', value: user?.user_metadata?.extracted_count || '34', icon: BookOpen },
-                                { label: 'DOWNLOADS', value: user?.user_metadata?.download_count || '12', icon: Download },
-                                { label: 'SAVED', value: user?.user_metadata?.saved_count || '08', icon: Star }
+                                { label: 'EXTRACTED', value: stats.viewed, icon: BookOpen },
+                                { label: 'DOWNLOADS', value: stats.downloaded, icon: Download },
+                                { label: 'SAVED', value: stats.saved, icon: Star }
                             ].map((stat, i) => (
                                 <div key={i} className="flex flex-col">
                                     <div className="flex items-center gap-2 mb-2">
@@ -214,7 +259,7 @@ export default function DashboardPage() {
                                         <span className="text-[9px] font-mono font-black text-[var(--color-text)]/30 uppercase tracking-widest">{stat.label}</span>
                                     </div>
                                     <div className="text-4xl font-black text-[var(--color-text)] tracking-tighter tabular-nums">
-                                        {authLoading ? '...' : stat.value}
+                                        {statsLoading ? '...' : stat.value}
                                     </div>
                                 </div>
                             ))}
@@ -233,17 +278,28 @@ export default function DashboardPage() {
                                 </Link>
                             </div>
 
-                            {papersLoading ? (
+                            {papersLoading || statsLoading ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
                                     {[...Array(4)].map((_, i) => (
                                         <PYQCardSkeleton key={i} />
                                     ))}
                                 </div>
-                            ) : (
+                            ) : recentActivityPapers.length > 0 ? (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-                                    {recentPYQs.slice(0, 4).map((pyq) => (
+                                    {recentActivityPapers.map((pyq) => (
                                         <PYQCard key={pyq.id} pyq={pyq} />
                                     ))}
+                                </div>
+                            ) : (
+                                <div className="p-10 border border-dashed border-[var(--color-border)]/40 text-center">
+                                    <p className="text-sm font-mono text-[var(--color-muted)] uppercase tracking-widest mb-4">
+                                        No activity yet
+                                    </p>
+                                    <Link href="/explore">
+                                        <Button variant="secondary" className="text-[10px] font-black uppercase tracking-widest">
+                                            EXPLORE_REPOSITORY
+                                        </Button>
+                                    </Link>
                                 </div>
                             )}
                         </section>

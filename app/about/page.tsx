@@ -49,23 +49,23 @@ export default function AboutPage() {
             </section>
 
             {/* Content Section */}
-            <section className="bg-white py-24 lg:py-32">
+            <section className="bg-[var(--color-surface)] py-24 lg:py-32">
                 <div className="container-main">
                     <div className="max-w-[800px] mx-auto">
                         <div className="space-y-16">
                             {/* Section 1 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     01 // THE_MISSION
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Precision Over Proliferation.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed mb-6">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Precision Over Proliferation.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed mb-6">
                                     Engineering students are often overwhelmed by fragmented, low-quality study materials.
                                     Our mission is to consolidate verified, industrial-grade question papers into a single,
                                     high-performance archive.
                                 </p>
-                                <p className="text-lg text-[#4B5563] leading-relaxed">
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed">
                                     We believe that success in complex technical disciplines requires structured data.
                                     By providing a pixel-perfect, organized history of examinations, we enable students
                                     to prepare with surgical precision.
@@ -74,33 +74,33 @@ export default function AboutPage() {
 
                             {/* Section 2 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     02 // THE_INFRASTRUCTURE
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Architected for Speed.</h3>
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Architected for Speed.</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                                    <div className="p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm">
+                                    <div className="p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm">
                                         <ShieldCheck className="w-8 h-8 text-[#4338CA] mb-4" />
-                                        <h4 className="font-black text-[#111827] uppercase tracking-tight mb-2">Verified Sourcing</h4>
-                                        <p className="text-sm text-[#6B7280]">Every document undergoes a multi-stage verification protocol before being committed to the central archive.</p>
+                                        <h4 className="font-black text-[var(--color-text)] uppercase tracking-tight mb-2">Verified Sourcing</h4>
+                                        <p className="text-sm text-[var(--color-muted)]">Every document undergoes a multi-stage verification protocol before being committed to the central archive.</p>
                                     </div>
-                                    <div className="p-6 border border-[#111827]/5 bg-[#F9FAFB] rounded-sm">
+                                    <div className="p-6 border border-[var(--color-border)]/5 bg-[var(--color-card)] rounded-sm">
                                         <Zap className="w-8 h-8 text-[#4338CA] mb-4" />
-                                        <h4 className="font-black text-[#111827] uppercase tracking-tight mb-2">Rapid Extraction</h4>
-                                        <p className="text-sm text-[#6B7280]">Real-time synchronization with Supabase ensures sub-second resource discovery across all subjects.</p>
+                                        <h4 className="font-black text-[var(--color-text)] uppercase tracking-tight mb-2">Rapid Extraction</h4>
+                                        <p className="text-sm text-[var(--color-muted)]">Real-time synchronization with Supabase ensures sub-second resource discovery across all subjects.</p>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Section 3 */}
                             <div>
-                                <h2 className="text-xs font-mono font-black text-[#111827] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
+                                <h2 className="text-xs font-mono font-black text-[var(--color-text)] uppercase tracking-[0.4em] mb-8 flex items-center gap-4">
                                     03 // THE_FUTURE
                                     <span className="h-[1px] flex-grow bg-[#111827]/10" />
                                 </h2>
-                                <h3 className="text-3xl font-black text-[#111827] uppercase tracking-tighter mb-6">Evolution of Academics.</h3>
-                                <p className="text-lg text-[#4B5563] leading-relaxed">
+                                <h3 className="text-3xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-6">Evolution of Academics.</h3>
+                                <p className="text-lg text-[var(--color-muted)] leading-relaxed">
                                     PYQ’s Hub is evolving into more than just a search tool. We are building the foundational
                                     data layer for engineering preparation—integrating analytics, tier-based classification,
                                     and community-driven verification to ensure the archive remains the gold standard
@@ -113,9 +113,9 @@ export default function AboutPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-24 bg-[#F3F4F6] border-t border-[#111827]/5">
+            <section className="py-24 bg-[var(--color-surface)] border-t border-[var(--color-border)]/5">
                 <div className="container-main text-center">
-                    <h2 className="text-3xl md:text-5xl font-black text-[#111827] uppercase tracking-tighter mb-10">
+                    <h2 className="text-3xl md:text-5xl font-black text-[var(--color-text)] uppercase tracking-tighter mb-10">
                         READY TO SYNC WITH THE ARCHIVE?
                     </h2>
                     <Link href="/explore">

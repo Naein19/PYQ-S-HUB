@@ -270,10 +270,17 @@ export default function ExploreClient() {
 
                     <FilterChips
                         label="SUBJECT PRIORITY"
-                        options={subjects.slice(0, 32).map(s => ({
-                            label: `${getNormalizedSubjectCode(s.subject_code)} - ${getCleanSubjectTitle(s.subject_code, s.subject_title)}`,
-                            value: getSubjectSlug(s.subject_code, s.subject_title)
-                        }))}
+                        options={Array.from(
+                            new Map(
+                                subjects.map(s => [
+                                    getSubjectSlug(s.subject_code, s.subject_title),
+                                    {
+                                        label: `${getNormalizedSubjectCode(s.subject_code)} - ${getCleanSubjectTitle(s.subject_code, s.subject_title)}`,
+                                        value: getSubjectSlug(s.subject_code, s.subject_title)
+                                    }
+                                ])
+                            ).values()
+                        ).slice(0, 32)}
                         value={filters.subject_code}
                         onChange={(val: string) => updateFilter('subject_code', val)}
                         className="max-h-[380px] overflow-y-auto pr-2 custom-scrollbar"
